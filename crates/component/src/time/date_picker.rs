@@ -131,11 +131,11 @@ impl DatePickerState {
             date,
             calendar,
             open: false,
-            date_format: "%Y/%m/%d".into(),
+            date_format: "%Y-%m-%d".into(),
             number_of_months: 1,
             disabled_matcher: None,
             _subscriptions,
-            first_day_of_week: Weekday::Sun,
+            first_day_of_week: Weekday::Mon,
             bounds: Bounds::default(),
         }
     }
