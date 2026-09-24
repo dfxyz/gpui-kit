@@ -3,11 +3,11 @@ use std::rc::Rc;
 use gpui::{
     App, ClickEvent, ElementId, Empty, Hsla, InteractiveElement, IntoElement, ParentElement as _,
     RenderOnce, Role, SharedString, StatefulInteractiveElement, StyleRefinement, Styled, Window,
-    div, prelude::FluentBuilder as _, px, rems, transparent_white,
+    div, prelude::FluentBuilder as _, px, rems,
 };
 
 use crate::{
-    ActiveTheme as _, Colorize, Icon, IconName, Sizable, Size, StyledExt, h_flex,
+    ActiveTheme as _, Icon, IconName, Sizable, Size, StyledExt, h_flex,
     text::{Text, TextViewStyle},
 };
 
@@ -26,6 +26,16 @@ impl AlertVariant {
     fn fg(&self, cx: &App) -> Hsla {
         match self {
             Self::Default => cx.theme().foreground,
+            Self::Info => cx.theme().info_foreground,
+            Self::Success => cx.theme().success_foreground,
+            Self::Warning => cx.theme().warning_foreground,
+            Self::Error => cx.theme().danger_foreground,
+        }
+    }
+
+    fn bg(&self, cx: &App) -> Hsla {
+        match self {
+            Self::Default => cx.theme().secondary,
             Self::Info => cx.theme().info,
             Self::Success => cx.theme().success,
             Self::Warning => cx.theme().warning,
@@ -33,23 +43,13 @@ impl AlertVariant {
         }
     }
 
-    fn bg(&self, cx: &App) -> Hsla {
-        match self {
-            Self::Default => cx.theme().background,
-            Self::Info => cx.theme().info.mix_oklab(transparent_white(), 0.04),
-            Self::Success => cx.theme().success.mix_oklab(transparent_white(), 0.04),
-            Self::Warning => cx.theme().warning.mix_oklab(transparent_white(), 0.04),
-            Self::Error => cx.theme().danger.mix_oklab(transparent_white(), 0.04),
-        }
-    }
-
     fn border_color(&self, cx: &App) -> Hsla {
         match self {
             Self::Default => cx.theme().border,
-            Self::Info => cx.theme().info.mix_oklab(transparent_white(), 0.3),
-            Self::Success => cx.theme().success.mix_oklab(transparent_white(), 0.3),
-            Self::Warning => cx.theme().warning.mix_oklab(transparent_white(), 0.3),
-            Self::Error => cx.theme().danger.mix_oklab(transparent_white(), 0.3),
+            Self::Info => cx.theme().border_info(),
+            Self::Success => cx.theme().border_success(),
+            Self::Warning => cx.theme().border_warning(),
+            Self::Error => cx.theme().border_danger(),
         }
     }
 }
