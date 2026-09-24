@@ -39,10 +39,23 @@ pub enum NotificationType {
 impl NotificationType {
     fn icon(&self, cx: &App) -> Icon {
         match self {
-            Self::Info => Icon::new(IconName::Info).text_color(cx.theme().info),
-            Self::Success => Icon::new(IconName::CircleCheck).text_color(cx.theme().success),
-            Self::Warning => Icon::new(IconName::TriangleAlert).text_color(cx.theme().warning),
-            Self::Error => Icon::new(IconName::CircleX).text_color(cx.theme().danger),
+            Self::Info => Icon::new(IconName::Info).text_color(cx.theme().info_foreground),
+            Self::Success => {
+                Icon::new(IconName::CircleCheck).text_color(cx.theme().success_foreground)
+            }
+            Self::Warning => {
+                Icon::new(IconName::TriangleAlert).text_color(cx.theme().warning_foreground)
+            }
+            Self::Error => Icon::new(IconName::CircleX).text_color(cx.theme().danger_foreground),
+        }
+    }
+
+    fn bg(&self, cx: &App) -> gpui::Hsla {
+        match self {
+            Self::Info => cx.theme().notification_info(),
+            Self::Success => cx.theme().notification_success(),
+            Self::Warning => cx.theme().notification_warning(),
+            Self::Error => cx.theme().notification_danger(),
         }
     }
 }
@@ -404,6 +417,10 @@ impl Render for Notification {
             .map(|builder| builder(self, window, cx).small().mr_3p5());
 
         let transition_status = self.transition_status;
+        let bg = match self.type_ {
+            None => cx.theme().popover,
+            Some(type_) => type_.bg(cx),
+        };
         let closing = transition_status == ToastTransitionStatus::Ending;
         let icon = match self.type_ {
             None => self.icon.clone(),
@@ -421,7 +438,7 @@ impl Render for Notification {
             .w_full()
             .border_1()
             .border_color(cx.theme().border)
-            .bg(cx.theme().tokens.popover)
+            .bg(bg)
             .rounded(cx.theme().radius_lg)
             .shadow(toast_shadow(1.))
             .py_3p5()
