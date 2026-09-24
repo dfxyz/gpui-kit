@@ -189,8 +189,6 @@ impl Styled for BubbleContent {
 
 impl RenderOnce for BubbleContent {
     fn render(self, _: &mut Window, cx: &mut App) -> impl IntoElement {
-        let tokens = cx.theme().semantic_tokens();
-
         div()
             .min_w_0()
             .max_w_full()
@@ -208,41 +206,38 @@ impl RenderOnce for BubbleContent {
             })
             .map(|this| match self.variant {
                 BubbleVariant::Filled => this
-                    .bg(tokens.colors.primary)
-                    .text_color(tokens.colors.primary_foreground),
+                    .bg(cx.theme().primary)
+                    .text_color(cx.theme().primary_foreground),
                 // The theme's `secondary` role is tuned for buttons and sits a
                 // tier darker than shadcn's conversation secondary; the
                 // near-background `muted` tier matches shadcn's value in both
                 // light and dark themes.
                 BubbleVariant::Secondary => this
-                    .bg(tokens.colors.muted)
-                    .text_color(tokens.colors.secondary_foreground),
-                BubbleVariant::Muted => this
-                    .bg(tokens.colors.muted)
-                    .text_color(tokens.colors.foreground),
+                    .bg(cx.theme().muted)
+                    .text_color(cx.theme().secondary_foreground),
+                BubbleVariant::Muted => this.bg(cx.theme().muted).text_color(cx.theme().foreground),
                 BubbleVariant::Tinted => this
-                    .bg(tokens.colors.primary.mix_oklab(
-                        tokens.colors.background,
+                    .bg(cx.theme().primary.mix_oklab(
+                        cx.theme().background,
                         if cx.theme().is_dark() { 0.24 } else { 0.12 },
                     ))
-                    .text_color(tokens.colors.foreground),
+                    .text_color(cx.theme().foreground),
                 BubbleVariant::Outline => this
-                    .border_color(tokens.colors.border)
-                    .bg(tokens.colors.background)
-                    .text_color(tokens.colors.foreground),
+                    .border_color(cx.theme().border)
+                    .bg(cx.theme().background)
+                    .text_color(cx.theme().foreground),
                 BubbleVariant::Ghost => this
-                    .rounded(tokens.radius.none)
+                    .rounded_none()
                     .border_0()
                     .bg(cx.theme().transparent)
-                    .text_color(tokens.colors.foreground)
+                    .text_color(cx.theme().foreground)
                     .p_0(),
                 BubbleVariant::Destructive => this
-                    .bg(tokens.colors.destructive.opacity(if cx.theme().is_dark() {
-                        0.2
-                    } else {
-                        0.1
-                    }))
-                    .text_color(tokens.colors.destructive),
+                    .bg(cx
+                        .theme()
+                        .danger_foreground
+                        .opacity(if cx.theme().is_dark() { 0.2 } else { 0.1 }))
+                    .text_color(cx.theme().danger_foreground),
             })
             .refine_style(&self.style)
             .children(self.children)
