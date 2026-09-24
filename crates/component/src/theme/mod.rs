@@ -334,7 +334,7 @@ impl Theme {
                         })
                         .thumb_active(|style| {
                             style
-                                .bg(self.tokens.scrollbar_thumb_hover)
+                                .bg(self.scrollbar_thumb_active())
                                 .radius(self.radius)
                                 .when(gpui_base::is_mobile(), |style| {
                                     style
