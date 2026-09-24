@@ -33,12 +33,15 @@ mod window_selection;
 /// Derives the Base rich-text style installed by the component theme adapter.
 pub(crate) fn base_text_view_style(theme: &crate::Theme) -> gpui_base::TextViewStyle {
     let radius = theme.semantic_tokens().radius.md;
-    let mut table = gpui::StyleRefinement::default();
+    let mut table = gpui::StyleRefinement::default().bg(theme.table);
     table.corner_radii.top_left = Some(radius.into());
     table.corner_radii.top_right = Some(radius.into());
     table.corner_radii.bottom_left = Some(radius.into());
     table.corner_radii.bottom_right = Some(radius.into());
-    let mut code_block = gpui::StyleRefinement::default();
+    let mut code_block = gpui::StyleRefinement::default()
+        .bg(theme.code_block())
+        .border_1()
+        .border_color(theme.border);
     code_block.corner_radii = table.corner_radii.clone();
     let table_head = gpui::StyleRefinement::default()
         .bg(theme.table_head)
@@ -55,7 +58,7 @@ pub(crate) fn base_text_view_style(theme: &crate::Theme) -> gpui_base::TextViewS
         .with_table(table)
         .with_table_head(table_head)
         .with_inline_code(gpui::HighlightStyle {
-            background_color: Some(theme.accent),
+            background_color: Some(theme.inline_code()),
             ..Default::default()
         })
         .with_dark(theme.is_dark())

@@ -818,12 +818,24 @@ impl Element for Inline {
             return;
         }
         let text_layout = self.styled_text.layout().clone();
-        self.styled_text
-            .paint(global_id, None, bounds, &mut (), &mut (), window, cx);
 
         // layout selections
         let (is_selectable, is_selection, selection) =
             self.layout_selections(&text_layout, &bounds, window, cx);
+
+        if let Some(selection) = &selection {
+            let color = GlobalState::global(cx)
+                .text_view_state()
+                .map(|state| state.read(cx).text_view_style.selection())
+                .unwrap_or_else(|| crate::Theme::global(cx).tokens.colors.selection);
+            Self::paint_selection(selection, &text_layout, &bounds, window, color);
+        }
+
+        self.styled_text
+            .paint(global_id, None, bounds, &mut (), &mut (), window, cx);
+
+        self.styled_text
+            .paint(global_id, None, bounds, &mut (), &mut (), window, cx);
 
         let Ok(mut state) = self.state.lock() else {
             return;
@@ -853,11 +865,6 @@ impl Element for Inline {
         }
 
         if let Some(selection) = &state.selection {
-            let color = GlobalState::global(cx)
-                .text_view_state()
-                .map(|state| state.read(cx).text_view_style.selection())
-                .unwrap_or_else(|| crate::Theme::global(cx).tokens.colors.selection);
-            Self::paint_selection(selection, &text_layout, &bounds, window, color);
             if let Some((start, end)) = Self::selection_edges(selection, &text_layout)
                 && let Some(text_view_state) = GlobalState::global(cx).text_view_state().cloned()
             {
