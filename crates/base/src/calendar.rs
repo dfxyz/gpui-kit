@@ -314,7 +314,7 @@ impl CalendarState {
                 days_in_month(
                     self.current_year,
                     self.current_month as u32 + n as u32,
-                    Weekday::Sun,
+                    Weekday::Mon,
                 )
             })
             .collect()
@@ -664,8 +664,8 @@ impl RenderOnce for Calendar {
                 (s.current_month() as i32, s.current_year())
             };
             for (kind, value, active) in [
-                (CalendarItemKind::MonthToggle, month, view.is_month()),
                 (CalendarItemKind::YearToggle, year, view.is_year()),
+                (CalendarItemKind::MonthToggle, month, view.is_month()),
             ] {
                 let st = CalendarItemState::new(kind).active(active);
                 let entity = self.state.clone();
@@ -700,8 +700,8 @@ impl RenderOnce for Calendar {
                     div().text_sm().font_medium().child(
                         v_flex()
                             .items_center()
-                            .child((self.label)(CalendarItemKind::MonthToggle, m as i32))
-                            .child(y.to_string()),
+                            .child(y.to_string())
+                            .child((self.label)(CalendarItemKind::MonthToggle, m as i32)),
                     ),
                 );
             }
