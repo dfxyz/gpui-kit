@@ -350,9 +350,8 @@ impl DialogStory {
                                                 .items_center()
                                                 .justify_center()
                                                 .rounded(cx.theme().radius_lg)
-                                                .bg(cx.theme().warning.opacity(0.2))
                                                 .size_12()
-                                                .text_color(cx.theme().warning)
+                                                .text_color(cx.theme().warning_foreground)
                                                 .child(Icon::new(IconName::TriangleAlert).size_8()),
                                         )
                                         .child(

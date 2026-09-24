@@ -317,7 +317,7 @@ impl Render for InputGroupStory {
                             .input(InputGroupInput::new(&self.email).aria_label("Email address").content_type(InputContentType::EmailAddress))
                             .addon(InputGroupAddon::new("email-icon").child(icon(IconName::Info))))
                         .child(div().text_sm()
-                            .text_color(if invalid { cx.theme().danger } else { cx.theme().muted_foreground })
+                            .text_color(if invalid { cx.theme().danger_foreground } else { cx.theme().muted_foreground })
                             .child(if invalid { "Enter an email address such as you@example.com." } else { "Validation comes from the application's field value." })))
                     .child(InputGroup::new("input-group-disabled").disabled(true)
                         .input(InputGroupInput::new(&self.disabled).aria_label("Disabled input"))
@@ -327,7 +327,7 @@ impl Render for InputGroupStory {
                     .child(v_flex().gap_2()
                         .child(InputGroup::new("input-group-disabled-invalid").disabled(true).invalid(true)
                             .input(InputGroupInput::new(&self.disabled_invalid).aria_label("Disabled invalid input")))
-                        .child(div().text_sm().text_color(cx.theme().danger)
+                        .child(div().text_sm().text_color(cx.theme().danger_foreground)
                             .child("The error remains visible while editing is unavailable."))),
             ))
             .child(self.render_textarea_examples(cx))

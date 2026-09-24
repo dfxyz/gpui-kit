@@ -245,7 +245,7 @@ impl Render for NumberInputStory {
                             .w(px(260.))
                             .appearance(false)
                             .bg(cx.theme().secondary)
-                            .text_color(cx.theme().info),
+                            .text_color(cx.theme().info_foreground),
                     ),
             )
     }

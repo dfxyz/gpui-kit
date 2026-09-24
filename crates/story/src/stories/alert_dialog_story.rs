@@ -104,7 +104,7 @@ impl Render for AlertDialogStory {
 
                             window.open_alert_dialog(cx, |alert, _, cx| {
                                 alert
-                                    .icon(Icon::new(IconName::Info).text_color(cx.theme().danger))
+                                    .icon(Icon::new(IconName::Info).text_color(cx.theme().danger_foreground))
                                     .title("Delete File")
                                     .description(
                                         "Are you sure you want to delete this file? \
@@ -137,7 +137,7 @@ impl Render for AlertDialogStory {
                             .child(
                                 DialogHeader::new()
                                     .items_center()
-                                    .child(Icon::new(IconName::TriangleAlert).size_10().text_color(cx.theme().warning))
+                                    .child(Icon::new(IconName::TriangleAlert).size_10().text_color(cx.theme().warning_foreground))
                                     .child(
                                         DialogTitle::new().child("Network Permission Required"),
                                     ).child(

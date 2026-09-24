@@ -1502,7 +1502,7 @@ impl Render for DataTableStory {
                             .justify_between()
                             .gap_3()
                             .px_3()
-                            .bg(cx.theme().muted.opacity(0.35))
+                            .bg(cx.theme().muted)
                             .text_xs()
                             .text_color(cx.theme().muted_foreground)
                             .child(format!(

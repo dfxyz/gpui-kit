@@ -629,6 +629,7 @@ impl Render for CommandStory {
                                             content.child(with_entries(
                                                 Command::new(&command)
                                                     .bordered(false)
+                                                    .rounded_lg()
                                                     .placeholder("Type a command or search...")
                                                     .on_confirm(move |index_path, window, cx| {
                                                         _ = confirm_owner.update(cx, |story, cx| {

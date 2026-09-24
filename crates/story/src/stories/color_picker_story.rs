@@ -135,12 +135,7 @@ impl Render for ColorPickerStory {
                                                         .text_color(cx.theme().muted_foreground)
                                                         .child("Selected color"),
                                                 )
-                                                .child(
-                                                    div()
-                                                        .font_family("monospace")
-                                                        .font_medium()
-                                                        .child(color.to_hex()),
-                                                ),
+                                                .child(div().font_medium().child(color.to_hex())),
                                         ),
                                 )
                             }),

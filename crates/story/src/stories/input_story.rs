@@ -332,7 +332,7 @@ impl InputStory {
             .gap_3()
             .child(
                 Label::new(item.label)
-                    .w_48()
+                    .w_56()
                     .flex_shrink_0()
                     .text_sm()
                     .whitespace_nowrap(),
@@ -611,7 +611,7 @@ impl Render for InputStory {
                     .child(
                         Input::new(&self.color_input)
                             .with_size(self.size)
-                            .text_color(cx.theme().info),
+                            .text_color(cx.theme().info_foreground),
                     ),
             )
     }

@@ -253,6 +253,7 @@ impl Render for PopoverStory {
                     .child(
                         Popover::new("default-open-popover")
                             .default_open(true)
+                            .text_sm()
                             .trigger(
                                 Button::new("default-open-btn")
                                     .label("Default Open")
@@ -306,6 +307,7 @@ impl Render for PopoverStory {
                             .mouse_button(MouseButton::Right)
                             .trigger(Button::new("btn").outline().label("Right Click Popover"))
                             .max_w(px(600.))
+                            .text_sm()
                             .content(|_, _, cx| {
                                 v_flex()
                                     .gap_2()
@@ -402,6 +404,7 @@ impl Render for PopoverStory {
                                         .max_w(px(600.))
                                         .anchor(Anchor::TopLeft)
                                         .trigger(Button::new("btn").outline().label("TopLeft"))
+                                        .text_sm()
                                         .child("Anchored to the trigger's top-left."),
                                 )
                                 .child(
@@ -409,12 +412,14 @@ impl Render for PopoverStory {
                                         .max_w(px(600.))
                                         .anchor(Anchor::TopCenter)
                                         .trigger(Button::new("btn").outline().label("TopCenter"))
+                                        .text_sm()
                                         .child("Anchored to the trigger's top-center."),
                                 )
                                 .child(
                                     Popover::new("anchor-top-right")
                                         .anchor(Anchor::TopRight)
                                         .trigger(Button::new("btn").outline().label("TopRight"))
+                                        .text_sm()
                                         .child("Anchored to the trigger's top-right."),
                                 ),
                         ),
@@ -428,18 +433,21 @@ impl Render for PopoverStory {
                                     Popover::new("anchor-bottom-left")
                                         .trigger(Button::new("btn").outline().label("BottomLeft"))
                                         .anchor(Anchor::BottomLeft)
+                                        .text_sm()
                                         .child("Anchored to the trigger's bottom-left."),
                                 )
                                 .child(
                                     Popover::new("anchor-bottom-center")
                                         .trigger(Button::new("btn").outline().label("BottomCenter"))
                                         .anchor(Anchor::BottomCenter)
+                                        .text_sm()
                                         .child("Anchored to the trigger's bottom-center."),
                                 )
                                 .child(
                                     Popover::new("anchor-bottom-right")
                                         .anchor(Anchor::BottomRight)
                                         .trigger(Button::new("btn").outline().label("BottomRight"))
+                                        .text_sm()
                                         .child("Anchored to the trigger's bottom-right."),
                                 ),
                         ),

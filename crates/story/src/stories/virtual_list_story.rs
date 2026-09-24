@@ -214,7 +214,7 @@ impl Render for VirtualListStory {
                 .text_sm()
                 .w(ITEM_SIZE.width)
                 .h(ITEM_SIZE.height)
-                .bg(cx.theme().secondary)
+                .bg(cx.theme().muted)
         }
 
         v_flex()

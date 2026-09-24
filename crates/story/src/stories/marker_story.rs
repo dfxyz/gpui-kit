@@ -85,7 +85,7 @@ impl Render for MarkerStory {
                     .gap_3()
                     .child(
                         Marker::new()
-                            .text_color(cx.theme().success)
+                            .text_color(cx.theme().success_foreground)
                             .icon(MarkerIcon::new().child(Icon::new(IconName::CircleCheck)))
                             .content(MarkerContent::new().child("Online")),
                     )
@@ -101,7 +101,7 @@ impl Render for MarkerStory {
                     )
                     .child(
                         Marker::new()
-                            .text_color(cx.theme().danger)
+                            .text_color(cx.theme().danger_foreground)
                             .icon(MarkerIcon::new().child(Icon::new(IconName::Info)))
                             .content(MarkerContent::new().child("Message could not be delivered")),
                     ),

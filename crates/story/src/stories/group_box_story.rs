@@ -113,6 +113,7 @@ impl Render for GroupBoxStory {
                         .child(
                             h_flex()
                                 .justify_between()
+                                .text_sm()
                                 .child("Make profile private and hide activity")
                                 .child(
                                     Switch::new("profile-private")
@@ -126,6 +127,7 @@ impl Render for GroupBoxStory {
                         .child(
                             h_flex()
                                 .justify_between()
+                                .text_sm()
                                 .child("Include private contributions on my profile")
                                 .child(
                                     Switch::new("private-contributions")
@@ -163,6 +165,7 @@ impl Render for GroupBoxStory {
                     GroupBox::new().outline().child(
                         h_flex()
                             .justify_between()
+                            .text_sm()
                             .child("Make profile private and hide activity")
                             .child(
                                 Switch::new("compact-private")

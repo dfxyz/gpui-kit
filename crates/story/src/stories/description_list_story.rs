@@ -154,7 +154,9 @@ impl Render for DescriptionListStory {
                                 }
 
                                 DescriptionItem::new(label)
-                                    .value(TextView::markdown(ix, value).into_any_element())
+                                    .value(
+                                        TextView::markdown(ix, value).text_sm().into_any_element(),
+                                    )
                                     .span(span)
                             },
                         )),

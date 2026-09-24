@@ -1,5 +1,5 @@
 use gpui_kit::component::{
-    ActiveTheme, IconName, Sizable, Size, StyledExt,
+    ActiveTheme, IconName, Size, StyledExt,
     button::Button,
     h_flex,
     progress::{Progress, ProgressCircle},
@@ -153,7 +153,7 @@ impl Render for ProgressStory {
                     .items_center()
                     .child(
                         v_flex()
-                            .w(px(400.))
+                            .w(px(480.))
                             .gap_3()
                             .p_4()
                             .rounded(cx.theme().radius_lg)
@@ -198,18 +198,18 @@ impl Render for ProgressStory {
                     .items_center()
                     .child(
                         h_flex()
-                            .w(px(400.))
+                            .w(px(480.))
                             .items_center()
                             .gap_5()
                             .p_4()
                             .rounded(cx.theme().radius_lg)
-                            .bg(cx.theme().muted.opacity(0.4))
+                            .bg(cx.theme().muted)
                             .child(
                                 ProgressCircle::new("analysis-progress")
-                                    .with_size(self.size)
+                                    .size_20()
+                                    .flex_shrink_0()
                                     .value(self.value)
                                     .loading(self.loading)
-                                    .size_20()
                                     .when(!self.loading, |this| {
                                         this.child(
                                             div()

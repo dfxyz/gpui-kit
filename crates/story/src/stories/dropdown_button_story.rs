@@ -181,6 +181,7 @@ impl Render for DropdownButtonStory {
                                     }
                                 }),
                         )
+                        .selected(selected)
                         .disabled(disabled)
                         .dropdown_menu(move |this, _, _| {
                             this.menu("Save as new file…", Box::new(ButtonAction::SaveCopy))

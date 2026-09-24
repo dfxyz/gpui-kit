@@ -375,7 +375,7 @@ impl Render for Gallery {
                             )
                             .child(
                                 div()
-                                    .bg(cx.theme().sidebar_accent)
+                                    .bg(cx.theme().muted)
                                     .rounded_full_style(cx)
                                     .px_1()
                                     .flex_1()

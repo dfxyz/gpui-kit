@@ -348,9 +348,9 @@ impl Render for BubbleStory {
                         start_bubble().content(
                             BubbleContent::new()
                                 .rounded(cx.theme().radius)
-                                .bg(cx.theme().success.opacity(0.15))
-                                .text_color(cx.theme().success)
-                                .border_color(cx.theme().success.opacity(0.35))
+                                .bg(cx.theme().success_foreground.opacity(0.15))
+                                .text_color(cx.theme().success_foreground)
+                                .border_color(cx.theme().success_foreground.opacity(0.35))
                                 .child("Custom semantic color"),
                         ),
                     ),

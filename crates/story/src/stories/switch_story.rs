@@ -167,7 +167,7 @@ impl Render for SwitchStory {
                             .with_size(self.size)
                             .checked(self.switch4)
                             .label("Success")
-                            .color(theme.success)
+                            .color(theme.success_foreground)
                             .on_click(cx.listener(|this, checked, _, cx| {
                                 this.switch4 = *checked;
                                 cx.notify();
@@ -178,7 +178,7 @@ impl Render for SwitchStory {
                             .with_size(self.size)
                             .checked(self.switch5)
                             .label("Destructive")
-                            .color(theme.danger)
+                            .color(theme.danger_foreground)
                             .on_click(cx.listener(|this, checked, _, cx| {
                                 this.switch5 = *checked;
                                 cx.notify();
@@ -189,7 +189,7 @@ impl Render for SwitchStory {
                             .with_size(self.size)
                             .checked(true)
                             .label("Disabled")
-                            .color(theme.success)
+                            .color(theme.success_foreground)
                             .disabled(true),
                     ),
             )

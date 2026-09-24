@@ -146,7 +146,7 @@ impl Render for ScrollbarStory {
                                             .child(
                                                 div()
                                                     .p_2()
-                                                    .bg(cx.theme().secondary)
+                                                    .bg(cx.theme().muted)
                                                     .child(item.to_string()),
                                             ),
                                     );

@@ -211,7 +211,7 @@ impl Render for AttachmentStory {
                             .status(AttachmentStatus::Complete)
                             .media(
                                 AttachmentMedia::new()
-                                    .text_color(cx.theme().success)
+                                    .text_color(cx.theme().success_foreground)
                                     .child(Icon::new(IconName::CircleCheck)),
                             )
                             .content(
