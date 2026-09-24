@@ -183,7 +183,6 @@ impl Attachment {
 
 impl RenderOnce for Attachment {
     fn render(mut self, _: &mut Window, cx: &mut App) -> impl IntoElement {
-        let tokens = cx.theme().semantic_tokens();
         let size = self.size;
         let axis = self.axis;
         let status = self.status;
@@ -199,25 +198,25 @@ impl RenderOnce for Attachment {
             .flex_none()
             .max_w_full()
             .min_w_0()
-            .rounded(if size == Size::XSmall {
-                tokens.radius.xl
-            } else {
-                cx.theme().radius_2xl()
-            })
+            .when_else(
+                size == Size::XSmall,
+                |this| this.rounded_xl(),
+                |this| this.rounded_2xl(),
+            )
             .border_1()
             .border_color(if status.is_failed() {
-                tokens.colors.destructive.opacity(0.3)
+                cx.theme().danger_foreground.opacity(0.3)
             } else {
-                tokens.colors.border
+                cx.theme().border
             })
             .when(status.is_pending(), |this| this.border_dashed())
-            .bg(tokens.colors.background)
-            .text_color(tokens.colors.foreground)
+            .bg(cx.theme().background)
+            .text_color(cx.theme().foreground)
             // Register `hover` unconditionally: a conditionally registered
             // hover style stays cached when the condition later flips off.
             .hover(move |style| {
                 if clickable {
-                    style.bg(tokens.colors.muted.opacity(0.5))
+                    style.bg(cx.theme().selection.opacity(0.125))
                 } else {
                     style
                 }
@@ -370,14 +369,14 @@ impl RenderOnce for AttachmentMedia {
             })
             .rounded(radius)
             .bg(if failed_media {
-                tokens.colors.destructive.opacity(0.1)
+                cx.theme().danger_foreground.opacity(0.1)
             } else {
-                tokens.colors.muted
+                cx.theme().muted
             })
             .text_color(if failed_media {
-                tokens.colors.destructive
+                cx.theme().danger_foreground
             } else {
-                tokens.colors.foreground
+                cx.theme().foreground
             })
             .when_some(source, |this, source| {
                 this.child(
@@ -587,12 +586,11 @@ impl Styled for AttachmentDescription {
 
 impl RenderOnce for AttachmentDescription {
     fn render(self, _: &mut Window, cx: &mut App) -> impl IntoElement {
-        let tokens = cx.theme().semantic_tokens();
         let color = self
             .status
             .is_some_and(AttachmentStatus::is_failed)
-            .then(|| tokens.colors.destructive.opacity(0.8))
-            .unwrap_or(tokens.colors.muted_foreground);
+            .then(|| cx.theme().danger_foreground)
+            .unwrap_or(cx.theme().muted_foreground);
 
         div()
             .max_w_full()
