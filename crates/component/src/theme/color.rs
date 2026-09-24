@@ -148,7 +148,11 @@ mod oklab {
 /// gamut is clipped per channel, which costs a little chroma but not the hue.
 pub fn oklch(lightness: f32, chroma: f32, hue: f32) -> Hsla {
     let hue = hue.to_radians();
-    let rgb = oklab::oklab_to_rgb(lightness, chroma * hue.cos(), chroma * hue.sin());
+    let mut rgb = oklab::oklab_to_rgb(lightness, chroma * hue.cos(), chroma * hue.sin());
+    rgb.r = (rgb.r * 255.).round() / 255.;
+    rgb.g = (rgb.g * 255.).round() / 255.;
+    rgb.b = (rgb.b * 255.).round() / 255.;
+    rgb.a = (rgb.a * 255.).round() / 255.;
     rgb.into()
 }
 

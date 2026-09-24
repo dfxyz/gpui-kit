@@ -9,6 +9,10 @@
       "is_default": true,
       "name": "Default Light",
       "mode": "light",
+      "font.family": "Fira Noto SC",
+      "font.size": 16,
+      "mono_font.family": "Fira Noto SC",
+      "mono_font.size": 14,
       "colors": {
         "accent.background": "neutral-100",
         "accent.foreground": "neutral-900",
@@ -23,8 +27,8 @@
         "chart.3": "#2563eb",
         "chart.4": "#1d4ed8",
         "chart.5": "#1e40af",
-        "chart.bullish": "green-600",
-        "chart.bearish": "red-600",
+        "chart.bullish": "red-600",
+        "chart.bearish": "green-600",
         "danger.background": "red-500",
         "danger.foreground": "neutral-50",
         "description_list_label.foreground": "#171717",
@@ -94,7 +98,7 @@
         "status_bar.border": "#e5e5e5",
         "warning.background": "yellow-500",
         "warning.foreground": "neutral-50",
-        "overlay": "#0000000d",
+        "overlay": "#0000001a",
         "window.border": "#e5e5e5",
         "base.red": "red-600",
         "base.red.light": "red-400",
@@ -110,11 +114,11 @@
         "base.cyan.light": "cyan-400"
       },
       "highlight": {
-        "editor.foreground": "#000000",
-        "editor.background": "#ffffff",
-        "editor.active_line.background": "#F5F5F5",
-        "editor.line_number": "#929292",
-        "editor.active_line_number": "#000000",
+        "editor.foreground": "#2E2E2E",
+        "editor.background": "#EDF0E8",
+        "editor.active_line.background": "#E0EAC5",
+        "editor.line_number": "#AEAEAE",
+        "editor.active_line_number": "#2E2E2E",
         "editor.invisible": "#73737366",
         "conflict": "#C5060B",
         "created": "#1642FF",
@@ -125,87 +129,87 @@
         "warning": "#C99401",
         "syntax": {
           "attribute": {
-            "color": "#957931"
+            "color": "#773AC1"
           },
           "boolean": {
-            "color": "#C5060B"
+            "color": "#A14206"
           },
           "comment": {
-            "color": "#007fff"
+            "color": "#5C6B21"
           },
           "comment.doc": {
-            "color": "#007fff"
+            "color": "#5C6B21"
           },
           "constant": {
-            "color": "#C5060B"
+            "color": "#2E2E2E"
           },
           "constructor": {
-            "color": "#0433ff"
+            "color": "#3B51D3"
           },
           "embedded": {
-            "color": "#333333"
+            "color": "#2E2E2E"
           },
           "emphasis": {
+            "color": "#2E2E2E",
             "font_style": "italic"
           },
           "emphasis.strong": {
+            "color": "#2E2E2E",
             "font_weight": 700
           },
           "function": {
-            "color": "#0000A2"
+            "color": "#2E2E2E"
           },
           "keyword": {
-            "color": "#0433ff"
+            "color": "#087736"
           },
           "link_text": {
-            "color": "#0000A2",
-            "font_style": "normal"
+            "color": "#0961BB"
           },
           "link_uri": {
-            "color": "#6A7293",
-            "font_style": "italic"
+            "color": "#0961BB"
           },
           "number": {
-            "color": "#0433ff"
+            "color": "#A14206"
           },
           "string": {
-            "color": "#036A07"
+            "color": "#176F7C"
           },
           "string.escape": {
-            "color": "#036A07"
+            "color": "#A14206"
           },
           "string.regex": {
-            "color": "#036A07"
+            "color": "#176F7C"
           },
           "string.special": {
-            "color": "#d21f07"
+            "color": "#A14206"
           },
           "string.special.symbol": {
-            "color": "#d21f07"
+            "color": "#A14206"
           },
           "tag": {
-            "color": "#0433ff"
+            "color": "#087736"
           },
           "text.literal": {
-            "color": "#6F42C1"
+            "color": "#176F7C"
           },
           "text.code.span": {
-            "color": "#6F42C1"
+            "color": "#176F7C"
           },
           "title": {
-            "color": "#0433FF"
+            "color": "#087736"
           },
           "type": {
-            "color": "#6f42c1"
+            "color": "#3B51D3"
           },
           "property": {
-            "color": "#333333"
+            "color": "#773AC1"
           },
           "variable": {
-            "color": "#333333"
+            "color": "#2E2E2E"
           },
           "variable.special": {
-            "color": "#C5060B"
+            "color": "#087736"
           }
         }
       }
@@ -228,8 +232,8 @@
         "chart.3": "#2563eb",
         "chart.4": "#1d4ed8",
         "chart.5": "#1e40af",
-        "chart.bullish": "green-600",
-        "chart.bearish": "red-600",
+        "chart.bullish": "red-600",
+        "chart.bearish": "green-600",
         "danger.background": "red-400",
         "danger.foreground": "red-600",
         "description_list_label.background": "#171717",

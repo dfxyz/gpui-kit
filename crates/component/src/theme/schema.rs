@@ -1102,6 +1102,10 @@ impl Theme {
 
         self.tokens = self.colors.apply_config(&config, &default_colors);
         self.mode = config.mode;
+
+        if !self.mode.is_dark() {
+            self.apply_custom_colors();
+        }
     }
 }
 

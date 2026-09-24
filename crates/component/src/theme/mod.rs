@@ -20,6 +20,7 @@ use std::{
 };
 
 mod color;
+mod custom;
 mod mono_font;
 mod motion;
 mod registry;
@@ -28,6 +29,7 @@ mod system_font;
 mod theme_color;
 
 pub use color::*;
+pub use custom::*;
 pub use motion::*;
 pub use registry::*;
 pub use schema::*;
@@ -168,6 +170,8 @@ pub struct Theme {
     /// Semantic motion policy for styled components.
     #[serde(skip)]
     pub motion: MotionTokens,
+    #[serde(skip)]
+    pub custom_colors: CustomColors,
 }
 
 impl Default for Theme {
@@ -380,7 +384,7 @@ impl Theme {
         if self.is_dark() {
             self.input.mix_oklab(self.transparent, 0.3)
         } else {
-            self.background
+            self.input_component()
         }
     }
 
@@ -679,6 +683,7 @@ impl From<&ThemeColor> for Theme {
             highlight_theme: HighlightTheme::default_light(),
             sheet: SheetSettings::default(),
             motion: MotionTokens::default(),
+            custom_colors: CustomColors::default(),
         }
     }
 }

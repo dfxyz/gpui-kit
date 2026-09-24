@@ -316,11 +316,11 @@ impl<T: Styled> StyleSized<T> for T {
         .pb(padding.bottom)
     }
 
+    #[inline]
     fn button_text_size(self, size: Size) -> Self {
         match size {
             Size::XSmall => self.text_xs(),
-            Size::Small => self.text_sm(),
-            _ => self.text_base(),
+            _ => self.text_sm(),
         }
     }
 }
