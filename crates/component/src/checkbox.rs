@@ -4,9 +4,9 @@ use crate::{
     ActiveTheme, Disableable, IconName, RoleOverride, Selectable, Sizable, Size, icon::IconNamed,
     text::Text, tooltip::ComponentTooltip, v_flex,
 };
-use crate::{StyledExt as _, ThemeStyled as _};
+use crate::{StyleSized as _, StyledExt as _, ThemeStyled as _};
 use gpui::{
-    AnyElement, App, ElementId, InteractiveElement, IntoElement, MouseButton, ParentElement,
+    AnyElement, App, ElementId, InteractiveElement, IntoElement, MouseButton, ParentElement, Rems,
     RenderOnce, SharedString, StatefulInteractiveElement, StyleRefinement, Styled, Window, div,
     prelude::FluentBuilder as _, px, relative, rems, svg,
 };
@@ -171,14 +171,24 @@ impl Sizable for Checkbox {
     }
 }
 
-pub(crate) fn checkbox_check_icon(
+#[inline]
+pub(crate) fn indicator_size(size: Size) -> Rems {
+    rems(match size {
+        Size::XSmall => 0.75,
+        Size::Small => 0.875,
+        Size::Large => 1.125,
+        _ => 1.,
+    })
+}
+
+pub(crate) fn checked_indicator(
     id: ElementId,
-    size: Size,
+    use_check_icon: bool,
     checked: bool,
     disabled: bool,
     window: &mut Window,
     cx: &mut App,
-) -> impl IntoElement {
+) -> AnyElement {
     // The mark keeps its path while the spring is still fading it out. Guarding
     // the path on `checked` alone unmounted the glyph the moment the box was
     // cleared, so only the fade-in was ever visible.
@@ -195,33 +205,27 @@ pub(crate) fn checkbox_check_icon(
         cx.theme().primary_foreground
     };
 
-    svg()
-        .absolute()
-        .top_px()
-        .left_px()
-        .map(|this| match size {
-            Size::XSmall => this.size_2(),
-            Size::Small => this.size_2p5(),
-            Size::Medium => this.size_3(),
-            Size::Large => this.size_3p5(),
-            _ => this.size_3(),
-        })
-        .text_color(color)
-        .when(opacity > 0., |this| {
-            this.path(IconName::Check.path()).opacity(opacity)
-        })
+    if use_check_icon {
+        svg()
+            .size_full()
+            .text_color(color)
+            .when(opacity > 0., |this| {
+                this.path(IconName::Check.path()).opacity(opacity)
+            })
+            .into_any_element()
+    } else {
+        div()
+            .size_1_3()
+            .rounded_full()
+            .bg(color.opacity(opacity))
+            .into_any_element()
+    }
 }
 
 impl RenderOnce for Checkbox {
     fn render(self, window: &mut Window, cx: &mut App) -> impl IntoElement {
         let checked = self.checked;
-        let has_content = self.label.is_some() || !self.children.is_empty();
-        let indicator_size = rems(match self.size {
-            Size::XSmall => 0.75,
-            Size::Small => 0.875,
-            Size::Large => 1.125,
-            _ => 1.,
-        });
+        let indicator_size = indicator_size(self.size);
 
         let base = self.base;
         let children = self.children;
@@ -269,16 +273,10 @@ impl RenderOnce for Checkbox {
             })
             .h_flex()
             .gap_2()
-            .items_start()
+            .items_center()
             .line_height(relative(1.))
             .text_color(cx.theme().foreground)
-            .map(|this| match self.size {
-                Size::XSmall => this.text_xs(),
-                Size::Small => this.text_sm(),
-                Size::Medium => this.text_base(),
-                Size::Large => this.text_lg(),
-                _ => this,
-            })
+            .input_text_size(self.size)
             .rounded(cx.theme().radius * 0.5)
             .when(is_focused && self.focus_ring_enabled, |this| {
                 this.focus_ring_style(window, cx)
@@ -288,10 +286,7 @@ impl RenderOnce for Checkbox {
                 CheckboxIndicator::new()
                     .checked(checked)
                     .disabled(self.disabled)
-                    .relative()
                     .size(indicator_size)
-                    // Center on the first 1.25em line, including when the label wraps.
-                    .when(has_content, |this| this.mt(indicator_size * 0.125))
                     .flex_shrink_0()
                     .border_1()
                     .rounded(radius)
@@ -312,9 +307,9 @@ impl RenderOnce for Checkbox {
                                     .when(checked, |style| style.bg(disabled_indicator_color))
                             })
                     })
-                    .child(checkbox_check_icon(
+                    .child(checked_indicator(
                         self.id,
-                        self.size,
+                        true,
                         checked,
                         self.disabled,
                         window,
