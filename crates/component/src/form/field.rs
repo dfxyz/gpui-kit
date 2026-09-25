@@ -312,7 +312,7 @@ impl RenderOnce for Field {
                                             )
                                             .when(self.required, |this| {
                                                 this.child(
-                                                    div().text_color(cx.theme().danger).child("*"),
+                                                    div().text_color(cx.theme().danger_foreground).child("*"),
                                                 )
                                             }),
                                     )
