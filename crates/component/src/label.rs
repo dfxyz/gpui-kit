@@ -205,6 +205,7 @@ impl RenderOnce for Label {
         div()
             .line_height(rems(1.25))
             .text_color(cx.theme().foreground)
+            .text_sm()
             .refine_style(&self.style)
             .child(
                 StyledText::new(&text).when_some(highlights, |this, hl| this.with_highlights(hl)),
