@@ -6,7 +6,9 @@ use gpui::{
 };
 use rust_i18n::t;
 
-use gpui_base::{Pagination as BasePagination, PaginationItem as PageItem, PaginationState};
+use gpui_base::{
+    Pagination as BasePagination, PaginationItem as PageItem, PaginationState, Selectable,
+};
 
 use crate::{
     Disableable, Icon, Sizable, Size, StyledExt,
@@ -188,13 +190,8 @@ impl RenderOnce for Pagination {
 
                         Button::new(page)
                             .with_size(self.size)
-                            .map(|this| {
-                                if is_selected {
-                                    this.outline()
-                                } else {
-                                    this.ghost()
-                                }
-                            })
+                            .ghost()
+                            .selected(is_selected)
                             .label(page.to_string())
                             .compact()
                             .disabled(is_disabled)
