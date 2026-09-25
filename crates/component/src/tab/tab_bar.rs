@@ -399,7 +399,7 @@ impl RenderOnce for TabBar {
                     _ => px(16.),
                 };
 
-                (cx.theme().transparent.into(), Edges::all(px(0.)), gap)
+                (cx.theme().tab_bar.into(), Edges::all(px(0.)), gap)
             }
         };
 
