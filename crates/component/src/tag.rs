@@ -1,8 +1,7 @@
 use crate::{ColorName, Sizable, Size, StyledExt, theme::ActiveTheme as _};
 use gpui::{
-    AbsoluteLength, AnyElement, App, Hsla, InteractiveElement as _, IntoElement, ParentElement,
-    RenderOnce, StyleRefinement, Styled, Window, div, prelude::FluentBuilder as _, relative, rems,
-    transparent_white,
+    AbsoluteLength, AnyElement, App, Hsla, IntoElement, ParentElement, RenderOnce, StyleRefinement,
+    Styled, Window, div, prelude::FluentBuilder as _, relative, rems, transparent_white,
 };
 
 /// The variant of the Tag.
@@ -47,10 +46,10 @@ impl TagVariant {
         match self {
             Self::Primary => cx.theme().primary,
             Self::Secondary => cx.theme().border,
-            Self::Danger => cx.theme().danger,
-            Self::Success => cx.theme().success,
-            Self::Warning => cx.theme().warning,
-            Self::Info => cx.theme().info,
+            Self::Danger => cx.theme().border_danger(),
+            Self::Success => cx.theme().border_success(),
+            Self::Warning => cx.theme().border_warning(),
+            Self::Info => cx.theme().border_info(),
             Self::Color(color) => {
                 if cx.theme().is_dark() {
                     color.scale(800).opacity(0.5)
@@ -78,34 +77,10 @@ impl TagVariant {
                     cx.theme().secondary_foreground
                 }
             }
-            Self::Danger => {
-                if outline {
-                    cx.theme().danger
-                } else {
-                    cx.theme().danger_foreground
-                }
-            }
-            Self::Success => {
-                if outline {
-                    cx.theme().success
-                } else {
-                    cx.theme().success_foreground
-                }
-            }
-            Self::Warning => {
-                if outline {
-                    cx.theme().warning
-                } else {
-                    cx.theme().warning_foreground
-                }
-            }
-            Self::Info => {
-                if outline {
-                    cx.theme().info
-                } else {
-                    cx.theme().info_foreground
-                }
-            }
+            Self::Danger => cx.theme().danger_foreground,
+            Self::Success => cx.theme().success_foreground,
+            Self::Warning => cx.theme().warning_foreground,
+            Self::Info => cx.theme().info_foreground,
             Self::Color(color) => {
                 if cx.theme().is_dark() {
                     color.scale(300)
@@ -262,7 +237,6 @@ impl RenderOnce for Tag {
             .text_color(fg)
             .border_color(border)
             .rounded(rounded)
-            .hover(|this| this.opacity(0.9))
             .refine_style(&self.style)
             .children(self.children)
     }
