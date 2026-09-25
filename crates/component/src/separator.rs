@@ -146,7 +146,6 @@ impl RenderOnce for Separator {
                         .py_1()
                         .mx_auto()
                         .text_xs()
-                        .bg(cx.theme().tokens.background)
                         .text_color(cx.theme().muted_foreground)
                         .child(label),
                 )
