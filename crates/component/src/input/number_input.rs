@@ -117,10 +117,9 @@ impl RenderOnce for NumberInput {
         } else {
             cx.theme().input
         };
-        // Transparent like a ghost button, but tinted to the frame on hover.
-        let button_foreground = cx.theme().secondary_foreground;
-        let button_hover = cx.theme().input.opacity(0.4);
-        let button_active = cx.theme().input.opacity(0.6);
+        let button_foreground = cx.theme().foreground;
+        let button_hover = cx.theme().button_ghost_hover();
+        let button_active = cx.theme().button_ghost_active();
         let button_size = self.size;
         // The buttons sit inside the 1px frame, so their corners are a pixel
         // tighter than the frame's, or they paint over its inner curve.
@@ -139,8 +138,10 @@ impl RenderOnce for NumberInput {
                     .items_center()
                     .justify_center()
                     .text_color(button_foreground)
-                    .hover(move |this| this.bg(button_hover))
-                    .active(move |this| this.bg(button_active))
+                    .when(!self.disabled, |this| {
+                        this.hover(move |this| this.bg(button_hover))
+                            .active(move |this| this.bg(button_active))
+                    })
                     // The frame owns the control height, so the buttons fill it
                     // rather than setting their own and outgrowing the border.
                     .h_full()
@@ -172,8 +173,10 @@ impl RenderOnce for NumberInput {
                     .items_center()
                     .justify_center()
                     .text_color(button_foreground)
-                    .hover(move |this| this.bg(button_hover))
-                    .active(move |this| this.bg(button_active))
+                    .when(!self.disabled, |this| {
+                        this.hover(move |this| this.bg(button_hover))
+                            .active(move |this| this.bg(button_active))
+                    })
                     .h_full()
                     .map(|this| match button_size {
                         Size::XSmall | Size::Small => this.min_w_6(),
