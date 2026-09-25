@@ -1,5 +1,6 @@
 use crate::{
-    ActiveTheme, Disableable, Side, Sizable, Size, StyledExt, text::Text, tooltip::ComponentTooltip,
+    ActiveTheme, Disableable, Side, Sizable, Size, StyleSized, StyledExt, text::Text,
+    tooltip::ComponentTooltip,
 };
 use gpui::{
     App, Background, ElementId, Hsla, InteractiveElement, IntoElement, ParentElement as _,
@@ -235,11 +236,8 @@ impl RenderOnce for Switch {
                                 this.debug_selector(|| "switch-label".into())
                             })
                             .line_height(bg_height)
-                            .child(label)
-                            .map(|this| match self.size {
-                                Size::XSmall | Size::Small => this.text_sm(),
-                                _ => this.text_base(),
-                            }),
+                            .input_text_size(self.size)
+                            .child(label),
                     )
                 }),
         )
