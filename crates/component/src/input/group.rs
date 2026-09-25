@@ -17,8 +17,8 @@ use gpui::{
 };
 
 use crate::{
-    ActiveTheme as _, Disableable, FocusableExt as _, Icon, Selectable, Sizable, Size,
-    StyleSized as _, StyledExt as _,
+    ActiveTheme as _, Colorize as _, Disableable, FocusableExt as _, Icon, Selectable, Sizable,
+    Size, StyleSized as _, StyledExt as _,
     button::{Button, ButtonCustomVariant, ButtonVariant, ButtonVariants},
     h_flex,
     input::{Input, Textarea},
@@ -294,25 +294,16 @@ struct GroupAppearance {
 impl GroupAppearance {
     fn new(theme: &crate::Theme, focused: bool, disabled: bool, invalid: bool) -> Self {
         let background = if disabled {
-            theme.input.opacity(if theme.is_dark() { 0.8 } else { 0.5 })
-        } else if theme.is_dark() {
-            theme.input.opacity(0.3)
+            theme.input.mix_oklab(theme.transparent, 0.8)
         } else {
-            theme.transparent
+            theme.input_background()
         };
         // Validation remains visible when editing is disabled. Focus alone never
         // reactivates a disabled control, and never replaces its validation color.
         let (border, ring) = if invalid {
-            (
-                theme.danger,
-                Some(
-                    theme
-                        .danger
-                        .opacity(if theme.is_dark() { 0.4 } else { 0.2 }),
-                ),
-            )
+            (theme.border_danger(), Some(theme.border_danger()))
         } else if focused && !disabled {
-            (theme.ring, Some(theme.ring.opacity(0.5)))
+            (theme.ring, Some(theme.ring))
         } else {
             (theme.input, None)
         };
