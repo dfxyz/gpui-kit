@@ -52,7 +52,7 @@ impl Calendar {
             state: state.clone(),
             style: StyleRefinement::default(),
             number_of_months: 1,
-            first_day_of_week: Weekday::Sun,
+            first_day_of_week: Weekday::Mon,
         }
     }
     pub fn number_of_months(mut self, count: usize) -> Self {
@@ -110,10 +110,21 @@ impl RenderOnce for Calendar {
                         .child(Icon::new(IconName::ChevronRight).size_4()),
                     _ => item,
                 };
+                let radius = match size {
+                    Size::Small => cx.theme().radius / 2.,
+                    Size::Large => cx.theme().radius * 2.,
+                    _ => cx.theme().radius,
+                };
                 item.map(|this| match size {
-                    Size::Small => this.size_7().rounded(cx.theme().radius / 2.),
-                    Size::Large => this.size_10().rounded(cx.theme().radius * 2.),
-                    _ => this.size_8().rounded(cx.theme().radius),
+                    Size::Small => this.size_7(),
+                    Size::Large => this.size_10(),
+                    _ => this.size_8(),
+                })
+                .rounded(radius)
+                .when(state.is_in_range(), |this| {
+                    this.rounded_none()
+                        .when(state.is_range_start(), |this| this.rounded_l(radius))
+                        .when(state.is_range_end(), |this| this.rounded_r(radius))
                 })
                 .flex()
                 .items_center()
@@ -171,8 +182,8 @@ impl RenderOnce for Calendar {
                         .when(state.is_disabled(), |this| this.opacity(0.5))
                 })
                 .when(state.is_in_range(), |this| {
-                    this.bg(cx.theme().accent)
-                        .text_color(cx.theme().accent_foreground)
+                    this.bg(cx.theme().secondary_active)
+                        .text_color(cx.theme().secondary_foreground)
                 })
                 .when(
                     !state.is_active()

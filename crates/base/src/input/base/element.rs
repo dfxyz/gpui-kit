@@ -3006,6 +3006,15 @@ impl<M: InputModeKind> Element for TextElement<M> {
             window.paint_path(path.clone(), *color);
         }
 
+        // Paint document colors
+        //
+        // Color swatches are decorations, so they sit below the user's
+        // selection like the range decorations above.
+        for (path, color) in prepaint.document_color_paths.iter() {
+            let color = if disabled { color.opacity(0.5) } else { *color };
+            window.paint_path(path.clone(), color);
+        }
+
         // Paint selections
         if window.is_window_active() {
             let secondary_selection = Hsla {
@@ -3028,12 +3037,6 @@ impl<M: InputModeKind> Element for TextElement<M> {
             if let Some(path) = prepaint.hover_highlight_path.take() {
                 window.paint_path(path, secondary_selection);
             }
-        }
-
-        // Paint document colors
-        for (path, color) in prepaint.document_color_paths.iter() {
-            let color = if disabled { color.opacity(0.5) } else { *color };
-            window.paint_path(path.clone(), color);
         }
 
         // Paint text with inline completion ghost line support

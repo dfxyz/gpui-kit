@@ -314,7 +314,7 @@ impl CalendarState {
                 days_in_month(
                     self.current_year,
                     self.current_month as u32 + n as u32,
-                    Weekday::Sun,
+                    Weekday::Mon,
                 )
             })
             .collect()
@@ -417,6 +417,8 @@ pub struct CalendarItemState {
     kind: CalendarItemKind,
     active: bool,
     in_range: bool,
+    range_start: bool,
+    range_end: bool,
     muted: bool,
     disabled: bool,
     today: bool,
@@ -429,6 +431,8 @@ impl CalendarItemState {
             kind,
             active: false,
             in_range: false,
+            range_start: false,
+            range_end: false,
             muted: false,
             disabled: false,
             today: false,
@@ -443,6 +447,18 @@ impl CalendarItemState {
     /// Set whether the item is between the two ends of a range selection.
     pub fn in_range(mut self, in_range: bool) -> Self {
         self.in_range = in_range;
+        self
+    }
+
+    /// Set whether the item is the first day of the selected range.
+    pub fn range_start(mut self, range_start: bool) -> Self {
+        self.range_start = range_start;
+        self
+    }
+
+    /// Set whether the item is the last day of the selected range.
+    pub fn range_end(mut self, range_end: bool) -> Self {
+        self.range_end = range_end;
         self
     }
 
@@ -473,6 +489,14 @@ impl CalendarItemState {
 
     pub fn is_in_range(&self) -> bool {
         self.in_range
+    }
+
+    pub fn is_range_start(&self) -> bool {
+        self.range_start
+    }
+
+    pub fn is_range_end(&self) -> bool {
+        self.range_end
     }
 
     pub fn is_muted(&self) -> bool {
@@ -574,7 +598,7 @@ impl Calendar {
             id: id.into(),
             state: state.clone(),
             number_of_months: 1,
-            first_day_of_week: Weekday::Sun,
+            first_day_of_week: Weekday::Mon,
             style: StyleRefinement::default(),
             item: Rc::new(|item, _, _, _| item.into_any_element()),
             label: Rc::new(|kind, value| match kind {
@@ -664,8 +688,8 @@ impl RenderOnce for Calendar {
                 (s.current_month() as i32, s.current_year())
             };
             for (kind, value, active) in [
-                (CalendarItemKind::MonthToggle, month, view.is_month()),
                 (CalendarItemKind::YearToggle, year, view.is_year()),
+                (CalendarItemKind::MonthToggle, month, view.is_month()),
             ] {
                 let st = CalendarItemState::new(kind).active(active);
                 let entity = self.state.clone();
@@ -762,9 +786,13 @@ impl RenderOnce for Calendar {
                             let (_, m) = s.offset_year_month(offset);
                             let disabled =
                                 s.disabled_matcher_ref().is_some_and(|x| x.matched(&date));
+                            let selection = s.date();
+                            let in_range = selection.is_in_range(&date);
                             CalendarItemState::new(CalendarItemKind::Day)
-                                .active(s.date().is_active(&date))
-                                .in_range(s.date().is_in_range(&date))
+                                .active(selection.is_active(&date))
+                                .in_range(in_range)
+                                .range_start(in_range && selection.start() == Some(date))
+                                .range_end(in_range && selection.end() == Some(date))
                                 .muted(date.month() != m || disabled)
                                 .disabled(disabled)
                                 .today(date == s.today())
@@ -996,11 +1024,11 @@ mod tests {
     fn six_week_month_is_not_truncated(cx: &mut gpui::TestAppContext) {
         let s = state(
             cx,
-            Date::Single(Some(NaiveDate::from_ymd_opt(2025, 8, 1).unwrap())),
+            Date::Single(Some(NaiveDate::from_ymd_opt(2025, 3, 1).unwrap())),
         );
         s.update(cx, |s, _| {
             s.apply_date(Date::Single(Some(
-                NaiveDate::from_ymd_opt(2025, 8, 1).unwrap(),
+                NaiveDate::from_ymd_opt(2025, 3, 1).unwrap(),
             )));
             assert_eq!(s.month_days().len(), 1);
             assert_eq!(s.month_days()[0].len(), 6);

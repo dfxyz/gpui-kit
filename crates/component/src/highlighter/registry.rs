@@ -130,9 +130,7 @@ pub struct SyntaxColors {
     pub hint: Option<ThemeStyle>,
     pub keyword: Option<ThemeStyle>,
     pub label: Option<ThemeStyle>,
-    #[serde(rename = "link_text")]
     pub link_text: Option<ThemeStyle>,
-    #[serde(rename = "link_uri")]
     pub link_uri: Option<ThemeStyle>,
     pub number: Option<ThemeStyle>,
     pub operator: Option<ThemeStyle>,
@@ -224,6 +222,7 @@ impl From<FontWeightContent> for FontWeight {
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, JsonSchema, Serialize, Deserialize)]
 pub struct ThemeStyle {
+    #[serde(default, deserialize_with = "deserialize_highlight_color")]
     color: Option<Hsla>,
     font_style: Option<FontStyle>,
     font_weight: Option<FontWeightContent>,
@@ -317,34 +316,49 @@ impl SyntaxColors {
 #[derive(Debug, Default, Clone, PartialEq, Eq, Hash, JsonSchema, Serialize, Deserialize)]
 pub struct StatusColors {
     #[serde(rename = "error")]
+    #[serde(default, deserialize_with = "deserialize_highlight_color")]
     error: Option<Hsla>,
     #[serde(rename = "error.background")]
+    #[serde(default, deserialize_with = "deserialize_highlight_color")]
     error_background: Option<Hsla>,
     #[serde(rename = "error.border")]
+    #[serde(default, deserialize_with = "deserialize_highlight_color")]
     error_border: Option<Hsla>,
     #[serde(rename = "warning")]
+    #[serde(default, deserialize_with = "deserialize_highlight_color")]
     warning: Option<Hsla>,
     #[serde(rename = "warning.background")]
+    #[serde(default, deserialize_with = "deserialize_highlight_color")]
     warning_background: Option<Hsla>,
     #[serde(rename = "warning.border")]
+    #[serde(default, deserialize_with = "deserialize_highlight_color")]
     warning_border: Option<Hsla>,
     #[serde(rename = "info")]
+    #[serde(default, deserialize_with = "deserialize_highlight_color")]
     info: Option<Hsla>,
     #[serde(rename = "info.background")]
+    #[serde(default, deserialize_with = "deserialize_highlight_color")]
     info_background: Option<Hsla>,
     #[serde(rename = "info.border")]
+    #[serde(default, deserialize_with = "deserialize_highlight_color")]
     info_border: Option<Hsla>,
     #[serde(rename = "success")]
+    #[serde(default, deserialize_with = "deserialize_highlight_color")]
     success: Option<Hsla>,
     #[serde(rename = "success.background")]
+    #[serde(default, deserialize_with = "deserialize_highlight_color")]
     success_background: Option<Hsla>,
     #[serde(rename = "success.border")]
+    #[serde(default, deserialize_with = "deserialize_highlight_color")]
     success_border: Option<Hsla>,
     #[serde(rename = "hint")]
+    #[serde(default, deserialize_with = "deserialize_highlight_color")]
     hint: Option<Hsla>,
     #[serde(rename = "hint.background")]
+    #[serde(default, deserialize_with = "deserialize_highlight_color")]
     hint_background: Option<Hsla>,
     #[serde(rename = "hint.border")]
+    #[serde(default, deserialize_with = "deserialize_highlight_color")]
     hint_border: Option<Hsla>,
 }
 
@@ -438,20 +452,27 @@ impl StatusColors {
 #[derive(Debug, Default, Clone, PartialEq, Eq, Hash, JsonSchema, Serialize, Deserialize)]
 pub struct HighlightThemeStyle {
     #[serde(rename = "editor.background")]
+    #[serde(default, deserialize_with = "deserialize_highlight_color")]
     pub editor_background: Option<Hsla>,
     #[serde(rename = "editor.foreground")]
+    #[serde(default, deserialize_with = "deserialize_highlight_color")]
     pub editor_foreground: Option<Hsla>,
     #[serde(rename = "editor.active_line.background")]
+    #[serde(default, deserialize_with = "deserialize_highlight_color")]
     pub editor_active_line: Option<Hsla>,
     #[serde(rename = "editor.line_number")]
+    #[serde(default, deserialize_with = "deserialize_highlight_color")]
     pub editor_line_number: Option<Hsla>,
     #[serde(rename = "editor.active_line_number")]
+    #[serde(default, deserialize_with = "deserialize_highlight_color")]
     pub editor_active_line_number: Option<Hsla>,
     #[serde(rename = "editor.invisible")]
+    #[serde(default, deserialize_with = "deserialize_highlight_color")]
     pub editor_invisible: Option<Hsla>,
     /// Optional background color for the gutter (line-number column).
     /// Falls back to [`Self::editor_background`] when unset.
     #[serde(rename = "editor.gutter.background")]
+    #[serde(default, deserialize_with = "deserialize_highlight_color")]
     pub editor_gutter_background: Option<Hsla>,
     #[serde(flatten)]
     pub status: StatusColors,
@@ -626,6 +647,20 @@ impl LanguageRegistry {
                 .and_then(|language| languages.get(language.name()).cloned())
         })
     }
+}
+
+fn deserialize_highlight_color<'de, D>(
+    deserializer: D,
+) -> std::result::Result<Option<Hsla>, D::Error>
+where
+    D: serde::Deserializer<'de>,
+{
+    let Some(expr) = <Option<&str>>::deserialize(deserializer)? else {
+        return Ok(None);
+    };
+    crate::try_parse_color(expr)
+        .map(Some)
+        .map_err(serde::de::Error::custom)
 }
 
 #[cfg(test)]

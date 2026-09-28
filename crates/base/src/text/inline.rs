@@ -931,7 +931,7 @@ impl Element for Inline {
 
     fn paint(
         &mut self,
-        global_id: Option<&GlobalElementId>,
+        _global_id: Option<&GlobalElementId>,
         _: Option<&InspectorElementId>,
         bounds: Bounds<Pixels>,
         _: &mut Self::RequestLayoutState,
@@ -949,15 +949,25 @@ impl Element for Inline {
             return;
         }
         let text_layout = self.styled_text.layout().clone();
+
+        // Backgrounds paint under the selection, so a highlighted run cannot
+        // cover the band that marks it selected.
         if !self.range_backgrounds.is_empty() {
             self.paint_range_highlights(&text_layout, window);
         }
-        self.styled_text
-            .paint(global_id, None, bounds, &mut (), &mut (), window, cx);
+        let _ = text_layout.paint_background(window, cx);
 
-        // layout selections
         let (is_selectable, is_selection, selection) =
             self.layout_selections(&text_layout, &bounds, window, cx);
+        if let Some(selection) = &selection {
+            let color = GlobalState::global(cx)
+                .text_view_state()
+                .map(|state| state.read(cx).text_view_style.selection())
+                .unwrap_or_else(|| crate::Theme::global(cx).tokens.colors.selection);
+            Self::paint_selection(selection, &text_layout, &bounds, window, color);
+        }
+
+        let _ = text_layout.paint_foreground(window, cx);
 
         let Ok(mut state) = self.state.lock() else {
             return;
@@ -988,11 +998,6 @@ impl Element for Inline {
         }
 
         if let Some(selection) = &state.selection {
-            let color = GlobalState::global(cx)
-                .text_view_state()
-                .map(|state| state.read(cx).text_view_style.selection())
-                .unwrap_or_else(|| crate::Theme::global(cx).tokens.colors.selection);
-            Self::paint_selection(selection, &text_layout, &bounds, window, color);
             if let Some((start, end)) = Self::selection_edges(selection, &text_layout)
                 && let Some(text_view_state) = GlobalState::global(cx).text_view_state().cloned()
             {

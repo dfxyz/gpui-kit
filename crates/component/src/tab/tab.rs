@@ -191,7 +191,7 @@ impl TabVariant {
             },
             TabVariant::Pill => TabStyle {
                 fg: cx.theme().secondary_foreground,
-                bg: cx.theme().tokens.secondary.into(),
+                bg: cx.theme().tokens.secondary_hover.into(),
                 ..Default::default()
             },
             TabVariant::Segmented => TabStyle {

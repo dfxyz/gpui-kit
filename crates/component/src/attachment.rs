@@ -16,7 +16,7 @@ use rust_i18n::t;
 
 use crate::{
     ActiveTheme as _, Icon, IconName, InteractiveElementExt as _, Sizable, Size, StyledExt as _,
-    button::{Button, ButtonCustomVariant, ButtonVariants as _},
+    button::{Button, ButtonVariants as _},
     h_flex,
     progress::ProgressCircle,
     shimmer::{ShimmerStyle, ShimmerText},
@@ -595,14 +595,7 @@ fn upload_bar_path(bounds: Bounds<Pixels>, percent: f32, radius: Pixels) -> Opti
 fn remove_button(id: ElementId, on_remove: ControlHandler, cx: &App) -> Button {
     let tokens = cx.theme().semantic_tokens();
     Button::new((id, "remove"))
-        // The custom variant thins its color to 20%; the disc must stay
-        // opaque, so the surface is set on the instance instead.
-        .custom(
-            ButtonCustomVariant::new(cx)
-                .hover(tokens.colors.muted)
-                .active(tokens.colors.muted)
-                .foreground(tokens.colors.foreground),
-        )
+        .secondary()
         .accessibility_label(t!("Attachment.Remove"))
         .child(
             Icon::new(IconName::Close)
@@ -624,7 +617,7 @@ fn remove_button(id: ElementId, on_remove: ControlHandler, cx: &App) -> Button {
 fn retry_button(id: ElementId, on_retry: ControlHandler, cx: &App) -> Button {
     let tokens = cx.theme().semantic_tokens();
     Button::new((id, "retry"))
-        .ghost()
+        .secondary()
         .accessibility_label(t!("Attachment.Retry"))
         .child(
             Icon::new(IconName::RefreshCw)

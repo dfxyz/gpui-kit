@@ -8,7 +8,9 @@ use gpui::{
 use gpui_base::{Toggle as BaseToggle, ToggleGroup as BaseToggleGroup};
 use smallvec::{SmallVec, smallvec};
 
-use crate::{ActiveTheme, Disableable, Icon, Sizable, Size, StyledExt, tooltip::ComponentTooltip};
+use crate::{
+    ActiveTheme, Disableable, Icon, Sizable, Size, StyleSized, StyledExt, tooltip::ComponentTooltip,
+};
 
 #[derive(Default, Copy, Debug, Clone, PartialEq, Eq, Hash)]
 pub enum ToggleVariant {
@@ -152,8 +154,6 @@ impl RenderOnce for Toggle {
         let disabled = self.disabled;
         let hoverable = !disabled && !checked;
         let rounding = cx.theme().radius;
-        let pressed_background = cx.theme().tokens.accent;
-        let pressed_foreground = cx.theme().accent_foreground;
         let instance_style = self.style.clone();
 
         BaseToggle::new(self.id)
@@ -171,10 +171,11 @@ impl RenderOnce for Toggle {
             .line_height(relative(1.25))
             .items_center()
             .justify_center()
+            .input_text_size(self.size)
             .map(|this| match self.size {
-                Size::XSmall => this.min_w_5().h_5().px_0p5().text_xs(),
-                Size::Small => this.min_w_6().h_6().px_1().text_sm(),
-                Size::Large => this.min_w_9().h_9().px_3().text_lg(),
+                Size::XSmall => this.min_w_5().h_5().px_0p5(),
+                Size::Small => this.min_w_6().h_6().px_1(),
+                Size::Large => this.min_w_9().h_9().px_3(),
                 _ => this.min_w_8().h_8().px_2(),
             })
             .when(self.border_corners.top_left, |this| {
@@ -199,15 +200,15 @@ impl RenderOnce for Toggle {
             })
             .when(hoverable, |this| {
                 this.hover(|this| {
-                    this.bg(cx.theme().tokens.accent)
+                    this.bg(cx.theme().tokens.button_ghost_hover)
                         .text_color(cx.theme().accent_foreground)
                 })
             })
             .styles(|styles| {
                 styles.pressed(|style| {
                     style
-                        .bg(pressed_background)
-                        .text_color(pressed_foreground)
+                        .bg(cx.theme().tokens.accent)
+                        .text_color(cx.theme().accent_foreground)
                         .refine_style(&instance_style)
                 })
             })

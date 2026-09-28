@@ -183,11 +183,7 @@ impl<T: Styled + Sized> ThemeStyled for T {
             return self.border_color(cx.theme().ring);
         }
 
-        focus_ring(
-            self.border_color(cx.theme().ring),
-            window,
-            cx.theme().ring.alpha(FOCUS_RING_OPACITY),
-        )
+        focus_ring(self, window, cx.theme().ring.alpha(FOCUS_RING_OPACITY))
     }
 
     fn popover_style(self, cx: &App) -> Self {
