@@ -148,7 +148,11 @@ mod oklab {
 /// gamut is clipped per channel, which costs a little chroma but not the hue.
 pub fn oklch(lightness: f32, chroma: f32, hue: f32) -> Hsla {
     let hue = hue.to_radians();
-    let rgb = oklab::oklab_to_rgb(lightness, chroma * hue.cos(), chroma * hue.sin());
+    let mut rgb = oklab::oklab_to_rgb(lightness, chroma * hue.cos(), chroma * hue.sin());
+    rgb.r = (rgb.r * 255.).round() / 255.;
+    rgb.g = (rgb.g * 255.).round() / 255.;
+    rgb.b = (rgb.b * 255.).round() / 255.;
+    rgb.a = (rgb.a * 255.).round() / 255.;
     rgb.into()
 }
 
@@ -691,6 +695,23 @@ color_methods!(rose);
 /// - `name-scale/opacity` - The color name with scale and opacity.
 ///
 pub fn try_parse_color(color: &str) -> Result<Hsla> {
+    if let Some(color) = color.strip_prefix("oklch(")
+        && let Some(color) = color.strip_suffix(")")
+    {
+        let parts = color.split_whitespace().collect::<Vec<_>>();
+        if parts.len() != 3 && parts.len() != 5 {
+            return Err(anyhow!("Invalid oklch color: {color}"));
+        }
+        let lightness = parts[0].parse::<f32>()?;
+        let chroma = parts[1].parse::<f32>()?;
+        let hue = parts[2].parse::<f32>()?;
+        if parts.len() == 5 {
+            let alpha = parts[4].parse::<f32>()?;
+            return Ok(oklch(lightness, chroma, hue).alpha(alpha));
+        }
+        return Ok(oklch(lightness, chroma, hue));
+    }
+
     if color.starts_with("#") {
         let rgba = gpui::Rgba::try_from(color)?;
         return Ok(rgba.into());
@@ -767,27 +788,6 @@ pub fn try_parse_background(background: &str) -> Result<Background> {
 
     let gradient = parse_linear_gradient(background)?;
     Ok(linear_gradient(gradient.angle, gradient.from, gradient.to))
-}
-
-/// Parse a background, clamping every color stop's alpha to at most `max`.
-///
-/// Unlike [`Background::opacity`], which scales all stops by a single factor,
-/// this caps each gradient stop independently, so a bright `to` stop (or a
-/// transparent `from` stop) can never push the rendered highlight past `max`.
-pub(crate) fn try_parse_background_clamped(background: &str, max: f32) -> Result<Background> {
-    if let Ok(color) = try_parse_color(background) {
-        return Ok(color.alpha(color.a.min(max)).into());
-    }
-
-    let gradient = parse_linear_gradient(background)?;
-    let clamp = |stop: LinearColorStop| {
-        linear_color_stop(stop.color.alpha(stop.color.a.min(max)), stop.percentage)
-    };
-    Ok(linear_gradient(
-        gradient.angle,
-        clamp(gradient.from),
-        clamp(gradient.to),
-    ))
 }
 
 pub(crate) fn try_parse_theme_color(color: &str) -> Result<Hsla> {

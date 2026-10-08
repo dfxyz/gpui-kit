@@ -303,7 +303,7 @@ impl SidebarItem for SidebarMenuItem {
                     .refine_style(&self.style)
                     .when(is_hoverable, |this| {
                         this.hover(|this| {
-                            this.bg(cx.theme().sidebar_accent.opacity(0.8))
+                            this.bg(cx.theme().sidebar_hover)
                                 .text_color(cx.theme().sidebar_accent_foreground)
                         })
                     })

@@ -6,7 +6,7 @@
   "_ref": "https://github.com/shadcn-ui/ui/blob/main/apps/v4/public/r/colors/neutral.json",
   "themes": [
     {
-      "is_default": true,
+      "is_default": false,
       "name": "Default Light",
       "mode": "light",
       "colors": {
@@ -417,6 +417,300 @@
           },
           "variable.special": {
             "color": "#419CFF"
+          }
+        }
+      }
+    },
+    {
+      "is_default": true,
+      "name": "Greenland",
+      "mode": "light",
+      "font.family": "Fira Noto SC",
+      "font.size": 16,
+      "mono_font.family": "Fira Noto SC",
+      "mono_font.size": 14,
+      "colors": {
+        "background": "oklch(0.95 0.01 120)",
+        "foreground": "oklch(0.3 0 0)",
+        "primary.background": "oklch(0.5 0.135 150)",
+        "primary.foreground": "oklch(0.97 0.01 120)",
+        "secondary.background": "oklch(0.92 0.01 120)",
+        "secondary.foreground": "oklch(0.3 0 0)",
+        "secondary.hover.background": "oklch(0.5 0.135 150 / 0.1)",
+        "secondary.active.background": "oklch(0.5 0.135 150 / 0.2)",
+        "muted.background": "oklch(0.92 0.01 120)",
+        "muted.foreground": "oklch(0.6 0 0)",
+        "accent.background": "oklch(0.9 0.1 135)",
+        "accent.foreground": "oklch(0.3 0 0)",
+        "danger.background": "oklch(0.5 0.2 30)",
+        "danger.foreground": "oklch(0.97 0.01 120)",
+        "warning.background": "oklch(0.5 0.1 90)",
+        "warning.foreground": "oklch(0.97 0.01 120)",
+        "success.background": "oklch(0.5 0.135 150)",
+        "success.foreground": "oklch(0.97 0.01 120)",
+        "info.background": "oklch(0.5 0.08 210)",
+        "info.foreground": "oklch(0.97 0.01 120)",
+        "border": "oklch(0.85 0 0)",
+        "input.border": "oklch(0.75 0 0)",
+        "input.background": "oklch(0.97 0.01 120)",
+        "ring": "oklch(0.5 0.135 150)",
+        "drag.border": "oklch(0.5 0.135 150)",
+        "drop_target.background": "oklch(0.5 0.135 150 / 0.1)",
+        "overlay": "oklch(0 0 0 / 0.1)",
+        "accordion.background": "oklch(0.95 0.01 120)",
+        "button.background": "oklch(0.97 0.01 120)",
+        "button.foreground": "oklch(0.3 0 0)",
+        "button.hover.background": "oklch(0.97 0.05 120)",
+        "button.active.background": "oklch(0.95 0.05 135)",
+        "button.border": "oklch(0.85 0 0)",
+        "button.primary.background": "oklch(0.97 0.025 120)",
+        "button.primary.foreground": "oklch(0.3 0 0)",
+        "button.primary.hover.background": "oklch(0.97 0.05 120)",
+        "button.primary.active.background": "oklch(0.95 0.05 135)",
+        "button.primary.border": "oklch(0.85 0 0)",
+        "button.secondary.background": "oklch(0.92 0.01 120)",
+        "button.secondary.foreground": "oklch(0.3 0 0)",
+        "button.secondary.hover.background": "oklch(0.92 0.05 120)",
+        "button.secondary.active.background": "oklch(0.9 0.05 135)",
+        "button.secondary.border": "oklch(0.8 0 0)",
+        "button.danger.background": "oklch(0.9 0.025 30)",
+        "button.danger.foreground": "oklch(0.5 0.2 30)",
+        "button.danger.hover.background": "oklch(0.9 0.05 30)",
+        "button.danger.active.background": "oklch(0.88 0.05 30)",
+        "button.danger.border": "oklch(0.8 0.05 30)",
+        "button.warning.background": "oklch(0.9 0.025 90)",
+        "button.warning.foreground": "oklch(0.5 0.1 90)",
+        "button.warning.hover.background": "oklch(0.9 0.05 90)",
+        "button.warning.active.background": "oklch(0.88 0.05 90)",
+        "button.warning.border": "oklch(0.8 0.05 90)",
+        "button.success.background": "oklch(0.9 0.025 150)",
+        "button.success.foreground": "oklch(0.5 0.135 150)",
+        "button.success.hover.background": "oklch(0.9 0.05 150)",
+        "button.success.active.background": "oklch(0.88 0.05 150)",
+        "button.success.border": "oklch(0.8 0.05 150)",
+        "button.info.background": "oklch(0.9 0.025 210)",
+        "button.info.foreground": "oklch(0.5 0.08 210)",
+        "button.info.hover.background": "oklch(0.9 0.05 210)",
+        "button.info.active.background": "oklch(0.88 0.05 210)",
+        "button.info.border": "oklch(0.8 0.05 210)",
+        "button.ghost.hover.background": "oklch(0.5 0.135 150 / 0.1)",
+        "button.ghost.active.background": "oklch(0.5 0.135 150 / 0.2)",
+        "caret": "oklch(0.5 0.135 150)",
+        "chart.1": "oklch(0.7 0.135 150)",
+        "chart.2": "oklch(0.65 0.135 150)",
+        "chart.3": "oklch(0.6 0.135 150)",
+        "chart.4": "oklch(0.55 0.135 150)",
+        "chart.5": "oklch(0.5 0.135 150)",
+        "chart.bullish": "oklch(0.6 0.2 30)",
+        "chart.bearish": "oklch(0.6 0.135 150)",
+        "chart.grid": "oklch(0.85 0 0)",
+        "code_block.background": "oklch(0.94 0.01 120)",
+        "code_inline.background": "oklch(0.95 0.025 150)",
+        "description_list.label.background": "oklch(0.94 0.01 120)",
+        "description_list.label.foreground": "oklch(0.3 0 0)",
+        "group_box.background": "oklch(0.92 0.01 120)",
+        "group_box.foreground": "oklch(0.3 0 0)",
+        "group_box.title.foreground": "oklch(0.3 0 0)",
+        "link": "oklch(0.5 0.2 270)",
+        "link.hover": "oklch(0.5 0.2 270)",
+        "link.active": "oklch(0.5 0.2 300)",
+        "list.background": "oklch(0.95 0.01 120)",
+        "list.even.background": "oklch(0.92 0.01 120)",
+        "list.head.background": "oklch(0.92 0.025 135)",
+        "list.hover.background": "oklch(0.5 0.135 150 / 0.1)",
+        "list.active.background": "oklch(0.9 0.1 135)",
+        "list.active.border": "oklch(0.9 0.1 135)",
+        "popover.background": "oklch(0.97 0.01 120)",
+        "popover.foreground": "oklch(0.3 0 0)",
+        "progress.bar.background": "oklch(0.5 0.135 150)",
+        "scrollbar.background": "oklch(0 0 0 / 0)",
+        "scrollbar.thumb.background": "oklch(0.5 0.135 150 / 0.25)",
+        "scrollbar.thumb.hover.background": "oklch(0.5 0.135 150 / 0.5)",
+        "selection.background": "oklch(0.9 0.1 135)",
+        "sidebar.background": "oklch(0.94 0.005 120)",
+        "sidebar.foreground": "oklch(0.3 0 0)",
+        "sidebar.border": "oklch(0.85 0 0)",
+        "sidebar.hover.background": "oklch(0.5 0.135 150 / 0.1)",
+        "sidebar.accent.background": "oklch(0.9 0.1 135)",
+        "sidebar.accent.foreground": "oklch(0.3 0 0)",
+        "sidebar.primary.background": "oklch(0.5 0.135 150)",
+        "sidebar.primary.foreground": "oklch(0.97 0.01 120)",
+        "skeleton.background": "oklch(0.92 0.01 120)",
+        "slider.background": "oklch(0.5 0.135 150)",
+        "slider.thumb.background": "oklch(0.97 0.01 120)",
+        "switch.background": "oklch(0.75 0 0)",
+        "switch.thumb.background": "oklch(0.97 0.01 120)",
+        "tab.background": "oklch(0 0 0 / 0)",
+        "tab.foreground": "oklch(0.3 0 0)",
+        "tab.active.background": "oklch(0.95 0.01 120)",
+        "tab.active.foreground": "oklch(0.3 0 0)",
+        "tab_bar.background": "oklch(0.94 0.005 120)",
+        "tab_bar.segmented.background": "oklch(0.92 0.01 120)",
+        "toolbar.background": "oklch(0.94 0.005 120)",
+        "table.background": "oklch(0.95 0.01 120)",
+        "table.even.background": "oklch(0.94 0.01 120)",
+        "table.head.background": "oklch(0.92 0.025 135)",
+        "table.head.foreground": "oklch(0.3 0 0)",
+        "table.foot.background": "oklch(0.92 0.01 135)",
+        "table.foot.foreground": "oklch(0.3 0 0)",
+        "table.hover.background": "oklch(0.5 0.135 150 / 0.1)",
+        "table.active.background": "oklch(0.9 0.1 135)",
+        "table.active.border": "oklch(0.9 0.1 135)",
+        "table.row.border": "oklch(0.85 0 0)",
+        "title_bar.background": "oklch(0.9 0.025 135)",
+        "title_bar.border": "oklch(0.85 0 0)",
+        "status_bar.background": "oklch(0.9 0.025 135)",
+        "status_bar.border": "oklch(0.85 0 0)",
+        "window.border": "oklch(0.85 0 0)",
+        "base.red": "red-600",
+        "base.red.light": "red-400",
+        "base.green": "green-600",
+        "base.green.light": "green-400",
+        "base.blue": "blue-600",
+        "base.blue.light": "blue-400",
+        "base.yellow": "yellow-600",
+        "base.yellow.light": "yellow-400",
+        "base.magenta": "purple-600",
+        "base.magenta.light": "purple-400",
+        "base.cyan": "cyan-600",
+        "base.cyan.light": "cyan-400"
+      },
+      "highlight": {
+        "editor.foreground": "oklch(0.3 0 0)",
+        "editor.background": "oklch(0.95 0.01 120)",
+        "editor.active_line.background": "oklch(0.92 0.05 120)",
+        "editor.line_number": "oklch(0.75 0 0)",
+        "editor.active_line_number": "oklch(0.3 0 0)",
+        "editor.invisible": "oklch(0.75 0 0)",
+        "error": "oklch(0.5 0.2 30)",
+        "warning": "oklch(0.5 0.1 90)",
+        "info": "oklch(0.5 0.08 210)",
+        "success": "oklch(0.5 0.135 150)",
+        "hint": "oklch(0.6 0 0)",
+        "syntax": {
+          "attribute": {
+            "color": "oklch(0.5 0.2 300)"
+          },
+          "boolean": {
+            "color": "oklch(0.5 0.14 45)"
+          },
+          "comment": {
+            "color": "oklch(0.5 0.1 120)"
+          },
+          "comment_doc": {
+            "color": "oklch(0.5 0.1 120)"
+          },
+          "constant": {
+            "color": "oklch(0.3 0 0)"
+          },
+          "constructor": {
+            "color": "oklch(0.5 0.2 270)"
+          },
+          "embedded": {
+            "color": "oklch(0.3 0 0)"
+          },
+          "emphasis": {
+            "font_style": "italic"
+          },
+          "emphasis.strong": {
+            "font_weight": 700
+          },
+          "enum": {
+            "color": "oklch(0.5 0.2 270)"
+          },
+          "function": {
+            "color": "oklch(0.3 0 0)"
+          },
+          "hint": {
+            "color": "oklch(0.6 0 0)"
+          },
+          "keyword": {
+            "color": "oklch(0.5 0.135 150)"
+          },
+          "label": {
+            "color": "oklch(0.5 0.1 90)"
+          },
+          "link_text": {
+            "color": "oklch(0.5 0.16 255)"
+          },
+          "link_uri": {
+            "color": "oklch(0.5 0.16 255)"
+          },
+          "number": {
+            "color": "oklch(0.5 0.14 45)"
+          },
+          "operator": {
+            "color": "oklch(0.3 0 0)"
+          },
+          "predictive": {
+            "color": "oklch(0.6 0 0)",
+            "font_style": "italic"
+          },
+          "preproc": {
+            "color": "oklch(0.5 0.1 90)"
+          },
+          "primary": {
+            "color": "oklch(0.3 0 0)"
+          },
+          "property": {
+            "color": "oklch(0.5 0.2 300)"
+          },
+          "punctuation": {
+            "color": "oklch(0.3 0 0)"
+          },
+          "punctuation.bracket": {
+            "color": "oklch(0.3 0 0)"
+          },
+          "punctuation.delimiter": {
+            "color": "oklch(0.3 0 0)"
+          },
+          "punctuation.list_marker": {
+            "color": "oklch(0.5 0.135 150)"
+          },
+          "punctuation.special": {
+            "color": "oklch(0.5 0.14 45)"
+          },
+          "string": {
+            "color": "oklch(0.5 0.08 210)"
+          },
+          "string.escape": {
+            "color": "oklch(0.5 0.14 45)"
+          },
+          "string.regex": {
+            "color": "oklch(0.5 0.08 210)"
+          },
+          "string.special": {
+            "color": "oklch(0.5 0.14 45)"
+          },
+          "string.special.symbol": {
+            "color": "oklch(0.5 0.14 45)"
+          },
+          "tag": {
+            "color": "oklch(0.5 0.135 150)"
+          },
+          "tag.doctype": {
+            "color": "oklch(0.5 0.1 90)"
+          },
+          "text.code.span": {
+            "color": "oklch(0.5 0.08 210)"
+          },
+          "text.literal": {
+            "color": "oklch(0.5 0.08 210)"
+          },
+          "title": {
+            "color": "oklch(0.5 0.135 150)"
+          },
+          "type": {
+            "color": "oklch(0.5 0.2 270)"
+          },
+          "variable": {
+            "color": "oklch(0.3 0 0)"
+          },
+          "variable.special": {
+            "color": "oklch(0.5 0.135 150)"
+          },
+          "variant": {
+            "color": "oklch(0.5 0.2 330)"
           }
         }
       }

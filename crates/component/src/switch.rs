@@ -3,9 +3,9 @@ use crate::{
     ThemeStyled as _, text::Text, tooltip::ComponentTooltip,
 };
 use gpui::{
-    App, Background, ElementId, Hsla, InteractiveElement, IntoElement, ParentElement as _,
-    RenderOnce, SharedString, StyleRefinement, Styled, Window, div, prelude::FluentBuilder as _,
-    px,
+    App, Background, ElementId, Hsla, InteractiveElement, IntoElement, MouseButton,
+    ParentElement as _, RenderOnce, SharedString, StyleRefinement, Styled, Window, div,
+    prelude::FluentBuilder as _, px,
 };
 use gpui_base::{Switch as BaseSwitch, SwitchThumb, SwitchTrack, spring};
 use std::rc::Rc;
@@ -234,9 +234,10 @@ impl RenderOnce for Switch {
                 .tab_stop(self.tab_stop)
                 .tab_index(self.tab_index)
                 .track_focus(&focus_handle)
+                .on_mouse_down(MouseButton::Left, |_, window, _| window.prevent_default())
                 .h_flex()
                 .gap_2()
-                .items_start()
+                .items_center()
                 .when(self.label_side.is_left(), |this| this.flex_row_reverse())
                 .child(
                     // Switch Bar
@@ -393,12 +394,12 @@ mod tests {
     }
 
     #[gpui::test]
-    fn canonical_pointer_activation_fires_once_and_focuses(cx: &mut TestAppContext) {
+    fn canonical_pointer_activation_fires_once_without_moving_focus(cx: &mut TestAppContext) {
         let (cx, toggles, _) = harness(cx, false);
         cx.simulate_click(point(px(10.), px(10.)), Modifiers::default());
 
         assert_eq!(toggles.get(), 1);
-        cx.update(|window, cx| assert!(window.focused(cx).is_some()));
+        cx.update(|window, cx| assert!(window.focused(cx).is_none()));
     }
 
     #[gpui::test]

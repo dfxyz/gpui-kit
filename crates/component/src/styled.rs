@@ -255,11 +255,7 @@ pub(crate) fn focus_style<T: Styled + ParentElement>(
 ) -> T {
     let theme = cx.theme();
     if theme.focus_ring {
-        return focus_ring(
-            element.border_color(theme.ring),
-            window,
-            theme.ring.alpha(FOCUS_RING_OPACITY),
-        );
+        return focus_ring(element, window, theme.ring.alpha(FOCUS_RING_OPACITY));
     }
 
     // The ring is painted outside the border, so a clipping ancestor cuts it

@@ -824,6 +824,7 @@ impl RenderOnce for ColorPickerButton {
         h_flex()
             .id(self.id)
             .gap_2()
+            .text_sm()
             .children(self.icon)
             .when(!has_icon, |this| {
                 this.child(

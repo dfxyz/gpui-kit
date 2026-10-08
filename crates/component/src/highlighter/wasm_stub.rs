@@ -132,6 +132,7 @@ pub enum FontWeightContent {
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, JsonSchema, Serialize, Deserialize)]
 pub struct ThemeStyle {
+    #[serde(default, deserialize_with = "deserialize_highlight_color")]
     pub color: Option<gpui::Hsla>,
     pub font_style: Option<FontStyle>,
     pub font_weight: Option<FontWeightContent>,
@@ -403,18 +404,45 @@ impl StatusColors {
 
 #[derive(Debug, Default, Clone, PartialEq, Eq, Hash, JsonSchema, Serialize, Deserialize)]
 pub struct HighlightThemeStyle {
+    #[serde(rename = "editor.background")]
+    #[serde(default, deserialize_with = "deserialize_highlight_color")]
     pub editor_background: Option<gpui::Hsla>,
+    #[serde(rename = "editor.foreground")]
+    #[serde(default, deserialize_with = "deserialize_highlight_color")]
     pub editor_foreground: Option<gpui::Hsla>,
+    #[serde(rename = "editor.active_line.background")]
+    #[serde(default, deserialize_with = "deserialize_highlight_color")]
     pub editor_active_line: Option<gpui::Hsla>,
+    #[serde(rename = "editor.line_number")]
+    #[serde(default, deserialize_with = "deserialize_highlight_color")]
     pub editor_line_number: Option<gpui::Hsla>,
+    #[serde(rename = "editor.active_line_number")]
+    #[serde(default, deserialize_with = "deserialize_highlight_color")]
     pub editor_active_line_number: Option<gpui::Hsla>,
+    #[serde(rename = "editor.invisible")]
+    #[serde(default, deserialize_with = "deserialize_highlight_color")]
     pub editor_invisible: Option<gpui::Hsla>,
     #[serde(rename = "editor.gutter.background")]
+    #[serde(default, deserialize_with = "deserialize_highlight_color")]
     pub editor_gutter_background: Option<gpui::Hsla>,
     #[serde(flatten)]
     pub status: StatusColors,
     #[serde(rename = "syntax")]
     pub syntax: SyntaxColors,
+}
+
+fn deserialize_highlight_color<'de, D>(
+    deserializer: D,
+) -> std::result::Result<Option<gpui::Hsla>, D::Error>
+where
+    D: serde::Deserializer<'de>,
+{
+    let Some(expr) = <Option<&str>>::deserialize(deserializer)? else {
+        return Ok(None);
+    };
+    crate::try_parse_color(expr)
+        .map(Some)
+        .map_err(serde::de::Error::custom)
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash, JsonSchema, Serialize, Deserialize)]

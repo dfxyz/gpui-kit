@@ -19,7 +19,7 @@ use gpui::{
 use crate::{
     ActiveTheme as _, Disableable, FocusableExt as _, Icon, Selectable, Sizable, Size,
     StyleSized as _, StyledExt as _,
-    button::{Button, ButtonCustomVariant, ButtonVariant, ButtonVariants},
+    button::{Button, ButtonVariant, ButtonVariants},
     h_flex,
     input::{Input, Textarea},
     v_flex,
@@ -294,11 +294,9 @@ struct GroupAppearance {
 impl GroupAppearance {
     fn new(theme: &crate::Theme, focused: bool, disabled: bool, invalid: bool) -> Self {
         let background = if disabled {
-            theme.input.opacity(if theme.is_dark() { 0.8 } else { 0.5 })
-        } else if theme.is_dark() {
-            theme.input.opacity(0.3)
+            theme.input.opacity(0.8)
         } else {
-            theme.transparent
+            theme.input_background()
         };
         // Validation remains visible when editing is disabled. Focus alone never
         // reactivates a disabled control, and never replaces its validation color.
@@ -539,12 +537,9 @@ impl InputGroupButton {
 
     fn render_in_group(self, disabled: bool, window: &mut Window, cx: &mut App) -> AnyElement {
         let disabled = disabled || self.button.is_disabled();
-        let selected = self.button.is_selected();
         let icon_only = self.button.is_icon_only();
         let ghost =
             matches!(self.button.variant(), ButtonVariant::Ghost) && !self.button.is_outline();
-        let muted = cx.theme().muted;
-        let hover = muted.opacity(if cx.theme().is_dark() { 0.5 } else { 1. });
         let compact = matches!(self.size, Size::XSmall | Size::Small);
         let icon_size = match self.size {
             Size::XSmall => Size::Small,
@@ -571,15 +566,7 @@ impl InputGroupButton {
                 }
             })
             .when(ghost, |this| {
-                this.custom(
-                    ButtonCustomVariant::new(cx)
-                        .color(cx.theme().transparent)
-                        .foreground(cx.theme().foreground)
-                        .hover(hover)
-                        .active(if selected { muted } else { hover }),
-                )
-                .text_color(cx.theme().foreground)
-                .when(disabled, |this| this.opacity(0.5))
+                this.ghost().when(disabled, |this| this.opacity(0.5))
             })
             .when(disabled, |this| this.focus_ring(false))
             .text_sm()

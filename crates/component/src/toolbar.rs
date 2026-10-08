@@ -6,7 +6,7 @@ use smallvec::SmallVec;
 
 use gpui_base::{Toolbar as BaseToolbar, ToolbarGroup as BaseToolbarGroup};
 
-use crate::{Sizable, Size, StyleSized as _, StyledExt as _};
+use crate::{ActiveTheme as _, Sizable, Size, StyleSized as _, StyledExt as _};
 
 enum ToolbarItem {
     Sized(Box<dyn FnOnce(Size) -> AnyElement>),
@@ -240,7 +240,7 @@ impl Sizable for Toolbar {
 }
 
 impl RenderOnce for Toolbar {
-    fn render(self, _: &mut Window, _: &mut App) -> impl IntoElement {
+    fn render(self, _: &mut Window, cx: &mut App) -> impl IntoElement {
         let size = self.size;
         let items = self.items.into_iter().map(|item| item.into_element(size));
 
@@ -254,6 +254,7 @@ impl RenderOnce for Toolbar {
                 Size::Small => this.h_8().p_1().gap_1().text_sm(),
                 _ => this.h_12().p_2().gap_2().text_sm(),
             })
+            .bg(cx.theme().toolbar)
             .refine_style(&self.style)
             .children(items)
     }

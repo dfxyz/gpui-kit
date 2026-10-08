@@ -244,7 +244,7 @@ impl DatePickerState {
             time_field,
             time_field_pushed: false,
             _subscriptions,
-            first_day_of_week: Weekday::Sun,
+            first_day_of_week: Weekday::Mon,
             bounds: Bounds::default(),
         }
     }
@@ -531,8 +531,8 @@ impl DatePickerState {
             return format.clone();
         }
         match self.edited_time_precision() {
-            Some(precision) => format!("%Y/%m/%d {}", precision.format(self.hour_cycle)).into(),
-            None => "%Y/%m/%d".into(),
+            Some(precision) => format!("%Y-%m-%d {}", precision.format(self.hour_cycle)).into(),
+            None => "%Y-%m-%d".into(),
         }
     }
 }

@@ -75,6 +75,8 @@ pub struct ThemeColor {
     pub button_foreground: Hsla,
     /// Default Button hover background color.
     pub button_hover: Hsla,
+    /// Default Button border color
+    pub button_border: Hsla,
     /// Button danger background color, fallback to `danger`.
     pub button_danger: Hsla,
     /// Button danger active background color, fallback to `danger_active`.
@@ -83,6 +85,12 @@ pub struct ThemeColor {
     pub button_danger_foreground: Hsla,
     /// Button danger hover background color, fallback to `danger_hover`.
     pub button_danger_hover: Hsla,
+    /// Button danger border color
+    pub button_danger_border: Hsla,
+    /// Button ghost active background color
+    pub button_ghost_active: Hsla,
+    /// Button ghost hover background color
+    pub button_ghost_hover: Hsla,
     /// Button info background color, fallback to `info`.
     pub button_info: Hsla,
     /// Button info active background color, fallback to `info_active`.
@@ -91,6 +99,8 @@ pub struct ThemeColor {
     pub button_info_foreground: Hsla,
     /// Button info hover background color, fallback to `info_hover`.
     pub button_info_hover: Hsla,
+    /// Button info border color
+    pub button_info_border: Hsla,
     /// Button primary background color, fallback to `primary`.
     pub button_primary: Hsla,
     /// Button primary active background color, fallback to `primary_active`.
@@ -99,6 +109,8 @@ pub struct ThemeColor {
     pub button_primary_foreground: Hsla,
     /// Button primary hover background color, fallback to `primary_hover`.
     pub button_primary_hover: Hsla,
+    /// Button primary border color
+    pub button_primary_border: Hsla,
     /// Button secondary background color, fallback to `secondary`.
     pub button_secondary: Hsla,
     /// Button secondary active background color, fallback to `secondary_active`.
@@ -107,6 +119,8 @@ pub struct ThemeColor {
     pub button_secondary_foreground: Hsla,
     /// Button secondary hover background color, fallback to `secondary_hover`.
     pub button_secondary_hover: Hsla,
+    /// Button secondary border color
+    pub button_secondary_border: Hsla,
     /// Button success background color, fallback to `success`.
     pub button_success: Hsla,
     /// Button success active background color, fallback to `success_active`.
@@ -115,6 +129,8 @@ pub struct ThemeColor {
     pub button_success_foreground: Hsla,
     /// Button success hover background color, fallback to `success_hover`.
     pub button_success_hover: Hsla,
+    /// Button success border color
+    pub button_success_border: Hsla,
     /// Button warning background color, fallback to `warning`.
     pub button_warning: Hsla,
     /// Button warning active background color, fallback to `warning_active`.
@@ -123,6 +139,8 @@ pub struct ThemeColor {
     pub button_warning_foreground: Hsla,
     /// Button warning hover background color, fallback to `warning_hover`.
     pub button_warning_hover: Hsla,
+    /// Button warning border color
+    pub button_warning_border: Hsla,
     /// Background color for GroupBox.
     pub group_box: Hsla,
     /// Text color for GroupBox.
@@ -145,6 +163,10 @@ pub struct ThemeColor {
     pub chart_bearish: Hsla,
     /// Chart grid line color.
     pub chart_grid: Hsla,
+    /// Code block background color in text view.
+    pub code_block: Hsla,
+    /// Inlined code span background color in text view.
+    pub code_inline: Hsla,
     /// Danger background color.
     pub danger: Hsla,
     /// Danger active background color.
@@ -173,6 +195,8 @@ pub struct ThemeColor {
     pub info_hover: Hsla,
     /// Border color for inputs such as Input, Select, etc.
     pub input: Hsla,
+    /// Background color for inputs such as Input, Select, etc.
+    pub input_background: Hsla,
     /// Link text color.
     pub link: Hsla,
     /// Active link text color.
@@ -237,6 +261,8 @@ pub struct ThemeColor {
     pub sidebar_border: Hsla,
     /// Sidebar text color.
     pub sidebar_foreground: Hsla,
+    /// Sidebar hover background color.
+    pub sidebar_hover: Hsla,
     /// Sidebar primary background color.
     pub sidebar_primary: Hsla,
     /// Sidebar primary text color.
@@ -271,6 +297,8 @@ pub struct ThemeColor {
     pub tab_bar_segmented: Hsla,
     /// Tab text color.
     pub tab_foreground: Hsla,
+    /// Toolbar background color.
+    pub toolbar: Hsla,
     /// Table background color.
     pub table: Hsla,
     /// Table active item background color.
@@ -412,30 +440,39 @@ define_theme_tokens! {
     button_active,
     button_foreground,
     button_hover,
+    button_border,
     button_danger,
     button_danger_active,
     button_danger_foreground,
     button_danger_hover,
+    button_danger_border,
+    button_ghost_active,
+    button_ghost_hover,
     button_info,
     button_info_active,
     button_info_foreground,
     button_info_hover,
+    button_info_border,
     button_primary,
     button_primary_active,
     button_primary_foreground,
     button_primary_hover,
+    button_primary_border,
     button_secondary,
     button_secondary_active,
     button_secondary_foreground,
     button_secondary_hover,
+    button_secondary_border,
     button_success,
     button_success_active,
     button_success_foreground,
     button_success_hover,
+    button_success_border,
     button_warning,
     button_warning_active,
     button_warning_foreground,
     button_warning_hover,
+    button_warning_border,
     group_box,
     group_box_foreground,
     caret,
@@ -447,6 +484,8 @@ define_theme_tokens! {
     chart_bullish,
     chart_bearish,
     chart_grid,
+    code_block,
+    code_inline,
     danger,
     danger_active,
     danger_foreground,
@@ -461,6 +500,7 @@ define_theme_tokens! {
     info_foreground,
     info_hover,
     input,
+    input_background,
     link,
     link_active,
     link_hover,
@@ -493,6 +533,7 @@ define_theme_tokens! {
     sidebar_accent_foreground,
     sidebar_border,
     sidebar_foreground,
+    sidebar_hover,
     sidebar_primary,
     sidebar_primary_foreground,
     skeleton,
@@ -510,6 +551,7 @@ define_theme_tokens! {
     tab_bar,
     tab_bar_segmented,
     tab_foreground,
+    toolbar,
     table,
     table_active,
     table_active_border,

@@ -1,14 +1,13 @@
+use std::collections::HashMap;
 use std::{rc::Rc, sync::Arc};
 
-use gpui::{Background, BoxShadow, FontWeight, Hsla, SharedString, px};
+use gpui::{BoxShadow, FontWeight, SharedString, px};
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 
 use crate::highlighter::{HighlightTheme, HighlightThemeStyle};
 
-use super::color::{
-    try_parse_background, try_parse_background_clamped, try_parse_color, try_parse_theme_color,
-};
+use super::color::{try_parse_background, try_parse_color, try_parse_theme_color};
 use super::{Colorize, SemanticThemeTokens, Theme, ThemeColor, ThemeMode, ThemeToken, ThemeTokens};
 
 fn try_parse_theme_token(value: &str) -> anyhow::Result<ThemeToken> {
@@ -675,6 +674,9 @@ pub struct ThemeConfigColors {
     /// Base light yellow color.
     #[serde(rename = "base.yellow.light")]
     yellow_light: Option<String>,
+
+    #[serde(flatten)]
+    others: HashMap<String, String>,
 }
 
 impl ThemeColor {
@@ -710,6 +712,17 @@ impl ThemeColor {
             };
         }
 
+        macro_rules! apply_other_color {
+            ($config_field:ident, $key:expr) => {
+                if let Some(value) = &colors.others.get($key)
+                    && let Ok(color) = try_parse_color(value)
+                {
+                    self.$config_field = color;
+                    tokens.$config_field = color.into();
+                }
+            };
+        }
+
         macro_rules! apply_background_color {
             ($config_field:ident) => {
                 let token = if let Some(value) = &colors.$config_field {
@@ -737,6 +750,17 @@ impl ThemeColor {
                 };
                 self.$config_field = token.color;
                 tokens.$config_field = token;
+            };
+        }
+
+        macro_rules! apply_other_background_color {
+            ($config_field:ident, $key:expr) => {
+                if let Some(value) = &colors.others.get($key)
+                    && let Ok(token) = try_parse_theme_token(&value)
+                {
+                    self.$config_field = token.color;
+                    tokens.$config_field = token;
+                }
             };
         }
 
@@ -777,6 +801,7 @@ impl ThemeColor {
         apply_color!(border);
         apply_color!(foreground);
         apply_color!(input, fallback = self.border);
+        apply_other_background_color!(input_background, "input.background");
         apply_background_color!(muted);
         apply_color!(
             muted_foreground,
@@ -802,6 +827,9 @@ impl ThemeColor {
             button_active,
             fallback = self.input.mix_oklab(transparent, 0.7)
         );
+        apply_other_color!(button_border, "button.border");
+        apply_other_background_color!(button_ghost_active, "button.ghost.active.background");
+        apply_other_background_color!(button_ghost_hover, "button.ghost.hover.background");
         apply_background_color!(primary);
         apply_color!(primary_foreground, fallback = self.foreground);
         apply_background_color!(
@@ -819,6 +847,7 @@ impl ThemeColor {
         );
         apply_background_color!(button_primary_hover, fallback = tokens.primary_hover);
         apply_background_color!(button_primary_active, fallback = tokens.primary_active);
+        apply_other_color!(button_primary_border, "button.primary.border");
         apply_background_color!(secondary);
         apply_color!(secondary_foreground, fallback = self.foreground);
         apply_background_color!(
@@ -836,6 +865,7 @@ impl ThemeColor {
         );
         apply_background_color!(button_secondary_hover, fallback = tokens.secondary_hover);
         apply_background_color!(button_secondary_active, fallback = tokens.secondary_active);
+        apply_other_color!(button_secondary_border, "button.secondary.border");
         apply_background_color!(success, fallback = self.green);
         apply_color!(success_foreground, fallback = self.primary_foreground);
         apply_background_color!(
@@ -859,6 +889,7 @@ impl ThemeColor {
             button_success_active,
             fallback = self.success.mix_oklab(transparent, 0.4)
         );
+        apply_other_color!(button_success_border, "button.success.border");
         apply_background_color!(info, fallback = self.cyan);
         apply_color!(info_foreground, fallback = self.primary_foreground);
         apply_background_color!(
@@ -879,6 +910,7 @@ impl ThemeColor {
             button_info_active,
             fallback = self.info.mix_oklab(transparent, 0.4)
         );
+        apply_other_color!(button_info_border, "button.info.border");
         apply_background_color!(warning, fallback = self.yellow);
         apply_color!(warning_foreground, fallback = self.primary_foreground);
         apply_background_color!(
@@ -902,6 +934,7 @@ impl ThemeColor {
             button_warning_active,
             fallback = self.warning.mix_oklab(transparent, 0.4)
         );
+        apply_other_color!(button_warning_border, "button.warning.border");
 
         // Other colors
         apply_background_color!(accent, fallback = tokens.secondary);
@@ -926,6 +959,8 @@ impl ThemeColor {
         apply_color!(chart_bullish, fallback = self.green);
         apply_color!(chart_bearish, fallback = self.red);
         apply_color!(chart_grid, fallback = self.border.opacity(0.6));
+        apply_other_color!(code_block, "code_block.background");
+        apply_other_color!(code_inline, "code_inline.background");
         apply_background_color!(danger, fallback = self.red);
         apply_background_color!(danger_active, fallback = self.danger.darken(active_darken));
         apply_color!(danger_foreground, fallback = self.primary_foreground);
@@ -946,6 +981,7 @@ impl ThemeColor {
             button_danger_active,
             fallback = self.danger.mix_oklab(transparent, 0.4)
         );
+        apply_other_color!(button_danger_border, "button.danger.border");
         apply_background_color!(
             description_list_label,
             fallback = self.background.blend(self.border.opacity(0.2))
@@ -987,6 +1023,7 @@ impl ThemeColor {
         apply_color!(sidebar_accent_foreground, fallback = self.accent_foreground);
         apply_color!(sidebar_border, fallback = self.border);
         apply_color!(sidebar_foreground, fallback = self.foreground);
+        apply_other_background_color!(sidebar_hover, "sidebar.hover.background");
         apply_background_color!(sidebar_primary, fallback = tokens.primary);
         apply_color!(
             sidebar_primary_foreground,
@@ -1003,6 +1040,7 @@ impl ThemeColor {
         apply_background_color!(tab_bar, fallback = tokens.background);
         apply_background_color!(tab_bar_segmented, fallback = tokens.secondary);
         apply_color!(tab_foreground, fallback = self.foreground);
+        apply_other_background_color!(toolbar, "toolbar.background");
         apply_background_color!(table, fallback = tokens.list);
         apply_background_color!(table_active, fallback = tokens.list_active);
         apply_color!(table_active_border, fallback = self.list_active_border);
@@ -1021,39 +1059,6 @@ impl ThemeColor {
         apply_color!(window_border, fallback = self.border);
 
         // TODO: Apply default fallback colors to highlight.
-
-        // Ensure opacity for list_active, table_active, selection.
-        let clamp_alpha = |raw: Option<&str>, color: Hsla, background: Background, max: f32| {
-            let base = color.a;
-            let target = base.min(max);
-            let color = color.alpha(target);
-            let background = raw
-                .and_then(|value| try_parse_background_clamped(value, max).ok())
-                .unwrap_or_else(|| {
-                    let factor = if base > 0. { target / base } else { 1. };
-                    background.opacity(factor)
-                });
-            (color, ThemeToken::new(color, background))
-        };
-
-        (self.list_active, tokens.list_active) = clamp_alpha(
-            colors.list_active.as_deref(),
-            self.list_active,
-            tokens.list_active.background,
-            0.2,
-        );
-        (self.table_active, tokens.table_active) = clamp_alpha(
-            colors.table_active.as_deref(),
-            self.table_active,
-            tokens.table_active.background,
-            0.2,
-        );
-        (self.selection, tokens.selection) = clamp_alpha(
-            colors.selection.as_deref(),
-            self.selection,
-            tokens.selection.background,
-            0.3,
-        );
 
         tokens
     }
@@ -1309,19 +1314,13 @@ mod tests {
     }
 
     #[test]
-    fn test_apply_config_clamps_highlight_alpha_per_gradient_stop() {
+    fn test_apply_config_keeps_highlight_backgrounds_as_written() {
         let config = serde_json::from_value::<ThemeConfig>(serde_json::json!({
             "name": "Highlight",
             "mode": "light",
             "colors": {
-                // Solid above the cap: must be capped to 0.2, not attenuated twice.
                 "list.active.background": "#3b82f6",
-                // Gradient with a faint `from` stop and an opaque `to` stop: the
-                // `to` stop must be clamped independently, not left at full alpha.
                 "table.active.background": "linear-gradient(#bfdbfe33, #3b82f6)",
-                // Gradient with a transparent `from` stop: the opaque `to` stop
-                // must still be clamped (the `base == 0` factor fallback used to
-                // leave it untouched).
                 "selection.background": "linear-gradient(#3b82f600, #3b82f6)",
             }
         }))
@@ -1330,31 +1329,29 @@ mod tests {
         let mut theme = Theme::default();
         theme.apply_config(&std::rc::Rc::new(config));
 
-        // Solid: representative color and rendered background both capped at 0.2.
+        // A solid color is used as written, not attenuated to a highlight cap.
         let blue = try_parse_color("#3b82f6").unwrap();
-        assert_eq!(theme.list_active, blue.alpha(0.2));
-        assert_eq!(theme.tokens.list_active.background, blue.alpha(0.2).into());
+        assert_eq!(theme.list_active, blue);
+        assert_eq!(theme.tokens.list_active.background, blue.into());
 
-        // Gradient: the opaque `to` stop is clamped to 0.2, not left fully opaque.
+        // Gradient stops keep the alphas the theme file gave them.
         let faint = try_parse_color("#bfdbfe33").unwrap();
         assert_eq!(
             theme.tokens.table_active.background,
             linear_gradient(
                 180.,
-                linear_color_stop(faint.alpha(faint.a.min(0.2)), 0.),
-                linear_color_stop(blue.alpha(0.2), 1.),
+                linear_color_stop(faint, 0.),
+                linear_color_stop(blue, 1.),
             )
         );
 
-        // Gradient: a transparent `from` stop stays transparent while the opaque
-        // `to` stop is still clamped to 0.3 (selection cap).
         let clear = try_parse_color("#3b82f600").unwrap();
         assert_eq!(
             theme.tokens.selection.background,
             linear_gradient(
                 180.,
-                linear_color_stop(clear.alpha(clear.a.min(0.3)), 0.),
-                linear_color_stop(blue.alpha(0.3), 1.),
+                linear_color_stop(clear, 0.),
+                linear_color_stop(blue, 1.),
             )
         );
     }

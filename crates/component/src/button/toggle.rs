@@ -152,8 +152,6 @@ impl RenderOnce for Toggle {
         let disabled = self.disabled;
         let hoverable = !disabled && !checked;
         let rounding = cx.theme().radius;
-        let pressed_background = cx.theme().tokens.accent;
-        let pressed_foreground = cx.theme().accent_foreground;
         let instance_style = self.style.clone();
 
         BaseToggle::new(self.id)
@@ -199,15 +197,15 @@ impl RenderOnce for Toggle {
             })
             .when(hoverable, |this| {
                 this.hover(|this| {
-                    this.bg(cx.theme().tokens.accent)
+                    this.bg(cx.theme().tokens.button_ghost_hover)
                         .text_color(cx.theme().accent_foreground)
                 })
             })
             .styles(|styles| {
                 styles.pressed(|style| {
                     style
-                        .bg(pressed_background)
-                        .text_color(pressed_foreground)
+                        .bg(cx.theme().tokens.accent)
+                        .text_color(cx.theme().accent_foreground)
                         .refine_style(&instance_style)
                 })
             })

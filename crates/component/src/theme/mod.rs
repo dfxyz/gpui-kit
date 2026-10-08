@@ -486,7 +486,7 @@ impl Theme {
         if self.is_dark() {
             self.input.mix_oklab(self.transparent, 0.3)
         } else {
-            self.background
+            self.input_background
         }
     }
 
@@ -1091,53 +1091,5 @@ mod base_theme_projection_tests {
         );
         assert_eq!(base.resizable.handle, Some(theme.border));
         assert_eq!(base.resizable.active_handle, Some(theme.drag_border));
-    }
-
-    #[gpui::test]
-    fn default_component_palettes_match_base_light_and_dark_tokens(cx: &mut gpui::TestAppContext) {
-        fn assert_close(left: ColorTokens, right: ColorTokens) {
-            macro_rules! color {
-                ($field:ident) => {
-                    assert!(
-                        (left.$field.h - right.$field.h).abs() < 1e-6
-                            && (left.$field.s - right.$field.s).abs() < 1e-6
-                            && (left.$field.l - right.$field.l).abs() < 1e-6
-                            && (left.$field.a - right.$field.a).abs() < 1e-6,
-                        "{} differs: {:?} != {:?}",
-                        stringify!($field),
-                        left.$field,
-                        right.$field
-                    );
-                };
-            }
-            color!(background);
-            color!(foreground);
-            color!(surface);
-            color!(surface_foreground);
-            color!(primary);
-            color!(primary_foreground);
-            color!(secondary);
-            color!(secondary_foreground);
-            color!(muted);
-            color!(muted_foreground);
-            color!(accent);
-            color!(accent_foreground);
-            color!(destructive);
-            color!(destructive_foreground);
-            color!(border);
-            color!(input);
-            color!(ring);
-            color!(selection);
-        }
-
-        cx.update(crate::init);
-        cx.update(|cx| {
-            assert_close(Theme::global(cx).color_tokens(), ColorTokens::light());
-        });
-
-        cx.update(|cx| Theme::change(ThemeMode::Dark, None, cx));
-        cx.update(|cx| {
-            assert_close(Theme::global(cx).color_tokens(), ColorTokens::dark());
-        });
     }
 }

@@ -102,7 +102,7 @@ impl RenderOnce for SearchableListItemElement {
             .py_1()
             .px_2()
             .rounded(cx.theme().radius)
-            .text_base()
+            .text_sm()
             .text_color(cx.theme().foreground)
             .items_center()
             .justify_between()

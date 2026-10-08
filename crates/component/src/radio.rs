@@ -1,16 +1,16 @@
 use std::rc::Rc;
 
 use crate::{
-    ActiveTheme, AxisExt, Sizable, Size, StyledExt, checkbox::checkbox_check_icon, h_flex,
-    text::Text, tooltip::ComponentTooltip, v_flex,
+    ActiveTheme, AxisExt, Sizable, Size, StyledExt, checkbox, h_flex, text::Text,
+    tooltip::ComponentTooltip, v_flex,
 };
 use crate::{StyleSized as _, ThemeStyled as _};
 use gpui::{
-    AnyElement, App, Axis, ElementId, InteractiveElement, IntoElement, ParentElement, RenderOnce,
-    SharedString, StatefulInteractiveElement, StyleRefinement, Styled, Window, div,
-    prelude::FluentBuilder, relative, rems,
+    AnyElement, App, Axis, ElementId, InteractiveElement, IntoElement, ParentElement, Pixels, Rems,
+    RenderOnce, SharedString, StatefulInteractiveElement, StyleRefinement, Styled, Window, div,
+    prelude::FluentBuilder, px, relative,
 };
-use gpui_base::{Radio as BaseRadio, RadioGroup as BaseRadioGroup};
+use gpui_base::{Radio as BaseRadio, RadioGroup as BaseRadioGroup, spring};
 
 /// A Radio element.
 ///
@@ -161,16 +161,55 @@ impl ParentElement for Radio {
     }
 }
 
+fn round_to_device_pixel(logical: f32, scale_factor: f32) -> f32 {
+    let device = logical * scale_factor;
+    (device.abs() - 0.5).ceil().copysign(device)
+}
+
+fn indicator_dot_size(indicator_size: Rems, rem_size: Pixels, scale_factor: f32) -> Pixels {
+    let indicator_size =
+        round_to_device_pixel(indicator_size.to_pixels(rem_size).as_f32(), scale_factor);
+    let border_size = round_to_device_pixel(1., scale_factor).max(1.);
+    let inner_size = (indicator_size - border_size * 2.).max(0.);
+    let mut dot_size = (inner_size / 2.).round();
+    if ((dot_size as i32) + (inner_size as i32)) % 2 != 0 {
+        dot_size += 1.;
+    }
+    px(dot_size / scale_factor)
+}
+
+fn indicator(
+    id: ElementId,
+    dot_size: Pixels,
+    checked: bool,
+    disabled: bool,
+    window: &mut Window,
+    cx: &mut App,
+) -> AnyElement {
+    let opacity = spring(
+        (id, "mark"),
+        if checked { 1. } else { 0. },
+        cx.theme().motion_tokens().spring_control,
+        window,
+        cx,
+    );
+    let color = if disabled {
+        cx.theme().primary_foreground.opacity(0.5)
+    } else {
+        cx.theme().primary_foreground
+    };
+    div()
+        .size(dot_size)
+        .rounded_full()
+        .bg(color.opacity(opacity))
+        .into_any_element()
+}
+
 impl RenderOnce for Radio {
     fn render(self, window: &mut Window, cx: &mut App) -> impl IntoElement {
         let checked = self.checked;
-        let has_content = self.label.is_some() || !self.children.is_empty();
-        let indicator_size = rems(match self.size {
-            Size::XSmall => 0.75,
-            Size::Small => 0.875,
-            Size::Large => 1.125,
-            _ => 1.,
-        });
+        let indicator_size = checkbox::indicator_size(self.size);
+        let dot_size = indicator_dot_size(indicator_size, window.rem_size(), window.scale_factor());
         let focus_handle = window
             .use_keyed_state(self.id.clone(), cx, |_, cx| cx.focus_handle())
             .read(cx)
@@ -185,7 +224,7 @@ impl RenderOnce for Radio {
         let (border_color, bg) = if checked {
             (cx.theme().primary, cx.theme().primary)
         } else {
-            (cx.theme().input, cx.theme().input.opacity(0.5))
+            (cx.theme().input, cx.theme().input_background())
         };
         let (border_color, bg) = if disabled {
             (border_color.opacity(0.5), bg.opacity(0.5))
@@ -210,7 +249,7 @@ impl RenderOnce for Radio {
             .h_flex()
             .gap_x_2()
             .text_color(cx.theme().foreground)
-            .items_start()
+            .items_center()
             .line_height(relative(1.))
             .rounded(cx.theme().radius * 0.5)
             .when(is_focused && self.focus_ring_enabled, |this| {
@@ -223,22 +262,15 @@ impl RenderOnce for Radio {
             .refine_style(&self.style)
             .child(
                 div()
-                    .relative()
                     .size(indicator_size)
-                    // Center on the first 1.25em line, including when the label wraps.
-                    .when(has_content, |this| this.mt(indicator_size * 0.125))
                     .flex_shrink_0()
+                    .h_flex()
+                    .justify_center()
                     .rounded_full_style(cx)
                     .border_1()
                     .border_color(border_color)
-                    .map(|this| match self.checked {
-                        false => this.bg(cx.theme().input_background()),
-                        true if disabled => this.bg(bg),
-                        true => this.bg(cx.theme().tokens.primary),
-                    })
-                    .child(checkbox_check_icon(
-                        self.id, self.size, checked, disabled, window, cx,
-                    )),
+                    .bg(bg)
+                    .child(indicator(self.id, dot_size, checked, disabled, window, cx)),
             )
             .when(!self.children.is_empty() || self.label.is_some(), |this| {
                 this.child(

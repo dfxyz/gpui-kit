@@ -92,7 +92,7 @@ impl RenderOnce for StatusBar {
             .border_color(cx.theme().status_bar_border)
             .bg(cx.theme().tokens.status_bar)
             .text_xs()
-            .text_color(cx.theme().muted_foreground)
+            .text_color(cx.theme().foreground)
             .refine_style(&self.style)
             .when(has_left, |this| this.child(region().children(self.left)))
             .child(
