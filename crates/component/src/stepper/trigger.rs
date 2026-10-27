@@ -5,7 +5,7 @@ use gpui::{
 };
 use gpui_base::TestSupportExt as _;
 
-use crate::{ActiveTheme as _, AxisExt, Icon, Size, StyleSized, StyledExt as _, ThemeStyled as _};
+use crate::{AxisExt, Icon, Size, StyleSized, StyledExt as _, ThemeStyled as _};
 
 /// The trigger part of a stepper item.
 #[derive(IntoElement)]
@@ -123,15 +123,15 @@ impl RenderOnce for StepperTrigger {
                     .rounded_full_style(cx)
                     .items_center()
                     .justify_center()
-                    .bg(cx.theme().tokens.secondary)
+                    .bg(crate::custom_style::muted_bg())
                     .when(!self.disabled && !is_checked, |this| {
-                        this.hover(|this| this.bg(cx.theme().tokens.secondary_hover))
-                            .active(|this| this.bg(cx.theme().tokens.secondary_active))
+                        this.hover(|this| this.bg(crate::custom_style::common_hover_bg()))
+                            .active(|this| this.bg(crate::custom_style::common_active_bg()))
                     })
-                    .text_color(cx.theme().secondary_foreground)
+                    .text_color(crate::custom_style::text())
                     .when(is_checked, |this| {
-                        this.bg(cx.theme().tokens.primary)
-                            .text_color(cx.theme().primary_foreground)
+                        this.bg(crate::custom_style::primary())
+                            .text_color(crate::custom_style::reversed_text())
                     })
                     .when(self.size != Size::XSmall, |this| {
                         this.map(|this| {

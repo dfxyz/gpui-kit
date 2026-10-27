@@ -1,5 +1,5 @@
 use crate::{
-    ActiveTheme as _, RoleOverride, Sizable as _, StyledExt as _, h_flex,
+    RoleOverride, Sizable as _, StyledExt as _, h_flex,
     shimmer::{ShimmerStyle, ShimmerText},
     spinner::Spinner,
 };
@@ -185,8 +185,7 @@ impl Styled for Marker {
 }
 
 impl RenderOnce for Marker {
-    fn render(self, _: &mut Window, cx: &mut App) -> impl IntoElement {
-        let tokens = cx.theme().semantic_tokens();
+    fn render(self, _: &mut Window, _cx: &mut App) -> impl IntoElement {
         let variant = self.variant;
         let alignment = self.resolved_alignment();
         let loading = self.loading;
@@ -216,14 +215,16 @@ impl RenderOnce for Marker {
             .gap_2()
             .text_sm()
             .line_height(relative(1.5))
-            .text_color(tokens.colors.muted_foreground)
+            .text_color(crate::custom_style::muted_text())
             .map(|this| match alignment {
                 MarkerAlignment::Start => this.justify_start().text_left(),
                 MarkerAlignment::Center => this.justify_center().text_center(),
                 MarkerAlignment::End => this.justify_end().text_right(),
             })
             .when(variant == MarkerVariant::Border, |this| {
-                this.border_b_1().border_color(tokens.colors.border).pb_2()
+                this.border_b_1()
+                    .border_color(crate::custom_style::border())
+                    .pb_2()
             })
             .when(
                 variant == MarkerVariant::Separator && alignment != MarkerAlignment::Start,
@@ -234,7 +235,7 @@ impl RenderOnce for Marker {
                             .min_w_0()
                             .h(px(1.))
                             .mr_1()
-                            .bg(tokens.colors.border)
+                            .bg(crate::custom_style::border())
                             .refine_style(&separator_style),
                     )
                 },
@@ -253,7 +254,7 @@ impl RenderOnce for Marker {
                             .min_w_0()
                             .h(px(1.))
                             .ml_1()
-                            .bg(tokens.colors.border)
+                            .bg(crate::custom_style::border())
                             .refine_style(&separator_style),
                     )
                 },

@@ -9,6 +9,10 @@
       "is_default": true,
       "name": "Default Light",
       "mode": "light",
+      "font.family": "Fira Noto SC",
+      "font.size": 16,
+      "mono_font.family": "Fira Noto SC",
+      "mono_font.size": 14,
       "colors": {
         "accent.background": "neutral-100",
         "accent.foreground": "neutral-900",

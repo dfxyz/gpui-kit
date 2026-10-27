@@ -288,10 +288,10 @@ impl<T> PieChart<T> {
     }
 
     /// The fill of a slice: the per-datum color, or the theme's.
-    fn slice_color(&self, datum: &T, cx: &App) -> Hsla {
+    fn slice_color(&self, datum: &T, _cx: &App) -> Hsla {
         match self.color.as_ref() {
             Some(color_fn) => color_fn(datum),
-            None => cx.theme().chart_2,
+            None => crate::custom_style::chart_2(),
         }
     }
 
@@ -370,9 +370,9 @@ impl<T> Plot for PieChart<T> {
         }
         let label_color = self
             .label_color
-            .unwrap_or(cx.theme().foreground)
+            .unwrap_or(crate::custom_style::text())
             .opacity(label_opacity);
-        let default_line_color = cx.theme().border;
+        let default_line_color = crate::custom_style::border();
 
         // First pass: collect a layout candidate per visible slice, split by
         // side. `y` is the target vertical position relative to the center and

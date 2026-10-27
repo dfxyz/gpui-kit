@@ -219,7 +219,7 @@ impl Default for DialogProps {
     fn default() -> Self {
         Self {
             margin_top: None,
-            centered: false,
+            centered: true,
             width: px(448.),
             max_width: None,
             overlay: true,
@@ -332,12 +332,12 @@ pub struct Dialog {
     pub(crate) id: usize,
 }
 
-pub(crate) fn overlay_color(overlay: bool, cx: &App) -> Hsla {
+pub(crate) fn overlay_color(overlay: bool, _cx: &App) -> Hsla {
     if !overlay {
         return hsla(0., 0., 0., 0.);
     }
 
-    cx.theme().overlay
+    crate::custom_style::overlay()
 }
 
 fn dialog_shadow(delta: f32) -> Vec<BoxShadow> {
@@ -486,6 +486,7 @@ impl Dialog {
 
     /// Set the top offset of the dialog, defaults to None, will use the 1/10 of the viewport height.
     pub fn margin_top(mut self, margin_top: impl Into<Pixels>) -> Self {
+        self.props.centered = false;
         self.props.margin_top = Some(margin_top.into());
         self
     }
@@ -776,9 +777,9 @@ impl RenderOnce for Dialog {
                                         .id("surface")
                                         .test_support()
                                         .debug_selector(move || format!("dialog-{layer_ix}"))
-                                        .bg(cx.theme().tokens.background)
+                                        .bg(crate::custom_style::base())
                                         .border_1()
-                                        .border_color(cx.theme().border)
+                                        .border_color(crate::custom_style::border())
                                         .rounded(cx.theme().radius_lg)
                                         .min_h_24()
                                         .pt(paddings.top)

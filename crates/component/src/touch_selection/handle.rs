@@ -7,8 +7,6 @@ use gpui::{
 };
 use gpui_base::{SelectionEdge, TouchHandle, TouchSelectionSnapshot};
 
-use crate::ActiveTheme as _;
-
 /// Reads the touch selection as laid out by the time the handles paint.
 pub(crate) type SnapshotSource = Rc<dyn Fn(&Window, &App) -> Option<TouchSelectionSnapshot>>;
 /// What a handle's owner gets told as the finger moves it.
@@ -89,11 +87,11 @@ impl SelectionHandles {
         handles
     }
 
-    fn paint_handle(handle: &LaidOutHandle, window: &mut Window, cx: &mut App) {
+    fn paint_handle(handle: &LaidOutHandle, window: &mut Window, _cx: &mut App) {
         TouchHandle::paint(
             handle.edge,
             handle.caret,
-            cx.theme().selection.alpha(1.),
+            crate::custom_style::selection(),
             window,
         );
     }

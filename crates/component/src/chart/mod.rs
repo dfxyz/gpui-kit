@@ -25,14 +25,11 @@ use gpui::{
     SharedString, Size, TextAlign, Window, point, px,
 };
 
-use crate::{
-    ActiveTheme,
-    plot::{
-        AxisLabelPlacement, AxisText, Grid, PlotAppear, PlotLabel,
-        label::{TEXT_GAP, TEXT_HEIGHT, TEXT_SIZE, Text, measure_text_width},
-        scale::{PlotValue, Scale, ScaleBand, ScaleLinear, ScalePoint},
-        tooltip::Tooltip,
-    },
+use crate::plot::{
+    AxisLabelPlacement, AxisText, Grid, PlotAppear, PlotLabel,
+    label::{TEXT_GAP, TEXT_HEIGHT, TEXT_SIZE, Text, measure_text_width},
+    scale::{PlotValue, Scale, ScaleBand, ScaleLinear, ScalePoint},
+    tooltip::Tooltip,
 };
 
 /// The [`ElementId`] a chart carries when the caller names none: the source
@@ -481,7 +478,7 @@ impl PointAxes {
         bounds: Bounds<Pixels>,
         height: f32,
         window: &mut Window,
-        cx: &mut App,
+        _cx: &mut App,
     ) {
         let plot = self.plot_bounds(bounds, height);
         let mut rows = self.tick_positions(height);
@@ -490,7 +487,10 @@ impl PointAxes {
         let columns: Vec<f32> = (0..self.grid_columns)
             .map(|i| width * i as f32 / self.grid_columns as f32)
             .collect();
-        let grid = Grid::new().y(rows).x(columns).stroke(cx.theme().chart_grid);
+        let grid = Grid::new()
+            .y(rows)
+            .x(columns)
+            .stroke(crate::custom_style::border());
         let grid = if self.grid_dashed {
             grid.dash_array(&[px(4.), px(2.)])
         } else {
@@ -507,7 +507,7 @@ impl PointAxes {
         bounds: Bounds<Pixels>,
         height: f32,
         window: &mut Window,
-        cx: &mut App,
+        _cx: &mut App,
     ) {
         let rows: Vec<f32> = self
             .reference_lines
@@ -520,7 +520,7 @@ impl PointAxes {
         }
         Grid::new()
             .y(rows)
-            .stroke(cx.theme().muted_foreground)
+            .stroke(crate::custom_style::muted_text())
             .dash_array(&[px(4.), px(2.)])
             .paint(&self.plot_bounds(bounds, height), window);
     }
@@ -537,7 +537,7 @@ impl PointAxes {
         if !self.y_axis {
             return;
         }
-        let color = cx.theme().muted_foreground;
+        let color = crate::custom_style::muted_text();
         let labels = self
             .y_tick_labels(extent, height)
             .into_iter()

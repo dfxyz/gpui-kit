@@ -158,7 +158,7 @@ impl RenderOnce for ProgressCircle {
         // the ring cannot sweep more than once around.
         .clamp(0., 100.);
 
-        let color = self.color.unwrap_or(cx.theme().progress_bar);
+        let color = self.color.unwrap_or(crate::custom_style::green_text());
 
         BaseProgress::new(self.id.clone())
             .value(value)

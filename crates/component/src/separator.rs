@@ -1,4 +1,4 @@
-use crate::{ActiveTheme, StyledExt};
+use crate::StyledExt;
 use gpui::{
     App, Axis, Div, Hsla, IntoElement, ParentElement, PathBuilder, RenderOnce, SharedString,
     StyleRefinement, Styled, Window, canvas, div, point, prelude::FluentBuilder as _, px,
@@ -124,8 +124,8 @@ impl Styled for Separator {
 }
 
 impl RenderOnce for Separator {
-    fn render(self, _: &mut Window, cx: &mut App) -> impl IntoElement {
-        let color = self.color.unwrap_or(cx.theme().border);
+    fn render(self, _: &mut Window, _cx: &mut App) -> impl IntoElement {
+        let color = self.color.unwrap_or(crate::custom_style::border());
         let axis = self.axis;
         let line_style = self.line_style;
 
@@ -146,8 +146,8 @@ impl RenderOnce for Separator {
                         .py_1()
                         .mx_auto()
                         .text_xs()
-                        .bg(cx.theme().tokens.background)
-                        .text_color(cx.theme().muted_foreground)
+                        .bg(crate::custom_style::base())
+                        .text_color(crate::custom_style::muted_text())
                         .child(label),
                 )
             })

@@ -91,7 +91,7 @@ impl RenderOnce for OtpInput {
             groups.push(vec![]);
         }
 
-        let (bg, fg) = input_style(self.disabled, cx);
+        let (bg, fg) = input_style(self.disabled);
 
         for ix in 0..state.len() {
             let c = state.value().chars().nth(ix);
@@ -106,11 +106,13 @@ impl RenderOnce for OtpInput {
                 h_flex()
                     .id(ix)
                     .border_1()
-                    .border_color(cx.theme().input)
+                    .border_color(crate::custom_style::border())
                     .bg(bg)
                     .text_color(fg)
                     .when(self.disabled, |this| this.opacity(0.5))
-                    .when(focus_visible, |this| this.border_color(cx.theme().ring))
+                    .when(focus_visible, |this| {
+                        this.border_color(crate::custom_style::ring())
+                    })
                     .items_center()
                     .justify_center()
                     .rounded(cx.theme().radius)
@@ -135,9 +137,9 @@ impl RenderOnce for OtpInput {
                             if state.is_masked() {
                                 this.child(
                                     Icon::new(IconName::Asterisk)
-                                        .text_color(cx.theme().secondary_foreground)
+                                        .text_color(crate::custom_style::text())
                                         .when(self.disabled, |this| {
-                                            this.text_color(cx.theme().muted_foreground)
+                                            this.text_color(crate::custom_style::muted_text())
                                         }),
                                 )
                             } else {
@@ -150,7 +152,7 @@ impl RenderOnce for OtpInput {
                                     .h_4()
                                     .w_0()
                                     .border_l_3()
-                                    .border_color(cx.theme().caret),
+                                    .border_color(crate::custom_style::caret()),
                             )
                         }),
                     })

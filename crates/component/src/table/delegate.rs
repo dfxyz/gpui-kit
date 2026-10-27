@@ -6,7 +6,7 @@ use gpui::{
 };
 
 use crate::{
-    ActiveTheme as _, Icon, IconName, Size, h_flex,
+    Icon, IconName, Size, h_flex,
     menu::PopupMenu,
     table::{Column, ColumnGroup, ColumnSort, TableState, loading::Loading},
 };
@@ -94,7 +94,7 @@ pub trait TableDelegate: Sized + 'static {
             .items_center()
             .justify_center()
             .border_r_1()
-            .border_color(cx.theme().border)
+            .border_color(crate::custom_style::border())
             .child(label.clone())
     }
 
@@ -173,7 +173,7 @@ pub trait TableDelegate: Sized + 'static {
         h_flex()
             .size_full()
             .justify_center()
-            .text_color(cx.theme().muted_foreground.opacity(0.6))
+            .text_color(crate::custom_style::muted_text().opacity(0.6))
             .child(Icon::new(IconName::Inbox).size_12())
             .into_any_element()
     }

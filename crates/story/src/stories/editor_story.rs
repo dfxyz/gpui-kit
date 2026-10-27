@@ -310,7 +310,7 @@ impl EditorStory {
     const FONT_FAMILIES: [&'static str; 3] = ["Menlo", "Consolas", "Monaco"];
 
     /// The font sizes to switch the editor between.
-    const FONT_SIZES: [Pixels; 4] = [px(11.), px(13.), px(16.), px(20.)];
+    const FONT_SIZES: [Pixels; 4] = [px(12.), px(14.), px(16.), px(20.)];
 
     fn render_toolbar(&self, cx: &mut Context<Self>) -> impl IntoElement {
         let story = cx.entity();
@@ -446,7 +446,7 @@ impl Render for EditorStory {
                         .child(
                             Label::new("Type fl or log to compare highlights.")
                                 .text_sm()
-                                .text_color(cx.theme().muted_foreground),
+                                .text_color(crate::custom_style::muted_text()),
                         )
                         .child(
                             self.styled_editor(&self.completions_state)

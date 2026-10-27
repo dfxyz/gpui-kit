@@ -1590,7 +1590,7 @@ where
         _row_ix: Option<usize>,
         col_ix: usize,
         _: &mut Window,
-        cx: &mut Context<Self>,
+        _cx: &mut Context<Self>,
     ) -> Div {
         let el = h_flex().h_full();
         let selectable = self.col_selectable
@@ -1603,7 +1603,7 @@ where
         // `selected_col()` is `None` outside column mode, so a selected cell
         // never leaves its column highlighted.
         if selectable && self.selected_col() == Some(col_ix) {
-            el.bg(cx.theme().tokens.table_active)
+            el.bg(crate::custom_style::common_active_bg())
         } else {
             el
         }
@@ -1664,8 +1664,10 @@ where
                 div()
                     .h_full()
                     .justify_center()
-                    .bg(cx.theme().table_row_border)
-                    .group_hover(&group_id, |this| this.bg(cx.theme().border).h_full())
+                    .bg(crate::custom_style::border())
+                    .group_hover(&group_id, |this| {
+                        this.bg(crate::custom_style::border()).h_full()
+                    })
                     .w(px(1.)),
             )
             .into_any_element()
@@ -1783,7 +1785,7 @@ where
 
     /// The border on the right edge of the fixed columns, unless turned off
     /// with [`DataTable::fixed_cols_border`].
-    fn render_fixed_cols_border(&self, cx: &App) -> Option<Div> {
+    fn render_fixed_cols_border(&self, _cx: &App) -> Option<Div> {
         self.options.fixed_cols_border.then(|| {
             div()
                 .absolute()
@@ -1793,7 +1795,7 @@ where
                 .w_0()
                 .flex_shrink_0()
                 .border_r_1()
-                .border_color(cx.theme().border)
+                .border_color(crate::custom_style::border())
         })
     }
 
@@ -1809,8 +1811,8 @@ where
             .w_3()
             .h_full()
             .border_r_1()
-            .border_color(cx.theme().table_row_border)
-            .bg(cx.theme().tokens.table_head)
+            .border_color(crate::custom_style::border())
+            .bg(crate::custom_style::table_head())
             .flex_shrink_0()
             .table_cell_size(self.options.size)
             .when(!is_head, |this| {
@@ -1858,15 +1860,15 @@ where
                     true => this,
                     false => this.opacity(0.5),
                 })
-                .hover(|this| this.bg(cx.theme().tokens.secondary).opacity(7.))
-                .active(|this| this.bg(cx.theme().tokens.secondary_active).opacity(1.))
+                .hover(|this| this.bg(crate::custom_style::common_hover_bg().opacity(1.)))
+                .active(|this| this.bg(crate::custom_style::common_active_bg().opacity(1.)))
                 .on_click(
                     cx.listener(move |table, _, window, cx| table.perform_sort(col_ix, window, cx)),
                 )
                 .child(
                     Icon::new(icon)
                         .size_3()
-                        .text_color(cx.theme().secondary_foreground),
+                        .text_color(crate::custom_style::text()),
                 ),
         )
     }
@@ -1942,7 +1944,7 @@ where
                                         .bottom_0()
                                         .w(px(2.))
                                         .map(|d| if right_side { d.right_0() } else { d.left_0() })
-                                        .bg(cx.theme().drag_border),
+                                        .bg(crate::custom_style::drag_border()),
                                 )
                             }
                             _ => this,
@@ -2064,8 +2066,8 @@ where
             .h_flex()
             .w_full()
             .flex_shrink_0()
-            .bg(cx.theme().tokens.table_head)
-            .text_color(cx.theme().table_head_foreground)
+            .bg(crate::custom_style::table_head())
+            .text_color(crate::custom_style::text())
             .refine_style(&style)
             .on_drag_move(cx.listener(|table, e: &DragMoveEvent<DragColumn>, _, cx| {
                 let drag = e.drag(cx);
@@ -2105,14 +2107,14 @@ where
                     h_flex()
                         .relative()
                         .h_full()
-                        .bg(cx.theme().tokens.table_head)
+                        .bg(crate::custom_style::table_head())
                         .child(v_flex().min_w_full().flex_shrink_0().children(
                             layout.iter().enumerate().map(|(_row_ix, row_cells)| {
                                 h_flex()
                                     .min_w_full()
                                     .h(header_row_height)
                                     .border_b_1()
-                                    .border_color(cx.theme().border)
+                                    .border_color(crate::custom_style::border())
                                     .children(row_cells.iter().filter_map(|cell| {
                                         if cell.start_leaf_col_ix < left_columns_count {
                                             if cell.is_leaf {
@@ -2154,7 +2156,7 @@ where
                     .overflow_scroll()
                     .relative()
                     .track_scroll(&horizontal_scroll_handle)
-                    .bg(cx.theme().tokens.table_head)
+                    .bg(crate::custom_style::table_head())
                     .child(v_flex().min_w_full().flex_shrink_0().children(
                         layout.iter().enumerate().map(|(row_ix, row_cells)| {
                             let is_leaf_row = row_ix + 1 == layout_len;
@@ -2162,7 +2164,7 @@ where
                                 .min_w_full()
                                 .h(header_row_height)
                                 .border_b_1()
-                                .border_color(cx.theme().border)
+                                .border_color(crate::custom_style::border())
                                 .map(|this| {
                                     if is_leaf_row {
                                         // Leaf row: apply the spacer virtualization pattern.
@@ -2272,15 +2274,16 @@ where
                 .w_full()
                 .h(row_height)
                 .when(need_render_border, |this| {
-                    this.border_b_1().border_color(cx.theme().table_row_border)
+                    this.border_b_1()
+                        .border_color(crate::custom_style::border())
                 })
-                .when(is_stripe_row, |this| this.bg(cx.theme().tokens.table_even))
+                .when(is_stripe_row, |this| this.bg(crate::custom_style::base_alternative()))
                 .refine_style(&style)
                 .hover(|this| {
                     if is_selected || self.right_clicked_row == Some(row_ix) {
                         this
                     } else {
-                        this.bg(cx.theme().tokens.table_hover)
+                        this.bg(crate::custom_style::common_hover_bg())
                     }
                 })
                 .when(self.cell_selectable && self.row_header, |this| {
@@ -2329,7 +2332,7 @@ where
                                                         div()
                                                             .absolute()
                                                             .inset_0()
-                                                            .bg(cx.theme().tokens.table_active),
+                                                            .bg(crate::custom_style::common_active_bg()),
                                                     )
                                                 })
                                                 .when(
@@ -2341,8 +2344,7 @@ where
                                                                 .inset_0()
                                                                 .border_1()
                                                                 .border_color(
-                                                                    cx.theme()
-                                                                        .table_active_border
+                                                                    crate::custom_style::green_text()
                                                                         .opacity(0.5),
                                                                 ),
                                                         )
@@ -2435,10 +2437,10 @@ where
                                                         ))
                                                         .when(is_cell_selected, |this| {
                                                             this.child(
-                                                                div().absolute().inset_0().bg(cx
-                                                                    .theme()
-                                                                    .tokens
-                                                                    .table_active),
+                                                                div()
+                                                                    .absolute()
+                                                                    .inset_0()
+                                                                    .bg(crate::custom_style::common_active_bg()),
                                                             )
                                                         })
                                                         .when(
@@ -2451,8 +2453,7 @@ where
                                                                         .inset_0()
                                                                         .border_1()
                                                                         .border_color(
-                                                                            cx.theme()
-                                                                                .table_active_border
+                                                                            crate::custom_style::green_text()
                                                                                 .opacity(0.5),
                                                                         ),
                                                                 )
@@ -2495,12 +2496,7 @@ where
                 )
                 // Row selected style
                 .when(is_selected, |this| {
-                    let bg = if cx.theme().list.active_highlight {
-                        cx.theme().tokens.table_active
-                    } else {
-                        cx.theme().tokens.accent
-                    };
-                    this.bg(bg)
+                    this.bg(crate::custom_style::common_active_bg())
                 })
                 // Row right click row style
                 .when(self.right_clicked_row == Some(row_ix), |this| {
@@ -2512,7 +2508,7 @@ where
                             .bottom(px(-1.))
                             .absolute()
                             .border_1()
-                            .border_color(cx.theme().selection),
+                            .border_color(crate::custom_style::green_text()),
                     )
                 })
                 .on_mouse_down(
@@ -2540,8 +2536,10 @@ where
                 .w_full()
                 .h(row_height)
                 .border_b_1()
-                .border_color(cx.theme().table_row_border)
-                .when(is_stripe_row, |this| this.bg(cx.theme().tokens.table_even))
+                .border_color(crate::custom_style::border())
+                .when(is_stripe_row, |this| {
+                    this.bg(crate::custom_style::base_alternative())
+                })
                 .when(self.cell_selectable && self.row_header, |this| {
                     // Render empty row header cell for fake rows
                     this.child(

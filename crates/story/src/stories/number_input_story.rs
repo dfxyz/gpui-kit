@@ -6,7 +6,7 @@ use regex::Regex;
 
 use crate::section;
 use gpui_kit::component::{
-    ActiveTheme, Disableable, IconName, Sizable,
+    Disableable, IconName, Sizable,
     button::{Button, ButtonVariants},
     input::{InputEvent, InputState, MaskPattern, NumberInput, NumberInputEvent, StepAction},
     v_flex,
@@ -192,7 +192,7 @@ impl Focusable for NumberInputStory {
 }
 
 impl Render for NumberInputStory {
-    fn render(&mut self, _: &mut Window, cx: &mut Context<Self>) -> impl IntoElement {
+    fn render(&mut self, _: &mut Window, _cx: &mut Context<Self>) -> impl IntoElement {
         v_flex()
             .id("input-story")
             .size_full()
@@ -244,8 +244,8 @@ impl Render for NumberInputStory {
                         NumberInput::new(&self.number_input4)
                             .w(px(260.))
                             .appearance(false)
-                            .bg(cx.theme().secondary)
-                            .text_color(cx.theme().info),
+                            .bg(crate::custom_style::muted_bg())
+                            .text_color(crate::custom_style::cyan_text()),
                     ),
             )
     }

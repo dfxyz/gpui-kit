@@ -47,13 +47,14 @@ impl RenderOnce for InputToken {
                 // The selection color is translucent as a fill; its opaque form
                 // is the matching border.
                 if self.context.is_selected() {
-                    this.bg(cx.theme().selection)
-                        .border_color(cx.theme().selection.alpha(1.))
+                    this.bg(crate::custom_style::selection())
+                        .border_color(crate::custom_style::selection())
                 } else {
-                    this.bg(cx.theme().muted).border_color(cx.theme().border)
+                    this.bg(crate::custom_style::muted_bg())
+                        .border_color(crate::custom_style::border())
                 }
             })
-            .text_color(cx.theme().foreground)
+            .text_color(crate::custom_style::text())
             .when(self.context.is_disabled(), |this| this.opacity(0.5))
             .when_some(self.icon, |this, icon| {
                 this.child(icon.size_3().flex_shrink_0())

@@ -1,4 +1,4 @@
-use crate::{ActiveTheme, Disableable, Icon, Selectable, Sizable as _, StyledExt, h_flex};
+use crate::{Disableable, Icon, Selectable, Sizable as _, StyledExt, h_flex};
 use gpui::{
     AnyElement, App, ClickEvent, Div, ElementId, InteractiveElement, Interactivity, IntoElement,
     MouseButton, MouseDownEvent, MouseMoveEvent, ParentElement, RenderOnce, SharedString, Stateful,
@@ -201,8 +201,8 @@ impl RenderOnce for ListItem {
             .gap_x_1()
             .py_1()
             .px_3()
-            .text_base()
-            .text_color(cx.theme().foreground)
+            .text_sm()
+            .text_color(crate::custom_style::text())
             .relative()
             .items_center()
             .justify_between()
@@ -228,12 +228,12 @@ impl RenderOnce for ListItem {
                         if is_active {
                             this
                         } else {
-                            this.bg(cx.theme().tokens.list_hover)
+                            this.bg(crate::custom_style::common_hover_bg())
                         }
                     })
             })
             .when(!is_selectable, |this| {
-                this.text_color(cx.theme().muted_foreground)
+                this.text_color(crate::custom_style::muted_text())
             })
             .child(
                 h_flex()
@@ -243,25 +243,19 @@ impl RenderOnce for ListItem {
                     .gap_x_1()
                     .child(div().w_full().children(self.children))
                     .when_some(self.check_icon, |this, icon| {
-                        this.child(
-                            div().w_5().items_center().justify_center().when(
-                                self.confirmed,
-                                |this| {
-                                    this.child(icon.small().text_color(cx.theme().muted_foreground))
-                                },
-                            ),
-                        )
+                        this.child(div().w_5().items_center().justify_center().when(
+                            self.confirmed,
+                            |this| {
+                                this.child(
+                                    icon.small().text_color(crate::custom_style::muted_text()),
+                                )
+                            },
+                        ))
                     }),
             )
             .when_some(self.suffix, |this, suffix| this.child(suffix(window, cx)))
             .when(is_selectable && self.selected, |this| {
-                let bg = if cx.theme().list.active_highlight {
-                    cx.theme().list_active
-                } else {
-                    cx.theme().accent
-                };
-
-                this.bg(bg)
+                this.bg(crate::custom_style::common_active_bg())
             })
             .when(is_selectable && self.secondary_selected, |this| {
                 this.child(
@@ -269,7 +263,7 @@ impl RenderOnce for ListItem {
                         .absolute()
                         .inset_0()
                         .border_1()
-                        .border_color(cx.theme().selection)
+                        .border_color(crate::custom_style::green_text())
                         .refine_style(&outline_style),
                 )
             })

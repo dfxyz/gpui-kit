@@ -129,7 +129,7 @@ impl Render for DropdownButtonStory {
                 h_flex()
                     .gap_1()
                     .text_sm()
-                    .text_color(cx.theme().muted_foreground)
+                    .text_color(crate::custom_style::muted_text())
                     .child("Last action:")
                     .child(self.last_action.clone()),
             )

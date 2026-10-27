@@ -9,7 +9,7 @@ use gpui_base::{
     TableRow as BaseTableRow,
 };
 
-use crate::{ActiveTheme as _, AnyChildElement, ChildElement, Sizable, Size, StyledExt as _};
+use crate::{AnyChildElement, ChildElement, Sizable, Size, StyledExt as _};
 
 const MIN_CELL_WIDTH: Pixels = px(100.);
 
@@ -102,7 +102,7 @@ impl ChildElement for Table {
 }
 
 impl RenderOnce for Table {
-    fn render(self, _: &mut Window, cx: &mut App) -> impl IntoElement {
+    fn render(self, _: &mut Window, _cx: &mut App) -> impl IntoElement {
         BaseTable::new(("table", self.ix))
             .when_some(self.accessibility_label, |this, label| {
                 this.accessibility_label(label)
@@ -110,7 +110,7 @@ impl RenderOnce for Table {
             .w_full()
             .text_sm()
             .overflow_hidden()
-            .bg(cx.theme().tokens.table)
+            .bg(crate::custom_style::base())
             .refine_style(&self.style)
             .children(
                 self.children
@@ -193,14 +193,14 @@ impl Sizable for TableHeader {
 }
 
 impl RenderOnce for TableHeader {
-    fn render(self, _: &mut Window, cx: &mut App) -> impl IntoElement {
+    fn render(self, _: &mut Window, _cx: &mut App) -> impl IntoElement {
         BaseTableHeader::new(("table-header", self.ix))
             .w_full()
-            .bg(cx.theme().tokens.table_head)
-            .text_color(cx.theme().table_head_foreground)
+            .bg(crate::custom_style::table_head())
+            .text_color(crate::custom_style::text())
             .refine_style(&self.style)
             .border_b_1()
-            .border_color(cx.theme().table_row_border)
+            .border_color(crate::custom_style::border())
             .children(
                 self.children
                     .into_iter()
@@ -333,14 +333,14 @@ impl ChildElement for TableFooter {
 }
 
 impl RenderOnce for TableFooter {
-    fn render(self, _: &mut Window, cx: &mut App) -> impl IntoElement {
+    fn render(self, _: &mut Window, _cx: &mut App) -> impl IntoElement {
         div()
             .id(("table-footer", self.ix))
             .w_full()
-            .bg(cx.theme().tokens.table_foot)
-            .text_color(cx.theme().table_foot_foreground)
+            .bg(crate::custom_style::table_foot())
+            .text_color(crate::custom_style::text())
             .border_t_1()
-            .border_color(cx.theme().table_row_border)
+            .border_color(crate::custom_style::border())
             .refine_style(&self.style)
             .children(
                 self.children
@@ -406,13 +406,13 @@ impl ChildElement for TableRow {
 }
 
 impl RenderOnce for TableRow {
-    fn render(self, _: &mut Window, cx: &mut App) -> impl IntoElement {
+    fn render(self, _: &mut Window, _cx: &mut App) -> impl IntoElement {
         BaseTableRow::new(("table-row", self.ix), self.ix + 1)
             .w_full()
             .flex()
             .flex_row()
             .refine_style(&self.style)
-            .border_color(cx.theme().table_row_border)
+            .border_color(crate::custom_style::border())
             .when(self.ix > 0, |this| this.border_t_1())
             .children(
                 self.children
@@ -652,7 +652,7 @@ impl Styled for TableCaption {
 }
 
 impl RenderOnce for TableCaption {
-    fn render(self, _: &mut Window, cx: &mut App) -> impl IntoElement {
+    fn render(self, _: &mut Window, _cx: &mut App) -> impl IntoElement {
         let paddings = self.size.table_cell_padding();
 
         BaseTableCaption::new(("table-caption", self.ix))
@@ -660,7 +660,7 @@ impl RenderOnce for TableCaption {
             .px(paddings.left)
             .py(paddings.top)
             .text_sm()
-            .text_color(cx.theme().muted_foreground)
+            .text_color(crate::custom_style::muted_text())
             .text_center()
             .refine_style(&self.style)
             .children(self.children)

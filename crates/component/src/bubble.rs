@@ -201,7 +201,7 @@ impl RenderOnce for BubbleContent {
             })
             .rounded(cx.theme().radius_2xl())
             .border_1()
-            .border_color(cx.theme().transparent)
+            .border_color(crate::custom_style::transparent())
             .px_3()
             .py_2()
             .text_sm()
@@ -212,41 +212,43 @@ impl RenderOnce for BubbleContent {
             })
             .map(|this| match self.variant {
                 BubbleVariant::Filled => this
-                    .bg(tokens.colors.primary)
-                    .text_color(tokens.colors.primary_foreground),
+                    .bg(crate::custom_style::primary())
+                    .text_color(crate::custom_style::reversed_text()),
                 // The theme's `secondary` role is tuned for buttons and sits a
                 // tier darker than shadcn's conversation secondary; the
                 // near-background `muted` tier matches shadcn's value in both
                 // light and dark themes.
                 BubbleVariant::Secondary => this
-                    .bg(tokens.colors.muted)
-                    .text_color(tokens.colors.secondary_foreground),
+                    .bg(crate::custom_style::muted_bg())
+                    .text_color(crate::custom_style::text()),
                 BubbleVariant::Muted => this
-                    .bg(tokens.colors.muted)
-                    .text_color(tokens.colors.foreground),
+                    .bg(crate::custom_style::muted_bg())
+                    .text_color(crate::custom_style::text()),
                 BubbleVariant::Tinted => this
-                    .bg(tokens.colors.primary.mix_oklab(
-                        tokens.colors.background,
+                    .bg(crate::custom_style::primary().mix_oklab(
+                        crate::custom_style::base(),
                         if cx.theme().is_dark() { 0.24 } else { 0.12 },
                     ))
-                    .text_color(tokens.colors.foreground),
+                    .text_color(crate::custom_style::text()),
                 BubbleVariant::Outline => this
-                    .border_color(tokens.colors.border)
-                    .bg(tokens.colors.background)
-                    .text_color(tokens.colors.foreground),
+                    .border_color(crate::custom_style::border())
+                    .bg(crate::custom_style::base())
+                    .text_color(crate::custom_style::text()),
                 BubbleVariant::Ghost => this
                     .rounded(tokens.radius.none)
                     .border_0()
-                    .bg(cx.theme().transparent)
-                    .text_color(tokens.colors.foreground)
+                    .bg(crate::custom_style::transparent())
+                    .text_color(crate::custom_style::text())
                     .p_0(),
                 BubbleVariant::Destructive => this
-                    .bg(tokens.colors.destructive.opacity(if cx.theme().is_dark() {
-                        0.2
-                    } else {
-                        0.1
-                    }))
-                    .text_color(tokens.colors.destructive),
+                    .bg(
+                        crate::custom_style::red_text().opacity(if cx.theme().is_dark() {
+                            0.2
+                        } else {
+                            0.1
+                        }),
+                    )
+                    .text_color(crate::custom_style::red_text()),
             })
             .refine_style(&self.style)
             .children(self.children)
@@ -373,7 +375,6 @@ impl Styled for BubbleReactions {
 
 impl RenderOnce for BubbleReactions {
     fn render(self, _: &mut Window, cx: &mut App) -> impl IntoElement {
-        let tokens = cx.theme().semantic_tokens();
         let has_action = self
             .children
             .iter()
@@ -395,9 +396,9 @@ impl RenderOnce for BubbleReactions {
             .gap_1()
             .rounded(cx.theme().radius_full())
             .border_3()
-            .border_color(tokens.colors.background)
-            .bg(tokens.colors.muted)
-            .text_color(tokens.colors.foreground)
+            .border_color(crate::custom_style::base())
+            .bg(crate::custom_style::muted_bg())
+            .text_color(crate::custom_style::text())
             .when(!has_action, |this| this.px_1p5().py_0p5())
             .text_sm()
             // Approximates shadcn's `translate-y-3/4`: GPUI cannot offset by a

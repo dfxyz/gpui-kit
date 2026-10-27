@@ -3,8 +3,6 @@ use gpui::{
     SharedString, Styled as _, TextAlign, Window, div, prelude::FluentBuilder, px,
 };
 
-use crate::ActiveTheme as _;
-
 /// Represents a column in a table, used for initializing table columns.
 #[derive(Debug, Clone)]
 pub struct Column {
@@ -280,15 +278,15 @@ pub enum ColumnSort {
 }
 
 impl Render for DragColumn {
-    fn render(&mut self, _window: &mut Window, cx: &mut Context<Self>) -> impl IntoElement {
+    fn render(&mut self, _window: &mut Window, _cx: &mut Context<Self>) -> impl IntoElement {
         div()
             .px_4()
             .py_1()
-            .bg(cx.theme().tokens.table_head)
-            .text_color(cx.theme().muted_foreground)
+            .bg(crate::custom_style::table_head())
+            .text_color(crate::custom_style::text())
             .opacity(0.9)
             .border_1()
-            .border_color(cx.theme().border)
+            .border_color(crate::custom_style::border())
             .shadow_md()
             .w(self.width)
             .min_w(px(100.))

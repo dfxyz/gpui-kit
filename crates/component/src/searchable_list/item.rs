@@ -102,8 +102,7 @@ impl RenderOnce for SearchableListItemElement {
             .py_1()
             .px_2()
             .rounded(cx.theme().radius)
-            .text_base()
-            .text_color(cx.theme().foreground)
+            .text_color(crate::custom_style::text())
             .items_center()
             .justify_between()
             .input_text_size(self.size)
@@ -111,13 +110,15 @@ impl RenderOnce for SearchableListItemElement {
             .refine_style(&self.style)
             .when(!self.disabled, |this| {
                 this.when(!self.selected, |this| {
-                    this.hover(|this| this.bg(cx.theme().accent.opacity(0.7)))
+                    this.hover(|this| this.bg(crate::custom_style::common_hover_bg()))
                 })
             })
-            .when(self.selected, |this| this.bg(cx.theme().tokens.accent))
+            .when(self.selected, |this| {
+                this.bg(crate::custom_style::common_hover_bg())
+            })
             .when(self.disabled, |this| {
                 this.cursor_not_allowed()
-                    .text_color(cx.theme().muted_foreground)
+                    .text_color(crate::custom_style::muted_text())
             })
             .child(
                 h_flex()
@@ -138,7 +139,7 @@ impl RenderOnce for SearchableListItemElement {
                         this.child(
                             icon.xsmall()
                                 .flex_shrink_0()
-                                .text_color(cx.theme().foreground)
+                                .text_color(crate::custom_style::text())
                                 .when(!self.checked, |this| this.invisible()),
                         )
                     }),

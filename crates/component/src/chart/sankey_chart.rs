@@ -10,18 +10,15 @@ use gpui::{
 use gpui_component_macros::IntoPlot;
 
 use super::{ChartAppear, caller_id, reveal_mask};
-use crate::{
-    ActiveTheme,
-    plot::{
-        PathCaches, Plot, PlotAppear, ShapeKey,
-        label::{PlotLabel, TEXT_GAP, TEXT_SIZE, Text, measure_text_width, truncate_text_to_width},
-        origin_point,
-        shape::{
-            Sankey, SankeyAlign, SankeyGraph, SankeyLink, SankeyLinkLayout, SankeyValueScale,
-            sankey_link_path,
-        },
-        tooltip::{PlotHover, Tooltip, TooltipState},
+use crate::plot::{
+    PathCaches, Plot, PlotAppear, ShapeKey,
+    label::{PlotLabel, TEXT_GAP, TEXT_SIZE, Text, measure_text_width, truncate_text_to_width},
+    origin_point,
+    shape::{
+        Sankey, SankeyAlign, SankeyGraph, SankeyLink, SankeyLinkLayout, SankeyValueScale,
+        sankey_link_path,
     },
+    tooltip::{PlotHover, Tooltip, TooltipState},
 };
 
 const DEFAULT_NODE_WIDTH: f32 = 10.;
@@ -373,7 +370,7 @@ impl<T> SankeyChart<T> {
     /// Each node's label lines: the custom `labels` closure wins, otherwise the
     /// value/name lines with the default styles. Labels get the raw throughput,
     /// not the layout's (possibly scaled) value.
-    fn node_labels(&self, cx: &App) -> Vec<Vec<SankeyLabel>> {
+    fn node_labels(&self, _cx: &App) -> Vec<Vec<SankeyLabel>> {
         let raw_value = self.raw_throughput();
         self.nodes
             .iter()
@@ -388,7 +385,8 @@ impl<T> SankeyChart<T> {
                     }
                     if let Some(node_label) = &self.node_label {
                         lines.push(
-                            SankeyLabel::new(node_label(datum)).color(cx.theme().muted_foreground),
+                            SankeyLabel::new(node_label(datum))
+                                .color(crate::custom_style::muted_text()),
                         );
                     }
                     lines
@@ -577,11 +575,11 @@ impl<T> Plot for SankeyChart<T> {
         let height = bounds.size.height.as_f32();
 
         let palette = [
-            cx.theme().chart_1,
-            cx.theme().chart_2,
-            cx.theme().chart_3,
-            cx.theme().chart_4,
-            cx.theme().chart_5,
+            crate::custom_style::chart_1(),
+            crate::custom_style::chart_2(),
+            crate::custom_style::chart_3(),
+            crate::custom_style::chart_4(),
+            crate::custom_style::chart_5(),
         ];
         let colors: Vec<Hsla> = self
             .nodes
@@ -708,7 +706,9 @@ impl<T> Plot for SankeyChart<T> {
                     Text::new(
                         text,
                         point(px(x), px(y)),
-                        line.color.unwrap_or(cx.theme().foreground).opacity(appear),
+                        line.color
+                            .unwrap_or(crate::custom_style::text())
+                            .opacity(appear),
                     )
                     .font_size(font_size)
                     .align(align),
@@ -762,7 +762,7 @@ impl<T> Plot for SankeyChart<T> {
         cursor: Point<Pixels>,
         bounds: Bounds<Pixels>,
         _window: &mut Window,
-        cx: &mut App,
+        _cx: &mut App,
     ) -> Option<AnyElement> {
         let datum = self.nodes.get(state.index)?;
         let value = self.raw_throughput().get(state.index).copied()?;
@@ -770,11 +770,11 @@ impl<T> Plot for SankeyChart<T> {
             Some(color) => color(datum),
             None => {
                 let palette = [
-                    cx.theme().chart_1,
-                    cx.theme().chart_2,
-                    cx.theme().chart_3,
-                    cx.theme().chart_4,
-                    cx.theme().chart_5,
+                    crate::custom_style::chart_1(),
+                    crate::custom_style::chart_2(),
+                    crate::custom_style::chart_3(),
+                    crate::custom_style::chart_4(),
+                    crate::custom_style::chart_5(),
                 ];
                 palette[state.index % palette.len()]
             }

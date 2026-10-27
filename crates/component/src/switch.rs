@@ -3,9 +3,9 @@ use crate::{
     ThemeStyled as _, text::Text, tooltip::ComponentTooltip,
 };
 use gpui::{
-    App, Background, ElementId, Hsla, InteractiveElement, IntoElement, ParentElement as _,
-    RenderOnce, SharedString, StyleRefinement, Styled, Window, div, prelude::FluentBuilder as _,
-    px,
+    App, Background, ElementId, Hsla, InteractiveElement, IntoElement, MouseButton,
+    ParentElement as _, RenderOnce, SharedString, StyleRefinement, Styled, Window, div,
+    prelude::FluentBuilder as _, px,
 };
 use gpui_base::{Switch as BaseSwitch, SwitchThumb, SwitchTrack, spring};
 use std::{rc::Rc, time::Duration};
@@ -181,15 +181,15 @@ impl RenderOnce for Switch {
         let checked_bg = self
             .color
             .map(Background::from)
-            .unwrap_or(cx.theme().tokens.primary.into());
-        let unchecked_bg: Background = cx.theme().tokens.switch.into();
+            .unwrap_or(crate::custom_style::primary().into());
+        let unchecked_bg: Background = crate::custom_style::border().into();
         // GPUI's element opacity multiplies each primitive's alpha instead of
         // compositing the subtree as one group, so fading the whole control
         // would let the track show through the thumb. Fading the track alone
         // lands on the pixels a grouped fade would: the thumb is `background`.
         let disabled_bg = if checked { checked_bg } else { unchecked_bg }.opacity(0.5);
-        let toggle_bg: Background = cx.theme().tokens.switch_thumb.into();
-        let disabled_label_color = cx.theme().muted_foreground;
+        let toggle_bg: Background = crate::custom_style::input().into();
+        let disabled_label_color = crate::custom_style::muted_text();
 
         let (bg_width, bg_height) = match self.size {
             Size::XSmall | Size::Small => (px(28.), px(16.)),
@@ -243,9 +243,14 @@ impl RenderOnce for Switch {
                 .tab_stop(self.tab_stop)
                 .tab_index(self.tab_index)
                 .track_focus(&focus_handle)
+                .when(!self.disabled, |this| {
+                    this.on_mouse_down(MouseButton::Left, |_, window, _| {
+                        window.prevent_default();
+                    })
+                })
                 .h_flex()
                 .gap_2()
-                .items_start()
+                .items_center()
                 .when(self.label_side.is_left(), |this| this.flex_row_reverse())
                 .child(
                     // Switch Bar
@@ -268,7 +273,7 @@ impl RenderOnce for Switch {
                         // lands within a few values of `switch.background`
                         // in both default modes.
                         .border_1()
-                        .border_color(cx.theme().transparent)
+                        .border_color(crate::custom_style::transparent())
                         .p(inset - px(1.))
                         .when(!checked, |this| this.bg(unchecked_bg))
                         .styles(|styles| {

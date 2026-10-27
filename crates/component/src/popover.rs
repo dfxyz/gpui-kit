@@ -331,7 +331,7 @@ impl RenderOnce for Popover {
             .background
             .as_ref()
             .and_then(gpui::Fill::color)
-            .unwrap_or_else(|| cx.theme().popover.into());
+            .unwrap_or_else(|| crate::custom_style::popover().into());
         let ring = popover_ring(cx);
         let radius = cx.theme().radius;
         let appearance = self.appearance;

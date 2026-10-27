@@ -4,6 +4,7 @@ use gpui_kit::*;
 use gpui_kit::component::{
     ActiveTheme, Icon, IconName, StyledExt, WindowExt as _,
     button::{Button, ButtonVariants as _},
+    custom_style,
     date_picker::{DatePicker, DatePickerState},
     dialog::{
         Dialog, DialogAction, DialogClose, DialogDescription, DialogEntrance, DialogFooter,
@@ -200,7 +201,7 @@ impl DialogStory {
                     })
                     .p_0()
                     .content({
-                        move |content, _, cx| {
+                        move |content, _, _cx| {
                             content
                                 .child(
                                     DialogHeader::new()
@@ -227,7 +228,7 @@ impl DialogStory {
                                 .child(
                                     DialogFooter::new()
                                         .p_4()
-                                        .bg(cx.theme().muted)
+                                        .bg(custom_style::muted_bg())
                                         .justify_between()
                                         .child(
                                             Button::new("new-dialog")
@@ -271,9 +272,9 @@ impl DialogStory {
                 .gap_3()
                 .p_3()
                 .rounded(cx.theme().radius_lg)
-                .bg(cx.theme().muted.opacity(0.45))
+                .bg(custom_style::muted_bg().opacity(0.45))
                 .border_1()
-                .border_color(cx.theme().border)
+                .border_color(custom_style::border())
                 .child(
                     v_flex()
                         .gap_1()
@@ -281,7 +282,7 @@ impl DialogStory {
                         .child(
                             div()
                                 .text_xs()
-                                .text_color(cx.theme().muted_foreground)
+                                .text_color(crate::custom_style::muted_text())
                                 .child("Type here, then open and close any dialog."),
                         ),
                 )
@@ -359,9 +360,9 @@ impl DialogStory {
                                                 .items_center()
                                                 .justify_center()
                                                 .rounded(cx.theme().radius_lg)
-                                                .bg(cx.theme().warning.opacity(0.2))
+                                                .bg(custom_style::yellow_text().opacity(0.1))
                                                 .size_12()
-                                                .text_color(cx.theme().warning)
+                                                .text_color(custom_style::yellow_text())
                                                 .child(Icon::new(IconName::TriangleAlert).size_8()),
                                         )
                                         .child(
@@ -496,8 +497,8 @@ impl DialogStory {
                         window.open_dialog(cx, move |dialog, _, cx| {
                             dialog
                                 .rounded(cx.theme().radius_lg)
-                                .bg(cx.theme().cyan)
-                                .text_color(cx.theme().info_foreground)
+                                .bg(custom_style::cyan_text())
+                                .text_color(custom_style::reversed_text())
                                 .title("Custom Dialog Title")
                                 .child("This is a custom dialog content.")
                         });
@@ -575,7 +576,7 @@ impl DialogStory {
                     .overlay_closable(overlay_closable)
                     .p_0()
                     .content({
-                        move |content, _, cx| {
+                        move |content, _, _cx| {
                             content
                                 .child(
                                     DialogHeader::new()
@@ -596,7 +597,7 @@ impl DialogStory {
                                 .child(
                                     DialogFooter::new()
                                         .p_4()
-                                        .bg(cx.theme().muted)
+                                        .bg(custom_style::muted_bg())
                                         .child(
                                             DialogClose::new().child(
                                                 Button::new("cancel").label("Cancel").outline(),

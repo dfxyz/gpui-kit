@@ -9,6 +9,7 @@ use gpui_kit::component::{
         AreaChart, BarChart, CandlestickChart, LineChart, PieChart, RadarChart, SankeyChart,
         SankeyLabel,
     },
+    custom_style,
     dock::PanelControl,
     h_flex,
     plot::shape::{BarAlignment, SankeyAlign, SankeyLink, SankeyValueScale},
@@ -323,9 +324,9 @@ impl Card {
         let headline = match self.headline {
             Headline::Trend { percent, period } => {
                 let (icon, color, direction) = if percent >= 0. {
-                    (IconName::TrendingUp, cx.theme().success, "up")
+                    (IconName::TrendingUp, custom_style::red_text(), "up")
                 } else {
-                    (IconName::TrendingDown, cx.theme().danger, "down")
+                    (IconName::TrendingDown, custom_style::green_text(), "down")
                 };
                 h_flex()
                     .gap_1p5()
@@ -346,7 +347,7 @@ impl Card {
             .min_w_0()
             .h(CARD_HEIGHT)
             .border_1()
-            .border_color(cx.theme().border)
+            .border_color(custom_style::border())
             .rounded(cx.theme().radius_lg)
             .p_4()
             .child(
@@ -363,7 +364,7 @@ impl Card {
                             .child(div().font_semibold().child(self.title))
                             .child(
                                 div()
-                                    .text_color(cx.theme().muted_foreground)
+                                    .text_color(crate::custom_style::muted_text())
                                     .text_sm()
                                     .child(self.period),
                             ),
@@ -388,7 +389,7 @@ impl Card {
             .child(
                 div()
                     .when(centered, |this| this.text_center())
-                    .text_color(cx.theme().muted_foreground)
+                    .text_color(crate::custom_style::muted_text())
                     .text_sm()
                     .child(self.note),
             )
@@ -400,13 +401,13 @@ impl Card {
 /// It shares the heading row with the title, so it has to yield width rather
 /// than hold its own: shrinking lets `flex_wrap` fold a long series list onto a
 /// second line instead of running out past the card.
-fn legend(entries: Vec<(Hsla, SharedString)>, cx: &App) -> gpui_kit::Div {
+fn legend(entries: Vec<(Hsla, SharedString)>, _cx: &App) -> gpui_kit::Div {
     h_flex()
         .flex_wrap()
         .justify_end()
         .gap_3()
         .text_xs()
-        .text_color(cx.theme().muted_foreground)
+        .text_color(crate::custom_style::muted_text())
         .children(entries.into_iter().map(|(color, label)| {
             h_flex()
                 .flex_shrink_0()
@@ -513,9 +514,9 @@ fn rounded_tip() -> Corners<Pixels> {
 
 impl ChartCard {
     fn render(self, data: &ChartData, cx: &App) -> AnyElement {
-        let accent = cx.theme().chart_2;
-        let mid = cx.theme().chart_3;
-        let deep = cx.theme().chart_4;
+        let accent = custom_style::chart_2();
+        let mid = custom_style::chart_3();
+        let deep = custom_style::chart_4();
         let card = match self {
             Self::AreaStacked => Card::new("Visitors", "April – June 2025")
                 .legend(accent, "Desktop")
@@ -612,7 +613,7 @@ impl ChartCard {
                                     .child(
                                         div()
                                             .text_xs()
-                                            .text_color(cx.theme().muted_foreground)
+                                            .text_color(crate::custom_style::muted_text())
                                             .child(leader.browser.clone()),
                                     ),
                             ),
@@ -738,7 +739,7 @@ impl ChartCard {
                     RadarChart::new(data.product_scores.clone())
                         // An element label: the dimension name over a grade badge.
                         .label({
-                            let muted_foreground = cx.theme().muted_foreground;
+                            let muted_foreground = crate::custom_style::muted_text();
                             let badge_radius = cx.theme().radius_full();
 
                             move |d: &ProductScore| {
@@ -859,10 +860,10 @@ impl ChartCard {
                     .map(|d| d.desktop + d.mobile + d.tablet + d.watch)
                     .sum();
                 Card::new("Visitors by Device", "First week of April")
-                    .legend(cx.theme().chart_4, "Desktop")
-                    .legend(cx.theme().chart_3, "Mobile")
-                    .legend(cx.theme().chart_2, "Tablet")
-                    .legend(cx.theme().chart_1, "Watch")
+                    .legend(custom_style::chart_4(), "Desktop")
+                    .legend(custom_style::chart_3(), "Mobile")
+                    .legend(custom_style::chart_2(), "Tablet")
+                    .legend(custom_style::chart_1(), "Watch")
                     .chart(StackedBarChart::new(days))
                     .headline(format!("{} visitors in eight days", compact(total)))
                     .note("Stacked by device, a custom Plot")
@@ -948,8 +949,8 @@ impl ChartCard {
                 .headline(format!("{} is the most visited page", data.pages[0].page))
                 .note("Right aligned: bars grow leftward"),
             Self::BarNegative => {
-                let positive = cx.theme().chart_bullish;
-                let negative = cx.theme().chart_bearish;
+                let positive = custom_style::chart_bullish();
+                let negative = custom_style::chart_bearish();
                 let net: f64 = data.cash_flow.iter().map(|d| d.revenue).sum();
                 Card::new("Net Cash Flow", "2025")
                     .legend(positive, "Surplus")
@@ -1060,8 +1061,8 @@ impl ChartCard {
                 )
                 .note("Fully rounded bars keep their shading"),
             Self::BarGradientDiagonal => {
-                let c1 = cx.theme().chart_1;
-                let c2 = cx.theme().chart_5;
+                let c1 = custom_style::chart_1();
+                let c2 = custom_style::chart_5();
                 Card::new("Orders", "2025")
                     .chart(
                         BarChart::new(data.metrics.clone())
@@ -1159,7 +1160,7 @@ impl ChartCard {
                         .x(|d| d.month.clone())
                         .y(|d| d.deploys)
                         .dot()
-                        .stroke(cx.theme().chart_5)
+                        .stroke(custom_style::chart_5())
                         .name("Deploys")
                         .id("line-chart-dots"),
                 )
@@ -1204,31 +1205,33 @@ impl ChartCard {
                 .note("Straight segments between months"),
             Self::AreaGradient => Card::new("Revenue vs Last Year", "2025")
                 .legend(accent, "2025")
-                .legend(cx.theme().chart_1, "2024")
+                .legend(custom_style::chart_1(), "2024")
                 .chart(
                     AreaChart::new(data.metrics.clone())
                         .x(|d| d.month.clone())
                         .y(|d| d.last_year)
-                        .stroke(cx.theme().chart_1)
-                        .fill(area_gradient(cx.theme().chart_1))
+                        .stroke(custom_style::chart_1())
+                        .fill(area_gradient(custom_style::chart_1()))
                         .name("2024")
                         .y(|d| d.revenue)
                         .stroke(accent)
                         .fill(area_gradient(accent))
                         .name("2025")
-                        .tooltip_content(|d, _, cx| {
+                        .tooltip_content(|d, _, _cx| {
                             let change = change_percent(d.revenue, d.last_year);
                             let change_color = if change >= 0. {
-                                cx.theme().chart_bullish
+                                custom_style::chart_bullish()
                             } else {
-                                cx.theme().chart_bearish
+                                custom_style::chart_bearish()
                             };
                             let row = |label: &'static str, value: String| {
                                 h_flex()
                                     .justify_between()
                                     .gap_4()
                                     .child(
-                                        div().text_color(cx.theme().muted_foreground).child(label),
+                                        div()
+                                            .text_color(crate::custom_style::muted_text())
+                                            .child(label),
                                     )
                                     .child(value)
                             };
@@ -1314,9 +1317,9 @@ impl ChartCard {
                 // the year-over-year change; the other keeps the default
                 // value/name lines.
                 let chart = if index == 0 {
-                    let up = cx.theme().success;
-                    let down = cx.theme().danger;
-                    let muted = cx.theme().muted_foreground;
+                    let up = custom_style::red_text();
+                    let down = custom_style::green_text();
+                    let muted = crate::custom_style::muted_text();
                     // `labels` draws the node text but never reaches the tooltip,
                     // so the tooltip needs its own name and value.
                     chart
@@ -1676,7 +1679,7 @@ impl Render for ChartStory {
         let story = cx.entity();
         v_flex()
             .size_full()
-            .bg(cx.theme().background)
+            .bg(custom_style::base())
             .on_prepaint(move |bounds, _, cx| {
                 story.update(cx, |this, cx| this.measure(bounds.size.width, cx));
             })

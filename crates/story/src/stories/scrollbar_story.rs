@@ -1,6 +1,6 @@
 use std::rc::Rc;
 
-use gpui_kit::component::{ActiveTheme as _, button::Button, scroll::ScrollableElement, v_flex};
+use gpui_kit::component::{button::Button, custom_style, scroll::ScrollableElement, v_flex};
 use gpui_kit::*;
 use serde::Deserialize;
 
@@ -127,12 +127,12 @@ impl Render for ScrollbarStory {
                 div()
                     .relative()
                     .border_1()
-                    .border_color(cx.theme().border)
+                    .border_color(custom_style::border())
                     .flex_1()
                     .child(
                         uniform_list("list", self.items.len(), {
                             let items = self.items.clone();
-                            move |visible_range, _, cx| {
+                            move |visible_range, _, _cx| {
                                 let mut elements = Vec::with_capacity(visible_range.len());
                                 for ix in visible_range {
                                     let item = &items[ix];
@@ -146,7 +146,7 @@ impl Render for ScrollbarStory {
                                             .child(
                                                 div()
                                                     .p_2()
-                                                    .bg(cx.theme().secondary)
+                                                    .bg(custom_style::muted_bg())
                                                     .child(item.to_string()),
                                             ),
                                     );

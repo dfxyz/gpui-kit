@@ -1,6 +1,7 @@
 use gpui_kit::component::{
-    ActiveTheme, Sizable as _,
+    Sizable as _,
     button::Button,
+    custom_style,
     resizable::{ResizableState, h_resizable, resizable_panel, v_resizable},
     v_flex,
 };
@@ -78,7 +79,7 @@ impl Render for ResizableStory {
                             .w_full()
                             .h(px(600.))
                             .border_1()
-                            .border_color(cx.theme().border)
+                            .border_color(custom_style::border())
                             .child(
                                 v_resizable("resizable-1")
                                     .on_resize(|state, _, cx| {
@@ -120,7 +121,7 @@ impl Render for ResizableStory {
                             .w_full()
                             .h(px(400.))
                             .border_1()
-                            .border_color(cx.theme().border)
+                            .border_color(custom_style::border())
                             .child(
                                 h_resizable("resizable-3")
                                     .child(
@@ -187,7 +188,7 @@ impl Render for ResizableStory {
                                     .w_full()
                                     .h(px(200.))
                                     .border_1()
-                                    .border_color(cx.theme().border)
+                                    .border_color(custom_style::border())
                                     .child(
                                         h_resizable("resizable-flex-none")
                                             .child({
@@ -276,7 +277,7 @@ impl Render for ResizableStory {
                                     .w_full()
                                     .h(px(200.))
                                     .border_1()
-                                    .border_color(cx.theme().border)
+                                    .border_color(custom_style::border())
                                     .child(
                                         h_resizable("resizable-programmatic")
                                             .with_state(&self.programmatic_state)

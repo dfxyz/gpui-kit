@@ -733,19 +733,19 @@ impl CommandState {
             .text_sm()
             .rounded(self.item_radius(window, cx))
             .when(selected, |this| {
-                this.bg(cx.theme().accent)
-                    .text_color(cx.theme().accent_foreground)
+                this.bg(crate::custom_style::common_hover_bg())
+                    .text_color(crate::custom_style::text())
             })
     }
 
-    fn heading_row(&self, heading: SharedString, cx: &App) -> gpui::Div {
+    fn heading_row(&self, heading: SharedString, _cx: &App) -> gpui::Div {
         div()
             .w_full()
             .px_2()
             .py_1p5()
             .text_xs()
             .font_medium()
-            .text_color(cx.theme().muted_foreground)
+            .text_color(crate::custom_style::muted_text())
             .child(heading)
     }
 
@@ -755,7 +755,7 @@ impl CommandState {
             Some(CommandRow::Separator) => div()
                 .w_full()
                 .py(px(4.))
-                .child(div().h(px(1.)).w_full().bg(cx.theme().border))
+                .child(div().h(px(1.)).w_full().bg(crate::custom_style::border()))
                 .into_any_element(),
             Some(CommandRow::Heading(heading)) => {
                 self.heading_row(heading.clone(), cx).into_any_element()
@@ -824,9 +824,9 @@ impl CommandState {
 
         let disabled = item.is_disabled();
         let selected = self.selected_index == Some(matched_ix) && !disabled;
-        let muted_foreground = cx.theme().muted_foreground;
+        let muted_foreground = crate::custom_style::muted_text();
         let icon_color = if selected {
-            cx.theme().accent_foreground
+            crate::custom_style::text()
         } else {
             muted_foreground
         };
@@ -889,7 +889,7 @@ impl CommandState {
             .w_full()
             .text_center()
             .text_sm()
-            .text_color(cx.theme().muted_foreground)
+            .text_color(crate::custom_style::muted_text())
             .child(message)
             .into_any_element()
     }
@@ -934,12 +934,12 @@ impl Render for CommandState {
             .on_action(cx.listener(Self::on_action_cancel))
             .w_full()
             .overflow_hidden()
-            .bg(cx.theme().popover)
-            .text_color(cx.theme().popover_foreground)
+            .bg(crate::custom_style::popover())
+            .text_color(crate::custom_style::text())
             .when(self.options.bordered, |this| {
                 this.rounded(cx.theme().radius_lg)
                     .border_1()
-                    .border_color(cx.theme().border)
+                    .border_color(crate::custom_style::border())
             })
             .refine_style(&self.options.style)
             .when_some(self.options.header.as_ref(), |this, header| {
@@ -951,12 +951,12 @@ impl Render for CommandState {
                         .flex_none()
                         .px_3()
                         .border_b_1()
-                        .border_color(cx.theme().border)
+                        .border_color(crate::custom_style::border())
                         .child(
                             Input::new(&self.query_input)
                                 .prefix(
                                     Icon::new(IconName::Search)
-                                        .text_color(cx.theme().muted_foreground),
+                                        .text_color(crate::custom_style::muted_text()),
                                 )
                                 .appearance(false)
                                 .p_0(),

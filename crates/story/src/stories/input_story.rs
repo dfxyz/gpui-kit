@@ -4,7 +4,7 @@ use gpui_kit::{
 };
 
 use crate::{ChangeStorySize, section, story_toolbar};
-use gpui_kit::component::{button::*, input::*, label::Label, *};
+use gpui_kit::component::{button::*, custom_style, input::*, label::Label, *};
 
 pub fn init(_: &mut App) {}
 
@@ -582,9 +582,9 @@ impl Render for InputStory {
                             .px_6()
                             .py_3()
                             .font_family(cx.theme().mono_font_family.clone())
-                            .border_color(cx.theme().border)
-                            .bg(cx.theme().secondary)
-                            .text_color(cx.theme().secondary_foreground)
+                            .border_color(custom_style::border())
+                            .bg(custom_style::muted_bg())
+                            .text_color(custom_style::text())
                             .w_full()
                             .child(
                                 Input::new(&self.custom_input)
@@ -615,7 +615,7 @@ impl Render for InputStory {
                     .child(
                         Input::new(&self.color_input)
                             .with_size(self.size)
-                            .text_color(cx.theme().info),
+                            .text_color(custom_style::cyan_text()),
                     ),
             )
             .child(section("Atomic inline tokens")

@@ -1,4 +1,4 @@
-use crate::{ActiveTheme, StyledExt};
+use crate::StyledExt;
 use gpui::{
     Animation, AnimationExt, IntoElement, RenderOnce, StyleRefinement, Styled, bounce, div,
     ease_in_out,
@@ -35,14 +35,14 @@ impl Styled for Skeleton {
 }
 
 impl RenderOnce for Skeleton {
-    fn render(self, _: &mut gpui::Window, cx: &mut gpui::App) -> impl IntoElement {
+    fn render(self, _: &mut gpui::Window, _cx: &mut gpui::App) -> impl IntoElement {
         div()
             .w_full()
             .h_4()
             .bg(if self.secondary {
-                cx.theme().skeleton.opacity(0.5).into()
+                crate::custom_style::muted_bg().opacity(0.5)
             } else {
-                cx.theme().skeleton
+                crate::custom_style::muted_bg()
             })
             .refine_style(&self.style)
             .with_animation(

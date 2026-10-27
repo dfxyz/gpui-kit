@@ -1,5 +1,5 @@
 use gpui_kit::component::{
-    ActiveTheme, Disableable, IconName, Selectable, Sizable, StyledExt as _, WindowExt as _,
+    Disableable, IconName, Selectable, Sizable, StyledExt as _, WindowExt as _,
     button::{Button, ButtonVariants},
     diff::{
         Diff, DiffAnnotation, DiffChangeIndicator, DiffDecoration, DiffFile, DiffGutterMarker,
@@ -417,7 +417,7 @@ impl Render for DiffStory {
                                         })
                                 })
                                 .annotations(annotations)
-                                    .render_annotation(move |annotation, _, cx| {
+                                    .render_annotation(move |annotation, _, _cx| {
                                         let (id, body, resolved) = comments
                                             .iter()
                                             .find(|(id, ..)| id == annotation.id())
@@ -451,7 +451,7 @@ impl Render for DiffStory {
                                                                 div()
                                                                     .text_xs()
                                                                     .text_color(
-                                                                        cx.theme().muted_foreground,
+                                                                        crate::custom_style::muted_text(),
                                                                     )
                                                                     .child(if resolved {
                                                                         "Resolved"

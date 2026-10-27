@@ -7,7 +7,7 @@ use gpui_kit::*;
 use gpui_kit::component::{
     ActiveTheme, Icon, IconName, IndexPath, Selectable, ThemeStyled as _,
     button::Button,
-    h_flex,
+    custom_style, h_flex,
     label::Label,
     list::{List, ListDelegate, ListEvent, ListItem, ListState},
     v_flex,
@@ -84,8 +84,8 @@ impl Render for DragCompany {
             .px_2()
             .py_1()
             .text_sm()
-            .bg(cx.theme().accent)
-            .text_color(cx.theme().accent_foreground)
+            .bg(custom_style::base().blend(custom_style::common_active_bg()))
+            .text_color(custom_style::text())
             .rounded(cx.theme().radius)
             .shadow_md()
             .child(self.name.clone())
@@ -151,16 +151,12 @@ impl Selectable for CompanyListItem {
 
 impl RenderOnce for CompanyListItem {
     fn render(self, _: &mut Window, cx: &mut App) -> impl IntoElement {
-        let text_color = if self.selected {
-            cx.theme().accent_foreground
-        } else {
-            cx.theme().foreground
-        };
+        let text_color = custom_style::text();
 
         let trend_color = match self.company.change_percent {
-            change if change > 0.0 => cx.theme().green,
-            change if change < 0.0 => cx.theme().red,
-            _ => cx.theme().foreground,
+            change if change > 0.0 => custom_style::green_text(),
+            change if change < 0.0 => custom_style::red_text(),
+            _ => custom_style::text(),
         };
 
         self.base
@@ -184,7 +180,7 @@ impl RenderOnce for CompanyListItem {
                                 .right_0()
                                 .h(px(2.))
                                 .rounded_full_style(cx)
-                                .bg(cx.theme().blue);
+                                .bg(custom_style::drag_border());
 
                             this.child(match position {
                                 DropPosition::Before => line.top(px(-5.)),
@@ -392,7 +388,7 @@ impl ListDelegate for CompanyListDelegate {
         &mut self,
         section: usize,
         _: &mut Window,
-        cx: &mut Context<ListState<Self>>,
+        _cx: &mut Context<ListState<Self>>,
     ) -> Option<impl IntoElement> {
         let Some(industry) = self.industries.get(section) else {
             return None;
@@ -404,7 +400,7 @@ impl ListDelegate for CompanyListDelegate {
                 .px_2()
                 .gap_2()
                 .text_sm()
-                .text_color(cx.theme().muted_foreground)
+                .text_color(crate::custom_style::muted_text())
                 .child(Icon::new(IconName::Folder))
                 .child(industry.clone())
                 .child(format!("(section: {})", section)),
@@ -415,7 +411,7 @@ impl ListDelegate for CompanyListDelegate {
         &mut self,
         section: usize,
         _: &mut Window,
-        cx: &mut Context<ListState<Self>>,
+        _cx: &mut Context<ListState<Self>>,
     ) -> Option<impl IntoElement> {
         let Some(_) = self.industries.get(section) else {
             return None;
@@ -427,7 +423,7 @@ impl ListDelegate for CompanyListDelegate {
                 .pb_5()
                 .px_2()
                 .text_xs()
-                .text_color(cx.theme().muted_foreground)
+                .text_color(crate::custom_style::muted_text())
                 .child(format!(
                     "Total {} items in section.",
                     self.matched_companies[section].len()
@@ -807,7 +803,7 @@ impl Render for ListStory {
                     .flex_1()
                     .w_full()
                     .border_1()
-                    .border_color(cx.theme().border)
+                    .border_color(custom_style::border())
                     .rounded(cx.theme().radius),
             )
     }

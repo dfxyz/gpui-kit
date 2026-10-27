@@ -11,16 +11,13 @@ use gpui::{
 use gpui_component_macros::IntoPlot;
 use num_traits::Zero;
 
-use crate::{
-    ActiveTheme,
-    plot::{
-        Plot, PlotAppear,
-        label::{PlotLabel, TEXT_SIZE, Text},
-        polygon,
-        scale::{PlotValue, Scale, ScaleLinear},
-        shape::RadialLine,
-        tooltip::{Dot, Tooltip, TooltipState},
-    },
+use crate::plot::{
+    Plot, PlotAppear,
+    label::{PlotLabel, TEXT_SIZE, Text},
+    polygon,
+    scale::{PlotValue, Scale, ScaleLinear},
+    shape::RadialLine,
+    tooltip::{Dot, Tooltip, TooltipState},
 };
 
 use super::{ChartAppear, HOVER_DOT_SIZE, HOVER_HALO_SIZE, TooltipContent, caller_id};
@@ -341,13 +338,13 @@ where
     }
 
     /// The theme chart colors the series cycle through by default.
-    fn palette(cx: &App) -> [Hsla; 5] {
+    fn palette(_cx: &App) -> [Hsla; 5] {
         [
-            cx.theme().chart_1,
-            cx.theme().chart_2,
-            cx.theme().chart_3,
-            cx.theme().chart_4,
-            cx.theme().chart_5,
+            crate::custom_style::chart_1(),
+            crate::custom_style::chart_2(),
+            crate::custom_style::chart_3(),
+            crate::custom_style::chart_4(),
+            crate::custom_style::chart_5(),
         ]
     }
 
@@ -504,7 +501,7 @@ where
 
         // Draw grid rings and spokes
         if self.grid {
-            let stroke = cx.theme().chart_grid;
+            let stroke = crate::custom_style::border();
 
             for level in 1..=self.grid_levels {
                 let radius = outer_radius * level as f32 / self.grid_levels as f32;
@@ -560,7 +557,9 @@ where
 
         // Draw the text labels outside the outer ring; `prepaint` resolved them and
         // already placed the element ones.
-        let label_color = self.label_color.unwrap_or(cx.theme().muted_foreground);
+        let label_color = self
+            .label_color
+            .unwrap_or(crate::custom_style::muted_text());
         let labels = self
             .label_texts
             .iter()
@@ -653,7 +652,7 @@ where
     ) -> Option<AnyElement> {
         let d = self.data.get(state.index)?;
 
-        let dot_stroke = cx.theme().background;
+        let dot_stroke = crate::custom_style::base();
 
         // No crosshair: a radar has no cartesian axis to snap to; the dots mark
         // the hovered dimension's vertices instead.

@@ -1,6 +1,6 @@
 use std::{rc::Rc, sync::Arc};
 
-use crate::{ActiveTheme, Sizable, Size};
+use crate::{Sizable, Size};
 use gpui::{
     AnyElement, App, AppContext, Context, Entity, Global, Hsla, IntoElement, Pixels, Radians,
     Render, RenderOnce, SharedString, StyleRefinement, Styled, Svg, Transformation, Window,
@@ -276,7 +276,7 @@ impl Render for Icon {
         let text_size = window.text_style().font_size.to_pixels(window.rem_size());
         self.clone()
             .resolved(cx)
-            .into_svg(text_size, cx.theme().foreground)
+            .into_svg(text_size, crate::custom_style::text())
     }
 }
 

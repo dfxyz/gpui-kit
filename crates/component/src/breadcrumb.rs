@@ -6,7 +6,7 @@ use gpui::{
     prelude::FluentBuilder as _,
 };
 
-use crate::{ActiveTheme, Icon, IconName, StyledExt, h_flex};
+use crate::{Icon, IconName, StyledExt, h_flex};
 
 /// A breadcrumb navigation element.
 #[derive(IntoElement)]
@@ -89,7 +89,7 @@ impl From<SharedString> for BreadcrumbItem {
 }
 
 impl RenderOnce for BreadcrumbItem {
-    fn render(self, _: &mut Window, cx: &mut App) -> impl IntoElement {
+    fn render(self, _: &mut Window, _cx: &mut App) -> impl IntoElement {
         div()
             .id(self.id)
             .role(if self.on_click.is_some() && !self.disabled {
@@ -98,10 +98,12 @@ impl RenderOnce for BreadcrumbItem {
                 Role::ListItem
             })
             .child(self.label)
-            .text_color(cx.theme().muted_foreground)
-            .when(self.is_last, |this| this.text_color(cx.theme().foreground))
+            .text_color(crate::custom_style::muted_text())
+            .when(self.is_last, |this| {
+                this.text_color(crate::custom_style::text())
+            })
             .when(self.disabled, |this| {
-                this.text_color(cx.theme().muted_foreground)
+                this.text_color(crate::custom_style::muted_text())
             })
             .refine_style(&self.style)
             .when(!self.disabled, |this| {
@@ -139,9 +141,9 @@ impl Breadcrumb {
 #[derive(IntoElement)]
 struct BreadcrumbSeparator;
 impl RenderOnce for BreadcrumbSeparator {
-    fn render(self, _: &mut Window, cx: &mut App) -> impl IntoElement {
+    fn render(self, _: &mut Window, _cx: &mut App) -> impl IntoElement {
         Icon::new(IconName::ChevronRight)
-            .text_color(cx.theme().muted_foreground)
+            .text_color(crate::custom_style::muted_text())
             .size_3p5()
             .into_any_element()
     }
@@ -154,7 +156,7 @@ impl Styled for Breadcrumb {
 }
 
 impl RenderOnce for Breadcrumb {
-    fn render(self, _: &mut Window, cx: &mut App) -> impl IntoElement {
+    fn render(self, _: &mut Window, _cx: &mut App) -> impl IntoElement {
         let items_count = self.items.len();
 
         let mut children = vec![];
@@ -171,7 +173,7 @@ impl RenderOnce for Breadcrumb {
         h_flex()
             .gap_1p5()
             .text_sm()
-            .text_color(cx.theme().muted_foreground)
+            .text_color(crate::custom_style::muted_text())
             .refine_style(&self.style)
             .children(children)
     }

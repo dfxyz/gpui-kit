@@ -72,9 +72,9 @@ impl RenderOnce for Empty {
             .p_6()
             .rounded(cx.theme().radius_tokens().xl)
             .border_dashed()
-            .border_color(cx.theme().border)
+            .border_color(crate::custom_style::border())
             .text_center()
-            .text_color(cx.theme().foreground)
+            .text_color(crate::custom_style::text())
             .refine_style(&self.style)
             .when_some(self.header, |this, header| this.child(header))
             .when_some(self.content, |this, content| this.child(content))
@@ -216,8 +216,8 @@ impl RenderOnce for EmptyMedia {
             .when(self.variant == EmptyMediaVariant::Icon, |this| {
                 this.size_8()
                     .rounded(cx.theme().radius_tokens().lg)
-                    .bg(cx.theme().muted)
-                    .text_color(cx.theme().foreground)
+                    .bg(crate::custom_style::muted_bg())
+                    .text_color(crate::custom_style::text())
                     // Icon inherits one rem unless it has an explicit size.
                     .text_base()
             })
@@ -310,13 +310,13 @@ impl Styled for EmptyDescription {
 }
 
 impl RenderOnce for EmptyDescription {
-    fn render(self, _: &mut Window, cx: &mut App) -> impl IntoElement {
+    fn render(self, _: &mut Window, _cx: &mut App) -> impl IntoElement {
         div()
             .w_full()
             .min_w_0()
             .text_sm()
             .line_height(relative(1.625))
-            .text_color(cx.theme().muted_foreground)
+            .text_color(crate::custom_style::muted_text())
             .whitespace_normal()
             .refine_style(&self.style)
             .children(self.children)

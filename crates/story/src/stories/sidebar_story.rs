@@ -9,7 +9,7 @@ use gpui_kit::component::{
     badge::Badge,
     breadcrumb::{Breadcrumb, BreadcrumbItem},
     button::Button,
-    h_flex,
+    custom_style, h_flex,
     menu::DropdownMenu,
     separator::Separator,
     sidebar::{
@@ -97,7 +97,7 @@ impl SidebarStory {
                             .child(
                                 div()
                                     .text_sm()
-                                    .text_color(cx.theme().muted_foreground)
+                                    .text_color(crate::custom_style::muted_text())
                                     .child("A quick view of your workspace activity."),
                             ),
                     )
@@ -162,18 +162,18 @@ impl SidebarStory {
                             .p_4()
                             .rounded(cx.theme().radius_lg)
                             .border_1()
-                            .border_color(cx.theme().border)
+                            .border_color(custom_style::border())
                             .child(
                                 div()
                                     .text_sm()
-                                    .text_color(cx.theme().muted_foreground)
+                                    .text_color(crate::custom_style::muted_text())
                                     .child(label),
                             )
                             .child(div().text_2xl().font_semibold().child(value))
                             .child(
                                 div()
                                     .text_xs()
-                                    .text_color(cx.theme().muted_foreground)
+                                    .text_color(crate::custom_style::muted_text())
                                     .child(detail),
                             )
                     }),
@@ -187,7 +187,7 @@ impl SidebarStory {
                     .mt_2()
                     .rounded(cx.theme().radius_lg)
                     .border_1()
-                    .border_color(cx.theme().border)
+                    .border_color(custom_style::border())
                     .child(
                         h_flex()
                             .items_center()
@@ -198,7 +198,7 @@ impl SidebarStory {
                             .child(
                                 div()
                                     .text_xs()
-                                    .text_color(cx.theme().muted_foreground)
+                                    .text_color(crate::custom_style::muted_text())
                                     .child("Today"),
                             ),
                     )
@@ -231,7 +231,7 @@ impl SidebarStory {
                                         .items_center()
                                         .justify_center()
                                         .rounded_full_style(cx)
-                                        .bg(cx.theme().muted)
+                                        .bg(custom_style::muted_bg())
                                         .child(Icon::new(icon).small()),
                                 )
                                 .child(
@@ -243,7 +243,7 @@ impl SidebarStory {
                                         .child(
                                             div()
                                                 .text_xs()
-                                                .text_color(cx.theme().muted_foreground)
+                                                .text_color(crate::custom_style::muted_text())
                                                 .child(time),
                                         ),
                                 )
@@ -477,7 +477,7 @@ impl Render for SidebarStory {
             }))
             .rounded(cx.theme().radius)
             .border_1()
-            .border_color(cx.theme().border)
+            .border_color(custom_style::border())
             .h_full()
             .when(self.side.is_right(), |this| this.flex_row_reverse())
             .child(
@@ -495,8 +495,8 @@ impl Render for SidebarStory {
                                     .items_center()
                                     .justify_center()
                                     .rounded(cx.theme().radius)
-                                    .bg(cx.theme().success)
-                                    .text_color(cx.theme().success_foreground)
+                                    .bg(custom_style::primary())
+                                    .text_color(custom_style::reversed_text())
                                     .size_8()
                                     .flex_shrink_0()
                                     .when(!icon_collapsed, |this| {
@@ -504,8 +504,8 @@ impl Render for SidebarStory {
                                     })
                                     .when(icon_collapsed, |this| {
                                         this.size_4()
-                                            .bg(cx.theme().transparent)
-                                            .text_color(cx.theme().foreground)
+                                            .bg(gpui_kit::component::custom_style::transparent())
+                                            .text_color(custom_style::text())
                                             .child(Icon::new(IconName::GalleryVerticalEnd))
                                     }),
                             )
@@ -552,9 +552,6 @@ impl Render for SidebarStory {
                                     .active(is_active)
                                     .default_open(ix == 0)
                                     .click_to_open(self.click_to_open_submenu)
-                                    .when(is_active, |this| {
-                                        this.border_1().border_color(Hsla::white())
-                                    })
                                     .when(ix == 0, |this| {
                                         this.context_menu({
                                             move |this, _, _| {

@@ -52,7 +52,7 @@ impl Calendar {
             state: state.clone(),
             style: StyleRefinement::default(),
             number_of_months: 1,
-            first_day_of_week: Weekday::Sun,
+            first_day_of_week: Weekday::Mon,
         }
     }
     pub fn number_of_months(mut self, count: usize) -> Self {
@@ -110,10 +110,21 @@ impl RenderOnce for Calendar {
                         .child(Icon::new(IconName::ChevronRight).size_4()),
                     _ => item,
                 };
+                let radius = match size {
+                    Size::Small => cx.theme().radius / 2.,
+                    Size::Large => cx.theme().radius * 2.,
+                    _ => cx.theme().radius,
+                };
                 item.map(|this| match size {
-                    Size::Small => this.size_7().rounded(cx.theme().radius / 2.),
-                    Size::Large => this.size_10().rounded(cx.theme().radius * 2.),
-                    _ => this.size_8().rounded(cx.theme().radius),
+                    Size::Small => this.size_7(),
+                    Size::Large => this.size_10(),
+                    _ => this.size_8(),
+                })
+                .rounded(radius)
+                .when(state.is_in_range(), |this| {
+                    this.rounded_none()
+                        .when(state.is_range_start(), |this| this.rounded_l(radius))
+                        .when(state.is_range_end(), |this| this.rounded_r(radius))
                 })
                 .flex()
                 .items_center()
@@ -126,9 +137,7 @@ impl RenderOnce for Calendar {
                     },
                 )
                 .when(state.kind() == CalendarItemKind::Weekday, |this| {
-                    this.text_xs()
-                        .font_normal()
-                        .text_color(cx.theme().muted_foreground)
+                    this.text_xs().font_normal()
                 })
                 .when(uses_compact_text(state.kind()), |this| this.text_xs())
                 .when(
@@ -167,12 +176,12 @@ impl RenderOnce for Calendar {
                     },
                 )
                 .when(state.is_muted(), |this| {
-                    this.text_color(cx.theme().muted_foreground)
+                    this.text_color(crate::custom_style::muted_text())
                         .when(state.is_disabled(), |this| this.opacity(0.5))
                 })
                 .when(state.is_in_range(), |this| {
-                    this.bg(cx.theme().accent)
-                        .text_color(cx.theme().accent_foreground)
+                    this.bg(crate::custom_style::common_active_bg())
+                        .text_color(crate::custom_style::text())
                 })
                 .when(
                     !state.is_active()
@@ -180,23 +189,23 @@ impl RenderOnce for Calendar {
                         && state.kind() != CalendarItemKind::Weekday,
                     |this| {
                         this.hover(|this| {
-                            this.bg(cx.theme().tokens.secondary_hover)
-                                .text_color(cx.theme().foreground)
+                            this.bg(crate::custom_style::common_hover_bg())
+                                .text_color(crate::custom_style::text())
                         })
                     },
                 )
                 .when(state.is_active(), |this| {
-                    this.bg(cx.theme().tokens.primary)
-                        .text_color(cx.theme().primary_foreground)
+                    this.bg(crate::custom_style::primary())
+                        .text_color(crate::custom_style::reversed_text())
                 })
                 .when(state.is_today() && !state.is_active(), |this| {
-                    this.bg(cx.theme().accent)
-                        .text_color(cx.theme().accent_foreground)
+                    this.bg(crate::custom_style::common_active_bg())
+                        .text_color(crate::custom_style::text())
                 })
                 .into_any_element()
             })
             .border_1()
-            .border_color(cx.theme().border)
+            .border_color(crate::custom_style::border())
             .rounded(cx.theme().radius_lg)
             .p_3()
             .gap_0p5()

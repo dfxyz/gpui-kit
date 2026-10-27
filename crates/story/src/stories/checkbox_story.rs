@@ -4,8 +4,7 @@ use gpui_kit::{
 };
 
 use gpui_kit::component::{
-    ActiveTheme, Disableable as _, Sizable, Size, StyledExt, checkbox::Checkbox, h_flex,
-    text::markdown, v_flex,
+    Disableable as _, Sizable, Size, StyledExt, checkbox::Checkbox, h_flex, text::markdown, v_flex,
 };
 
 use crate::{ChangeStorySize, section, story_toolbar};
@@ -148,7 +147,7 @@ impl Render for CheckboxStory {
                             .child(
                                 div()
                                     .text_xs()
-                                    .text_color(cx.theme().muted_foreground)
+                                    .text_color(crate::custom_style::muted_text())
                                     .child("Download updates when the application is idle."),
                             )
                             .on_click(cx.listener(|this, checked: &bool, _, cx| {
@@ -176,7 +175,7 @@ impl Render for CheckboxStory {
                             .child(
                                 div()
                                     .text_xs()
-                                    .text_color(cx.theme().muted_foreground)
+                                    .text_color(crate::custom_style::muted_text())
                                     .child(markdown(
                                         "Read the [terms of service](https://github.com) before continuing.",
                                     )),

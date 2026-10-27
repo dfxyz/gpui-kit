@@ -36,29 +36,27 @@ mod window_selection;
 /// Derives the Base rich-text style installed by the component theme adapter.
 pub(crate) fn base_text_view_style(theme: &crate::Theme) -> gpui_base::TextViewStyle {
     let radius = theme.semantic_tokens().radius.md;
-    let mut table = gpui::StyleRefinement::default();
+    let mut table = gpui::StyleRefinement::default().bg(crate::custom_style::base());
     table.corner_radii.top_left = Some(radius.into());
     table.corner_radii.top_right = Some(radius.into());
     table.corner_radii.bottom_left = Some(radius.into());
     table.corner_radii.bottom_right = Some(radius.into());
     let mut code_block = gpui::StyleRefinement::default();
     code_block.corner_radii = table.corner_radii.clone();
-    let table_head = gpui::StyleRefinement::default()
-        .bg(theme.table_head)
-        .text_color(theme.table_head_foreground);
+    let table_head = gpui::StyleRefinement::default().bg(crate::custom_style::table_head());
 
     gpui_base::TextViewStyle::default()
-        .with_foreground(theme.foreground)
-        .with_muted_foreground(theme.muted_foreground)
-        .with_link(theme.link)
-        .with_selection(theme.selection)
-        .with_code_background(theme.muted)
-        .with_border(theme.border)
+        .with_foreground(crate::custom_style::text())
+        .with_muted_foreground(crate::custom_style::muted_text())
+        .with_link(crate::custom_style::blue_text())
+        .with_selection(crate::custom_style::selection())
+        .with_code_background(crate::custom_style::base_alternative())
+        .with_border(crate::custom_style::border())
         .with_code_block(code_block)
         .with_table(table)
         .with_table_head(table_head)
         .with_inline_code(gpui::HighlightStyle {
-            background_color: Some(theme.accent),
+            background_color: Some(crate::custom_style::inlined()),
             ..Default::default()
         })
         .with_dark(theme.is_dark())

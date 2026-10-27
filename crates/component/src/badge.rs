@@ -156,7 +156,7 @@ impl RenderOnce for Badge {
                                 .bottom_0()
                                 .size(size)
                                 .border_1()
-                                .border_color(cx.theme().background)
+                                .border_color(crate::custom_style::base())
                                 .child(*icon),
                         }),
                 )

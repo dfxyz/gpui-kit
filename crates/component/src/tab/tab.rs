@@ -166,170 +166,170 @@ impl TabVariant {
         }
     }
 
-    fn normal(&self, cx: &App) -> TabStyle {
+    fn normal(&self, _cx: &App) -> TabStyle {
         match self {
             TabVariant::Tab => TabStyle {
-                fg: cx.theme().tab_foreground,
-                bg: cx.theme().transparent.into(),
+                fg: crate::custom_style::text(),
+                bg: crate::custom_style::transparent().into(),
                 borders: Edges {
                     left: px(1.),
                     right: px(1.),
                     ..Default::default()
                 },
-                border_color: cx.theme().transparent,
+                border_color: crate::custom_style::transparent(),
                 ..Default::default()
             },
             TabVariant::Outline => TabStyle {
-                fg: cx.theme().tab_foreground,
-                bg: cx.theme().transparent.into(),
+                fg: crate::custom_style::text(),
+                bg: crate::custom_style::transparent().into(),
                 borders: Edges::all(px(1.)),
-                border_color: cx.theme().border,
+                border_color: crate::custom_style::border(),
                 ..Default::default()
             },
             TabVariant::Pill => TabStyle {
-                fg: cx.theme().foreground,
-                bg: cx.theme().transparent.into(),
+                fg: crate::custom_style::text(),
+                bg: crate::custom_style::transparent().into(),
                 ..Default::default()
             },
             TabVariant::Segmented => TabStyle {
-                fg: cx.theme().tab_foreground,
-                bg: cx.theme().transparent.into(),
+                fg: crate::custom_style::text(),
+                bg: crate::custom_style::transparent().into(),
                 ..Default::default()
             },
             TabVariant::Underline => TabStyle {
-                fg: cx.theme().tab_foreground,
-                bg: cx.theme().transparent.into(),
-                inner_bg: cx.theme().transparent.into(),
+                fg: crate::custom_style::text(),
+                bg: crate::custom_style::transparent().into(),
+                inner_bg: crate::custom_style::transparent().into(),
                 borders: Edges {
                     bottom: px(2.),
                     ..Default::default()
                 },
-                border_color: cx.theme().transparent,
+                border_color: crate::custom_style::transparent(),
                 ..Default::default()
             },
             TabVariant::Folder => TabStyle {
-                fg: cx.theme().tab_foreground,
-                bg: cx.theme().transparent.into(),
+                fg: crate::custom_style::text(),
+                bg: crate::custom_style::transparent().into(),
                 ..Default::default()
             },
         }
     }
 
-    fn hovered(&self, selected: bool, cx: &App) -> TabStyle {
+    fn hovered(&self, selected: bool, _cx: &App) -> TabStyle {
         match self {
             TabVariant::Tab => TabStyle {
-                fg: cx.theme().tab_active_foreground,
-                bg: cx.theme().transparent.into(),
+                fg: crate::custom_style::text(),
+                bg: crate::custom_style::transparent().into(),
                 borders: Edges {
                     left: px(1.),
                     right: px(1.),
                     ..Default::default()
                 },
-                border_color: cx.theme().transparent,
+                border_color: crate::custom_style::transparent(),
                 ..Default::default()
             },
             TabVariant::Outline => TabStyle {
-                fg: cx.theme().secondary_foreground,
-                bg: cx.theme().tokens.secondary_hover.into(),
+                fg: crate::custom_style::text(),
+                bg: crate::custom_style::common_hover_bg().into(),
                 borders: Edges::all(px(1.)),
-                border_color: cx.theme().border,
+                border_color: crate::custom_style::border(),
                 ..Default::default()
             },
             TabVariant::Pill => TabStyle {
-                fg: cx.theme().secondary_foreground,
-                bg: cx.theme().tokens.secondary.into(),
+                fg: crate::custom_style::text(),
+                bg: crate::custom_style::common_hover_bg().into(),
                 ..Default::default()
             },
             TabVariant::Segmented => TabStyle {
-                fg: cx.theme().tab_active_foreground,
-                bg: cx.theme().transparent.into(),
+                fg: crate::custom_style::text(),
+                bg: crate::custom_style::transparent().into(),
                 inner_bg: if selected {
-                    cx.theme().tokens.background.into()
+                    crate::custom_style::base().into()
                 } else {
-                    cx.theme().transparent.into()
+                    crate::custom_style::transparent().into()
                 },
                 ..Default::default()
             },
             TabVariant::Underline => TabStyle {
-                fg: cx.theme().tab_active_foreground,
-                bg: cx.theme().transparent.into(),
-                inner_bg: cx.theme().transparent.into(),
+                fg: crate::custom_style::text(),
+                bg: crate::custom_style::transparent().into(),
+                inner_bg: crate::custom_style::transparent().into(),
                 borders: Edges {
                     bottom: px(2.),
                     ..Default::default()
                 },
-                border_color: cx.theme().transparent,
+                border_color: crate::custom_style::transparent(),
                 ..Default::default()
             },
             // The hover fill is an inset rounded layer, see `Tab::render`.
             TabVariant::Folder => TabStyle {
-                fg: cx.theme().tab_active_foreground,
-                bg: cx.theme().transparent.into(),
+                fg: crate::custom_style::text(),
+                bg: crate::custom_style::transparent().into(),
                 ..Default::default()
             },
         }
     }
 
-    fn selected(&self, cx: &App) -> TabStyle {
+    fn selected(&self, _cx: &App) -> TabStyle {
         match self {
             TabVariant::Tab => TabStyle {
-                fg: cx.theme().tab_active_foreground,
-                bg: cx.theme().tokens.tab_active.into(),
+                fg: crate::custom_style::text(),
+                bg: crate::custom_style::base().into(),
                 borders: Edges {
                     left: px(1.),
                     right: px(1.),
                     ..Default::default()
                 },
-                border_color: cx.theme().border,
+                border_color: crate::custom_style::border(),
                 ..Default::default()
             },
             TabVariant::Outline => TabStyle {
-                fg: cx.theme().primary,
-                bg: cx.theme().transparent.into(),
+                fg: crate::custom_style::primary(),
+                bg: crate::custom_style::transparent().into(),
                 borders: Edges::all(px(1.)),
-                border_color: cx.theme().primary,
+                border_color: crate::custom_style::primary(),
                 ..Default::default()
             },
             TabVariant::Pill => TabStyle {
-                fg: cx.theme().primary_foreground,
-                bg: cx.theme().tokens.primary.into(),
+                fg: crate::custom_style::reversed_text(),
+                bg: crate::custom_style::primary().into(),
                 ..Default::default()
             },
             TabVariant::Segmented => TabStyle {
-                fg: cx.theme().tab_active_foreground,
-                bg: cx.theme().transparent.into(),
-                inner_bg: cx.theme().tokens.background.into(),
+                fg: crate::custom_style::text(),
+                bg: crate::custom_style::transparent().into(),
+                inner_bg: crate::custom_style::base().into(),
                 shadow: true,
                 ..Default::default()
             },
             TabVariant::Underline => TabStyle {
-                fg: cx.theme().tab_active_foreground,
-                bg: cx.theme().transparent.into(),
+                fg: crate::custom_style::text(),
+                bg: crate::custom_style::transparent().into(),
                 borders: Edges {
                     bottom: px(2.),
                     ..Default::default()
                 },
-                border_color: cx.theme().primary,
+                border_color: crate::custom_style::primary(),
                 ..Default::default()
             },
             // The shape is painted by `folder_tab_shape`.
             TabVariant::Folder => TabStyle {
-                fg: cx.theme().tab_active_foreground,
-                bg: cx.theme().transparent.into(),
+                fg: crate::custom_style::text(),
+                bg: crate::custom_style::transparent().into(),
                 ..Default::default()
             },
         }
     }
 
-    fn disabled(&self, selected: bool, cx: &App) -> TabStyle {
+    fn disabled(&self, selected: bool, _cx: &App) -> TabStyle {
         match self {
             TabVariant::Tab => TabStyle {
-                fg: cx.theme().muted_foreground,
-                bg: cx.theme().transparent.into(),
+                fg: crate::custom_style::muted_text(),
+                bg: crate::custom_style::transparent().into(),
                 border_color: if selected {
-                    cx.theme().border
+                    crate::custom_style::border()
                 } else {
-                    cx.theme().transparent
+                    crate::custom_style::transparent()
                 },
                 borders: Edges {
                     left: px(1.),
@@ -339,46 +339,46 @@ impl TabVariant {
                 ..Default::default()
             },
             TabVariant::Outline => TabStyle {
-                fg: cx.theme().muted_foreground,
-                bg: cx.theme().transparent.into(),
+                fg: crate::custom_style::muted_text(),
+                bg: crate::custom_style::transparent().into(),
                 borders: Edges::all(px(1.)),
                 border_color: if selected {
-                    cx.theme().primary
+                    crate::custom_style::primary()
                 } else {
-                    cx.theme().border
+                    crate::custom_style::border()
                 },
                 ..Default::default()
             },
             TabVariant::Pill => TabStyle {
                 fg: if selected {
-                    cx.theme().primary_foreground.opacity(0.5)
+                    crate::custom_style::reversed_text().opacity(0.5)
                 } else {
-                    cx.theme().muted_foreground
+                    crate::custom_style::muted_text()
                 },
                 bg: if selected {
-                    cx.theme().primary.opacity(0.5).into()
+                    crate::custom_style::primary().opacity(0.5).into()
                 } else {
-                    cx.theme().transparent.into()
+                    crate::custom_style::transparent().into()
                 },
                 ..Default::default()
             },
             TabVariant::Segmented => TabStyle {
-                fg: cx.theme().muted_foreground,
-                bg: cx.theme().tokens.tab_bar.into(),
+                fg: crate::custom_style::muted_text(),
+                bg: crate::custom_style::muted_bg().into(),
                 inner_bg: if selected {
-                    cx.theme().tokens.background.into()
+                    crate::custom_style::base().into()
                 } else {
-                    cx.theme().transparent.into()
+                    crate::custom_style::transparent().into()
                 },
                 ..Default::default()
             },
             TabVariant::Underline => TabStyle {
-                fg: cx.theme().muted_foreground,
-                bg: cx.theme().transparent.into(),
+                fg: crate::custom_style::muted_text(),
+                bg: crate::custom_style::transparent().into(),
                 border_color: if selected {
-                    cx.theme().border
+                    crate::custom_style::border()
                 } else {
-                    cx.theme().transparent
+                    crate::custom_style::transparent()
                 },
                 borders: Edges {
                     bottom: px(2.),
@@ -387,8 +387,8 @@ impl TabVariant {
                 ..Default::default()
             },
             TabVariant::Folder => TabStyle {
-                fg: cx.theme().muted_foreground,
-                bg: cx.theme().transparent.into(),
+                fg: crate::custom_style::muted_text(),
+                bg: crate::custom_style::transparent().into(),
                 ..Default::default()
             },
         }
@@ -810,7 +810,10 @@ impl RenderOnce for Tab {
             self.selected && segmented_indicator_active && !self.indicator_ready;
         let inline_inner_bg = tab_style.inner_bg;
         let (inner_bg, hover_inner_bg) = if segmented_indicator_active && self.indicator_ready {
-            (cx.theme().transparent.into(), cx.theme().transparent.into())
+            (
+                crate::custom_style::transparent().into(),
+                crate::custom_style::transparent().into(),
+            )
         } else if has_inline_inner_bg {
             (inline_inner_bg, inline_inner_bg)
         } else {
@@ -828,14 +831,14 @@ impl RenderOnce for Tab {
             self.selected && !self.disabled && self.indicator_active && self.indicator_ready;
         // Pill paints its active state via the outer `bg`.
         let selected_outer_bg = if suppress_active_visual && self.variant == TabVariant::Pill {
-            cx.theme().transparent.into()
+            crate::custom_style::transparent().into()
         } else {
             selected_style.bg
         };
         // Underline paints its active state via the bottom `border_color`.
         let selected_outer_border_color =
             if suppress_active_visual && self.variant == TabVariant::Underline {
-                cx.theme().transparent
+                crate::custom_style::transparent()
             } else {
                 selected_style.border_color
             };
@@ -995,7 +998,7 @@ impl RenderOnce for Tab {
             .when(folder && self.selected, |this| {
                 this.child(folder_tab_shape(
                     metrics,
-                    cx.theme().tokens.tab_active.into(),
+                    crate::custom_style::base().into(),
                 ))
             })
             .when(
@@ -1009,7 +1012,7 @@ impl RenderOnce for Tab {
                             .right_0()
                             .bottom(metrics.top_padding)
                             .rounded(metrics.radius)
-                            .bg(cx.theme().tokens.secondary),
+                            .bg(crate::custom_style::common_hover_bg()),
                     )
                 },
             )
@@ -1022,7 +1025,7 @@ impl RenderOnce for Tab {
                         .top((height - metrics.top_padding - metrics.separator_height) / 2.)
                         .w(px(1.))
                         .h(metrics.separator_height)
-                        .bg(cx.theme().border),
+                        .bg(crate::custom_style::border()),
                 )
             })
             .when(has_inline_inner_bg, |this| {

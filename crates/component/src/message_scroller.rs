@@ -344,7 +344,6 @@ impl RenderOnce for MessageScroller {
         } else {
             0.
         };
-        let tokens = cx.theme().semantic_tokens();
         let row_style = self.row_style;
         let jump_button_style = self.jump_button_style;
         let jump_button_renderer = self.jump_button_renderer;
@@ -472,9 +471,9 @@ impl RenderOnce for MessageScroller {
                                 .tooltip(self.jump_button_label)
                                 .rounded(cx.theme().radius_full())
                                 .border_1()
-                                .border_color(tokens.colors.border)
-                                .bg(tokens.colors.background)
-                                .text_color(tokens.colors.foreground)
+                                .border_color(crate::custom_style::border())
+                                .bg(crate::custom_style::base())
+                                .text_color(crate::custom_style::text())
                                 .refine_style(&jump_button_style)
                                 .on_click(move |_, _, cx| {
                                     state.update(cx, |state, cx| state.scroll_to_end(cx));

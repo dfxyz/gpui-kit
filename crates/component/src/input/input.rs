@@ -116,14 +116,14 @@ fn exposes_accessibility_value(content_type: Option<InputContentType>) -> bool {
 }
 
 /// Returns `(background, foreground)` colors for input-like components.
-pub(crate) fn input_style(disabled: bool, cx: &App) -> (Hsla, Hsla) {
+pub(crate) fn input_style(disabled: bool) -> (Hsla, Hsla) {
     if disabled {
         (
-            cx.theme().input.mix_oklab(cx.theme().transparent, 0.8),
-            cx.theme().muted_foreground,
+            crate::custom_style::border().mix_oklab(crate::custom_style::transparent(), 0.8),
+            crate::custom_style::muted_text(),
         )
     } else {
-        (cx.theme().input_background(), cx.theme().foreground)
+        (crate::custom_style::input(), crate::custom_style::text())
     }
 }
 
@@ -561,12 +561,12 @@ impl RenderOnce for Input {
         state.ensure_highlighter_factory(crate::highlighter::input_highlighter_factory(), cx);
         state.set_editor_style(
             gpui_base::input::InputEditorStyle {
-                foreground: cx.theme().foreground,
-                muted_foreground: cx.theme().muted_foreground,
-                background: cx.theme().editor_background(),
-                border: cx.theme().border,
-                selection: cx.theme().selection,
-                caret: cx.theme().caret,
+                foreground: crate::custom_style::text(),
+                muted_foreground: crate::custom_style::editor_muted_text(),
+                background: crate::custom_style::base(),
+                border: crate::custom_style::border(),
+                selection: crate::custom_style::selection(),
+                caret: crate::custom_style::caret(),
                 diagnostics: gpui_base::input::DiagnosticColors {
                     error: cx.theme().highlight_theme.style.status.error(cx),
                     warning: cx.theme().highlight_theme.style.status.warning(cx),
@@ -712,7 +712,7 @@ impl RenderOnce for Input {
             _ => px(6.),
         };
 
-        let (bg, _) = input_style(presentation.is_disabled(), cx);
+        let (bg, _) = input_style(presentation.is_disabled());
         let bg = if presentation.is_code_editor() {
             cx.theme().editor_background()
         } else {
@@ -775,7 +775,7 @@ impl RenderOnce for Input {
                 styles.focused(|style| {
                     style.when(
                         self.appearance && self.bordered && self.focus_bordered,
-                        |style| style.border_1().border_color(cx.theme().ring),
+                        |style| style.border_1().border_color(crate::custom_style::ring()),
                     )
                 })
             })
@@ -800,7 +800,7 @@ impl RenderOnce for Input {
                 this.bg(bg)
                     .rounded(cx.theme().radius)
                     .when(self.bordered, |this| {
-                        this.border_1().border_color(cx.theme().input)
+                        this.border_1().border_color(crate::custom_style::border())
                     })
             })
             .items_center()
@@ -830,7 +830,7 @@ impl RenderOnce for Input {
                         .cursor_default()
                         .when(presentation.is_disabled(), |this| this.opacity(0.5))
                         .when(presentation.is_loading(), |this| {
-                            this.child(Spinner::new().color(cx.theme().muted_foreground))
+                            this.child(Spinner::new().color(crate::custom_style::muted_text()))
                         })
                         .when(self.mask_toggle, |this| {
                             this.child(Self::render_toggle_mask_button(&state, cx))

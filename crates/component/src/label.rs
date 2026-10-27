@@ -7,7 +7,7 @@ use gpui::{
 
 use gpui_base::TestTextExt as _;
 
-use crate::{ActiveTheme, StyledExt};
+use crate::{ActiveTheme as _, StyledExt};
 
 const MASKED: &'static str = "•";
 
@@ -170,7 +170,7 @@ impl Label {
             highlights.push((
                 ranges[1].clone(),
                 HighlightStyle {
-                    color: Some(cx.theme().muted_foreground),
+                    color: Some(crate::custom_style::muted_text()),
                     ..Default::default()
                 },
             ));
@@ -181,7 +181,7 @@ impl Label {
             highlights.push((
                 range.clone(),
                 HighlightStyle {
-                    color: Some(cx.theme().blue),
+                    color: Some(cx.theme().green),
                     ..Default::default()
                 },
             ));
@@ -210,7 +210,7 @@ impl RenderOnce for Label {
 
         div()
             .line_height(rems(1.25))
-            .text_color(cx.theme().foreground)
+            .text_color(crate::custom_style::text())
             .refine_style(&self.style)
             .child(
                 StyledText::new(&text).when_some(highlights, |this, hl| this.with_highlights(hl)),

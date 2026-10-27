@@ -7,6 +7,7 @@ use gpui_kit::*;
 use gpui_kit::component::{
     ActiveTheme as _, Icon, IconName, IndexPath, Placement, WindowExt,
     button::{Button, ButtonVariant, ButtonVariants as _},
+    custom_style,
     date_picker::{DatePicker, DatePickerState},
     h_flex,
     input::{Input, InputState},
@@ -108,21 +109,21 @@ impl ListDelegate for ListItemDeletegate {
     fn render_empty(
         &mut self,
         _: &mut Window,
-        cx: &mut Context<ListState<Self>>,
+        _cx: &mut Context<ListState<Self>>,
     ) -> impl IntoElement {
         v_flex()
             .size_full()
             .child(
                 Icon::new(IconName::Inbox)
                     .size(px(50.))
-                    .text_color(cx.theme().muted_foreground),
+                    .text_color(crate::custom_style::muted_text()),
             )
             .child("No matches found")
             .items_center()
             .justify_center()
             .p_3()
-            .bg(cx.theme().muted)
-            .text_color(cx.theme().muted_foreground)
+            .bg(custom_style::muted_bg())
+            .text_color(crate::custom_style::muted_text())
     }
 
     fn cancel(&mut self, window: &mut Window, cx: &mut Context<ListState<Self>>) {
@@ -327,7 +328,7 @@ impl SheetStory {
                         .child(
                             List::new(&list)
                                 .border_1()
-                                .border_color(cx.theme().border)
+                                .border_color(custom_style::border())
                                 .rounded(cx.theme().radius),
                         ),
                 )

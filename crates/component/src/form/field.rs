@@ -6,7 +6,7 @@ use gpui::{
     Window, div, prelude::FluentBuilder as _, px,
 };
 
-use crate::{ActiveTheme as _, AxisExt, Size, StyledExt, h_flex, v_flex};
+use crate::{AxisExt, Size, StyledExt, h_flex, v_flex};
 
 #[derive(Clone, Copy)]
 pub(super) struct FieldProps {
@@ -318,7 +318,9 @@ impl RenderOnce for Field {
                                             )
                                             .when(self.required, |this| {
                                                 this.child(
-                                                    div().text_color(cx.theme().danger).child("*"),
+                                                    div()
+                                                        .text_color(crate::custom_style::red_text())
+                                                        .child("*"),
                                                 )
                                             }),
                                     )
@@ -341,7 +343,7 @@ impl RenderOnce for Field {
                         this.child(
                             div()
                                 .text_xs()
-                                .text_color(cx.theme().muted_foreground)
+                                .text_color(crate::custom_style::muted_text())
                                 .child(builder.render(window, cx)),
                         )
                     }),

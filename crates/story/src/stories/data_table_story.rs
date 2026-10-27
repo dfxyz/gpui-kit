@@ -183,11 +183,17 @@ impl Stock {
 ///
 /// A rise is green and a fall is red, both taken from the theme. Unchanged
 /// values keep the default cell colors.
-fn change_colors(val: f64, cx: &App) -> Option<(Hsla, Hsla)> {
+fn change_colors(val: f64, _cx: &App) -> Option<(Hsla, Hsla)> {
     if val > 0. {
-        Some((cx.theme().green, cx.theme().green_light))
+        Some((
+            crate::custom_style::green_text(),
+            crate::custom_style::green_text(),
+        ))
     } else if val < 0. {
-        Some((cx.theme().red, cx.theme().red_light))
+        Some((
+            crate::custom_style::red_text(),
+            crate::custom_style::red_text(),
+        ))
     } else {
         None
     }
@@ -726,7 +732,7 @@ impl TableDelegate for StockTableDelegate {
         let Some((text, weight)) = format_cell(stock, &col.key) else {
             return self
                 .value_cell(col)
-                .text_color(cx.theme().muted_foreground)
+                .text_color(crate::custom_style::muted_text())
                 .child("--")
                 .into_any_element();
         };
@@ -734,7 +740,7 @@ impl TableDelegate for StockTableDelegate {
         match col.key.as_ref() {
             "id" => self
                 .value_cell(col)
-                .text_color(cx.theme().muted_foreground)
+                .text_color(crate::custom_style::muted_text())
                 .when(col.align == TextAlign::Center, |this| this.justify_center())
                 .child(text)
                 .into_any_element(),
@@ -742,9 +748,9 @@ impl TableDelegate for StockTableDelegate {
                 .value_cell(col)
                 .map(|this| {
                     if stock.counter.market == "US" {
-                        this.text_color(cx.theme().blue)
+                        this.text_color(crate::custom_style::blue_text())
                     } else {
-                        this.text_color(cx.theme().magenta)
+                        this.text_color(crate::custom_style::magenta_text())
                     }
                 })
                 .child(text)
@@ -1635,9 +1641,9 @@ impl Render for DataTableStory {
                             .justify_between()
                             .gap_3()
                             .px_3()
-                            .bg(cx.theme().muted.opacity(0.35))
+                            .bg(crate::custom_style::muted_bg())
                             .text_xs()
-                            .text_color(cx.theme().muted_foreground)
+                            .text_color(crate::custom_style::muted_text())
                             .child(format!(
                                 "Total · {} rows · {} columns",
                                 rows_count, columns_count

@@ -7,13 +7,10 @@ use gpui::{
 use gpui_component_macros::IntoPlot;
 use rust_i18n::t;
 
-use crate::{
-    ActiveTheme,
-    plot::{
-        Grid, Plot, PlotAppear, PlotAxis, origin_point,
-        scale::{PlotValue, Scale, ScaleBand, ScaleLinear},
-        tooltip::{CrossLine, Tooltip, TooltipState},
-    },
+use crate::plot::{
+    Grid, Plot, PlotAppear, PlotAxis, origin_point,
+    scale::{PlotValue, Scale, ScaleBand, ScaleLinear},
+    tooltip::{CrossLine, Tooltip, TooltipState},
 };
 
 use super::{
@@ -244,10 +241,10 @@ where
     }
 
     /// The candle colors, `(bullish, bearish)`, set or from the theme.
-    fn candle_colors(&self, cx: &App) -> (Hsla, Hsla) {
+    fn candle_colors(&self, _cx: &App) -> (Hsla, Hsla) {
         (
-            self.bullish.unwrap_or(cx.theme().chart_bullish),
-            self.bearish.unwrap_or(cx.theme().chart_bearish),
+            self.bullish.unwrap_or(crate::custom_style::chart_bullish()),
+            self.bearish.unwrap_or(crate::custom_style::chart_bearish()),
         )
     }
 
@@ -305,7 +302,7 @@ where
         let y = ScaleLinear::new(all_values, [height, 10.]);
 
         // Draw X axis
-        let mut axis = PlotAxis::new().stroke(cx.theme().border);
+        let mut axis = PlotAxis::new().stroke(crate::custom_style::border());
         if self.x_axis {
             let labels = build_band_labels(
                 &self.data,
@@ -313,7 +310,7 @@ where
                 &x,
                 band_width,
                 &labeled_items(self.data.len(), None, self.tick_margin),
-                cx.theme().muted_foreground,
+                crate::custom_style::muted_text(),
             );
             axis = axis.x(height).x_label(labels);
         }
@@ -323,7 +320,7 @@ where
         if self.grid {
             Grid::new()
                 .y((0..=3).map(|i| height * i as f32 / 4.0))
-                .stroke(cx.theme().border)
+                .stroke(crate::custom_style::border())
                 .dash_array(&[px(4.), px(2.)])
                 .paint(&bounds, window);
         }

@@ -169,13 +169,13 @@ impl RenderOnce for Slider {
             .background
             .clone()
             .and_then(|bg| bg.color())
-            .unwrap_or(cx.theme().tokens.slider_bar.into());
+            .unwrap_or(crate::custom_style::primary().into());
         let thumb_bg: Background = self
             .style
             .text
             .color
             .map(Into::into)
-            .unwrap_or_else(|| cx.theme().tokens.slider_thumb.into());
+            .unwrap_or_else(|| crate::custom_style::input().into());
         let corner_radii = self.style.corner_radii.clone();
         // The track is a pill by default, and square when the theme squares its
         // corners. A caller's own corner radii still win.
@@ -199,7 +199,7 @@ impl RenderOnce for Slider {
                 .unwrap_or(default_radius),
         };
 
-        let ring_color = cx.theme().ring;
+        let ring_color = crate::custom_style::ring();
         let entity_id = self.state.entity_id();
         let start_ring = is_range.then(|| ThumbRing::new(entity_id, true, ring_color, window, cx));
         let end_ring = ThumbRing::new(entity_id, false, ring_color, window, cx);
@@ -279,8 +279,8 @@ impl RenderOnce for Slider {
             .when(axis.is_vertical(), |this| this.h(px(120.)))
             .when(axis.is_horizontal(), |this| this.w_full())
             .refine_style(&self.style)
-            .bg(cx.theme().transparent)
-            .text_color(cx.theme().foreground)
+            .bg(crate::custom_style::transparent())
+            .text_color(crate::custom_style::text())
             .child(
                 SliderTrack::new(&self.state)
                     .axis(axis)

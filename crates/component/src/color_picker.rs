@@ -272,7 +272,7 @@ impl ColorPicker {
         let alpha_start = hsla(slider_color.h, slider_color.s, slider_color.l, 0.0);
         let alpha_end = hsla(slider_color.h, slider_color.s, slider_color.l, 1.0);
 
-        let label_color = cx.theme().foreground.opacity(0.7);
+        let label_color = crate::custom_style::text().opacity(0.7);
 
         v_flex()
             .gap_2()
@@ -298,7 +298,7 @@ impl ColorPicker {
                             .child(
                                 Slider::new(sliders.hue())
                                     .flex_1()
-                                    .bg(cx.theme().transparent),
+                                    .bg(crate::custom_style::transparent()),
                             ),
                     )
                     .child(
@@ -336,7 +336,7 @@ impl ColorPicker {
                             .child(
                                 Slider::new(sliders.saturation())
                                     .flex_1()
-                                    .bg(cx.theme().transparent),
+                                    .bg(crate::custom_style::transparent()),
                             ),
                     )
                     .child(
@@ -370,7 +370,7 @@ impl ColorPicker {
                             .child(
                                 Slider::new(sliders.lightness())
                                     .flex_1()
-                                    .bg(cx.theme().transparent),
+                                    .bg(crate::custom_style::transparent()),
                             ),
                     )
                     .child(
@@ -404,7 +404,7 @@ impl ColorPicker {
                             .child(
                                 Slider::new(sliders.alpha())
                                     .flex_1()
-                                    .bg(cx.theme().transparent),
+                                    .bg(crate::custom_style::transparent()),
                             ),
                     )
                     .child(
@@ -760,7 +760,7 @@ impl ColorPickerButton {
     /// The framed trigger of a [`ColorSelect`]: the swatch, the hex value and
     /// a caret, laid out like a [`Select`](crate::select::Select) trigger.
     fn render_field(self, window: &mut Window, cx: &mut App) -> AnyElement {
-        let (bg, fg) = input_style(false, cx);
+        let (bg, fg) = input_style(false);
         let outline_visible = self.selected || self.focused;
 
         h_flex()
@@ -770,12 +770,12 @@ impl ColorPickerButton {
             .bg(bg)
             .text_color(fg)
             .border_1()
-            .border_color(cx.theme().input)
+            .border_color(crate::custom_style::border())
             .rounded(cx.theme().radius)
             .input_size(self.size)
             .input_text_size(self.size)
             .when(outline_visible, |this| {
-                this.border_color(cx.theme().ring)
+                this.border_color(crate::custom_style::ring())
                     .focus_ring_style(window, cx)
             })
             .child(
@@ -783,7 +783,7 @@ impl ColorPickerButton {
                     .id("swatch")
                     .flex_shrink_0()
                     .border_1()
-                    .border_color(cx.theme().input)
+                    .border_color(crate::custom_style::border())
                     .rounded(cx.theme().radius / 2.)
                     .map(|this| match self.size {
                         Size::XSmall => this.size_3(),
@@ -803,13 +803,13 @@ impl ColorPickerButton {
                     .whitespace_nowrap()
                     .map(|this| match self.value {
                         Some(value) => this.child(value.to_hex()),
-                        None => this.text_color(cx.theme().muted_foreground).child(
+                        None => this.text_color(crate::custom_style::muted_text()).child(
                             self.placeholder
                                 .unwrap_or_else(|| t!("Select.placeholder").into()),
                         ),
                     }),
             )
-            .child(Caret::new(self.size).text_color(cx.theme().muted_foreground))
+            .child(Caret::new(self.size).text_color(crate::custom_style::muted_text()))
             .into_any_element()
     }
 }
@@ -829,9 +829,9 @@ impl RenderOnce for ColorPickerButton {
                 this.child(
                     div()
                         .id("square")
-                        .bg(cx.theme().tokens.background)
+                        .bg(crate::custom_style::base())
                         .border_1()
-                        .border_color(cx.theme().input)
+                        .border_color(crate::custom_style::border())
                         .rounded(cx.theme().radius)
                         .overflow_hidden()
                         .size_with(self.size)

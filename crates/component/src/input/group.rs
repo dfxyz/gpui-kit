@@ -18,10 +18,11 @@ use gpui::{
     StyleRefinement, Styled, ViewElement, Window, div, prelude::FluentBuilder as _, px, rems,
 };
 
+use super::input::input_style;
 use crate::{
     ActiveTheme as _, Disableable, FocusableExt as _, Icon, Selectable, Sizable, Size,
     StyleSized as _, StyledExt as _,
-    button::{Button, ButtonCustomVariant, ButtonVariant, ButtonVariants},
+    button::{Button, ButtonVariant, ButtonVariants},
     h_flex,
     input::{Input, Textarea},
     v_flex,
@@ -179,7 +180,7 @@ impl RenderOnce for InputGroup {
         let theme = cx.theme();
         let appearance = GroupAppearance::new(theme, focused, disabled, self.invalid);
         let radius = theme.radius;
-        let foreground = theme.foreground;
+        let foreground = crate::custom_style::text();
         let show_ring = theme.focus_ring && self.focus_ring;
         let motion = theme.motion_tokens();
         let duration = motion.duration_fast;
@@ -299,29 +300,22 @@ struct GroupAppearance {
 }
 
 impl GroupAppearance {
-    fn new(theme: &crate::Theme, focused: bool, disabled: bool, invalid: bool) -> Self {
-        let background = if disabled {
-            theme.input.opacity(if theme.is_dark() { 0.8 } else { 0.5 })
-        } else if theme.is_dark() {
-            theme.input.opacity(0.3)
-        } else {
-            theme.transparent
-        };
+    fn new(_theme: &crate::Theme, focused: bool, disabled: bool, invalid: bool) -> Self {
+        let background = input_style(disabled).0;
         // Validation remains visible when editing is disabled. Focus alone never
         // reactivates a disabled control, and never replaces its validation color.
         let (border, ring) = if invalid {
             (
-                theme.danger,
-                Some(
-                    theme
-                        .danger
-                        .opacity(if theme.is_dark() { 0.4 } else { 0.2 }),
-                ),
+                crate::custom_style::red_text(),
+                Some(crate::custom_style::red_text().opacity(0.5)),
             )
         } else if focused && !disabled {
-            (theme.ring, Some(theme.ring.opacity(0.5)))
+            (
+                crate::custom_style::ring(),
+                Some(crate::custom_style::ring().opacity(0.5)),
+            )
         } else {
-            (theme.input, None)
+            (crate::custom_style::border(), None)
         };
         Self {
             background,
@@ -372,7 +366,7 @@ impl InputGroupAddon {
         mut self,
         presentation: GroupPresentation,
         window: &mut Window,
-        cx: &mut App,
+        _cx: &mut App,
     ) -> AnyElement {
         for child in &mut self.children {
             if let Some(button) = button_element::InputGroupButtonElement::from_element(child) {
@@ -407,7 +401,7 @@ impl InputGroupAddon {
             .justify_center()
             .font_medium()
             .input_text_size(presentation.size)
-            .text_color(cx.theme().muted_foreground)
+            .text_color(crate::custom_style::muted_text())
             .cursor_text()
             .map(|this| match self.alignment {
                 InputGroupAddonAlignment::InlineStart => this.pl_1p5(),
@@ -551,12 +545,9 @@ impl InputGroupButton {
 
     fn render_in_group(self, disabled: bool, window: &mut Window, cx: &mut App) -> AnyElement {
         let disabled = disabled || self.button.is_disabled();
-        let selected = self.button.is_selected();
         let icon_only = self.button.is_icon_only();
         let ghost =
             matches!(self.button.variant(), ButtonVariant::Ghost) && !self.button.is_outline();
-        let muted = cx.theme().muted;
-        let hover = muted.opacity(if cx.theme().is_dark() { 0.5 } else { 1. });
         let compact = matches!(self.size, Size::XSmall | Size::Small);
         let icon_size = match self.size {
             Size::XSmall => Size::Small,
@@ -582,17 +573,7 @@ impl InputGroupButton {
                     this.with_size(self.size)
                 }
             })
-            .when(ghost, |this| {
-                this.custom(
-                    ButtonCustomVariant::new(cx)
-                        .color(cx.theme().transparent)
-                        .foreground(cx.theme().foreground)
-                        .hover(hover)
-                        .active(if selected { muted } else { hover }),
-                )
-                .text_color(cx.theme().foreground)
-                .when(disabled, |this| this.opacity(0.5))
-            })
+            .when(ghost, |this| this.ghost())
             .when(disabled, |this| this.focus_ring(false))
             .text_sm()
             .font_medium()
@@ -707,11 +688,11 @@ impl Styled for InputGroupText {
 }
 
 impl RenderOnce for InputGroupText {
-    fn render(self, _: &mut Window, cx: &mut App) -> impl IntoElement {
+    fn render(self, _: &mut Window, _cx: &mut App) -> impl IntoElement {
         h_flex()
             .gap_2()
             .text_sm()
-            .text_color(cx.theme().muted_foreground)
+            .text_color(crate::custom_style::muted_text())
             .refine_style(&self.style)
             .children(self.children.into_iter().map(addon_child))
     }

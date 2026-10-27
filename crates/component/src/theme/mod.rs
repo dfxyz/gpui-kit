@@ -19,7 +19,7 @@ use std::{
     time::Duration,
 };
 
-mod color;
+pub(crate) mod color;
 mod mono_font;
 mod motion;
 mod registry;
@@ -414,7 +414,12 @@ impl Theme {
         } else {
             gpui_base::ThemeAppearance::Light
         };
-        theme.tokens = self.semantic_tokens();
+        theme.tokens = {
+            let mut tokens = self.semantic_tokens();
+            tokens.colors.background = crate::custom_style::base();
+            tokens.colors.selection = crate::custom_style::selection();
+            tokens
+        };
         theme.scrollbar = gpui_base::ScrollbarTheme::new()
             .with_mode(self.scrollbar_mode)
             .with_motion(scrollbar_motion(self.scrollbar_mode))
@@ -425,7 +430,7 @@ impl Theme {
                     .track_active(|style| style.bg(self.scrollbar).border_color(self.border))
                     .thumb(|style| {
                         style
-                            .bg(self.tokens.scrollbar_thumb)
+                            .bg(crate::custom_style::scrollbar_thumb())
                             .radius(self.radius)
                             .when(gpui_base::is_mobile(), |style| {
                                 style
@@ -436,7 +441,7 @@ impl Theme {
                     })
                     .thumb_hover(|style| {
                         style
-                            .bg(self.tokens.scrollbar_thumb_hover)
+                            .bg(crate::custom_style::scrollbar_thumb_hover())
                             .radius(self.radius)
                             .when(gpui_base::is_mobile(), |style| {
                                 style
@@ -446,7 +451,7 @@ impl Theme {
                     })
                     .thumb_active(|style| {
                         style
-                            .bg(self.tokens.scrollbar_thumb_hover)
+                            .bg(crate::custom_style::scrollbar_thumb_active())
                             .radius(self.radius)
                             .when(gpui_base::is_mobile(), |style| {
                                 style
