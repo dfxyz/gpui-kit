@@ -1,7 +1,7 @@
 use gpui_kit::component::{
     ActiveTheme as _, IconName, Side, StyledExt,
     button::Button,
-    h_flex,
+    custom_style, h_flex,
     menu::{ContextMenuExt, DropdownMenu as _, PopupMenuItem},
     v_flex,
 };
@@ -162,11 +162,11 @@ impl Render for MenuStory {
                                     .menu_with_icon("Search", IconName::Search, Box::new(SearchAll))
                                     .separator()
                                     .item(
-                                        PopupMenuItem::element(|_, cx| {
+                                        PopupMenuItem::element(|_, _cx| {
                                             v_flex().child("Custom Element").child(
                                                 div()
                                                     .text_xs()
-                                                    .text_color(cx.theme().muted_foreground)
+                                                    .text_color(crate::custom_style::muted_text())
                                                     .child("This is sub-title"),
                                             )
                                         })
@@ -181,11 +181,11 @@ impl Render for MenuStory {
                                     .menu_element_with_check(
                                         check_side.is_some(),
                                         Box::new(ToggleCheck),
-                                        |_, cx| {
+                                        |_, _cx| {
                                             h_flex().gap_1().child("Custom Element").child(
                                                 div()
                                                     .text_xs()
-                                                    .text_color(cx.theme().muted_foreground)
+                                                    .text_color(crate::custom_style::muted_text())
                                                     .child("checked"),
                                             )
                                         },
@@ -193,11 +193,11 @@ impl Render for MenuStory {
                                     .menu_element_with_icon(
                                         IconName::Info,
                                         Box::new(Info(0)),
-                                        |_, cx| {
+                                        |_, _cx| {
                                             h_flex().gap_1().child("Custom").child(
                                                 div()
                                                     .text_sm()
-                                                    .text_color(cx.theme().muted_foreground)
+                                                    .text_color(crate::custom_style::muted_text())
                                                     .child("element"),
                                             )
                                         },
@@ -251,7 +251,7 @@ impl Render for MenuStory {
                             .rounded(cx.theme().radius_lg)
                             .border_2()
                             .border_dashed()
-                            .border_color(cx.theme().border)
+                            .border_color(custom_style::border())
                             .child("Right click to open ContextMenu")
                             .context_menu({
                                 move |this, window, cx| {
@@ -329,7 +329,7 @@ impl Render for MenuStory {
                             .child(
                                 div()
                                     .text_sm()
-                                    .text_color(cx.theme().muted_foreground)
+                                    .text_color(crate::custom_style::muted_text())
                                     .child(
                                         "You can right click anywhere in \
                                          this area to open the context menu.",
@@ -348,7 +348,7 @@ impl Render for MenuStory {
                             .rounded(cx.theme().radius_lg)
                             .border_2()
                             .border_dashed()
-                            .border_color(cx.theme().border)
+                            .border_color(custom_style::border())
                             .child("Here is another area with context menu.")
                             .context_menu({
                                 move |this, _, _| {
@@ -370,7 +370,7 @@ impl Render for MenuStory {
                             .rounded(cx.theme().radius_lg)
                             .border_2()
                             .border_dashed()
-                            .border_color(cx.theme().border)
+                            .border_color(custom_style::border())
                             .child("ContextMenu area 1")
                             .context_menu({
                                 move |this, _, _| {

@@ -1,6 +1,6 @@
 use gpui_kit::assets::IconName;
 use gpui_kit::component::{
-    ActiveTheme as _, Icon, Sizable as _, StyledExt as _, WindowExt as _,
+    Icon, Sizable as _, StyledExt as _, WindowExt as _,
     avatar::{Avatar, AvatarGroup},
     button::Button,
     empty::{
@@ -214,7 +214,7 @@ impl Render for EmptyStory {
                     .child(
                         Empty::new()
                             .min_h_64()
-                            .bg(cx.theme().muted.opacity(0.3))
+                            .bg(crate::custom_style::muted_bg().opacity(0.3))
                             .header(
                                 EmptyHeader::new()
                                     .media(

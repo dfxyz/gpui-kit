@@ -1,7 +1,7 @@
 use gpui::{AnyElement, App, Context, IntoElement, ParentElement as _, Styled as _, Window, div};
 
 use crate::{
-    ActiveTheme, Disableable as _, Icon, IconName, IndexPath, Sizable as _, Size, StyleSized as _,
+    Disableable as _, Icon, IconName, IndexPath, Sizable as _, Size, StyleSized as _,
     list::{ListDelegate, ListState},
 };
 
@@ -92,7 +92,7 @@ impl<D: SearchableListDelegate + 'static> ListDelegate for SearchableListAdapter
                 .px_2()
                 .list_size(self.size)
                 .text_sm()
-                .text_color(cx.theme().muted_foreground)
+                .text_color(crate::custom_style::muted_text())
                 .child(item)
                 .into_any_element(),
         )

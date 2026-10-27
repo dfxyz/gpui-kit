@@ -196,7 +196,7 @@ impl RenderOnce for Carousel {
                             .w(size.width)
                             .h(size.height)
                             .border_1()
-                            .border_color(cx.theme().transparent)
+                            .border_color(crate::custom_style::transparent())
                             .rounded(cx.theme().radius)
                             .focus_ring_style(window, cx),
                     )

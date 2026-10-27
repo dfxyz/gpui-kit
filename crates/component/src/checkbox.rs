@@ -6,7 +6,7 @@ use crate::{
 };
 use crate::{StyleSized as _, StyledExt as _, ThemeStyled as _};
 use gpui::{
-    AnyElement, App, ElementId, InteractiveElement, IntoElement, MouseButton, ParentElement,
+    AnyElement, App, ElementId, InteractiveElement, IntoElement, MouseButton, ParentElement, Rems,
     RenderOnce, SharedString, StatefulInteractiveElement, StyleRefinement, Styled, Window, div,
     prelude::FluentBuilder as _, px, relative, rems, svg,
 };
@@ -181,9 +181,18 @@ impl Sizable for Checkbox {
     }
 }
 
-pub(crate) fn checkbox_check_icon(
+#[inline]
+pub(crate) fn indicator_size(size: Size) -> Rems {
+    rems(match size {
+        Size::XSmall => 0.75,
+        Size::Small => 0.875,
+        Size::Large => 1.125,
+        _ => 1.,
+    })
+}
+
+fn checked_indicator(
     id: ElementId,
-    size: Size,
     checked: bool,
     disabled: bool,
     window: &mut Window,
@@ -199,24 +208,13 @@ pub(crate) fn checkbox_check_icon(
         window,
         cx,
     );
-    let color = if disabled {
-        cx.theme().primary_foreground.opacity(0.5)
-    } else {
-        cx.theme().primary_foreground
-    };
-
     svg()
-        .absolute()
-        .top_px()
-        .left_px()
-        .map(|this| match size {
-            Size::XSmall => this.size_2(),
-            Size::Small => this.size_2p5(),
-            Size::Medium => this.size_3(),
-            Size::Large => this.size_3p5(),
-            _ => this.size_3(),
+        .size_full()
+        .text_color(if disabled {
+            crate::custom_style::reversed_text().opacity(0.5)
+        } else {
+            crate::custom_style::reversed_text()
         })
-        .text_color(color)
         .when(opacity > 0., |this| {
             this.path(crate::resolve_icon_path(IconName::Check.path(), cx))
                 .opacity(opacity)
@@ -226,13 +224,7 @@ pub(crate) fn checkbox_check_icon(
 impl RenderOnce for Checkbox {
     fn render(self, window: &mut Window, cx: &mut App) -> impl IntoElement {
         let checked = self.checked;
-        let has_content = self.label.is_some() || !self.children.is_empty();
-        let indicator_size = rems(match self.size {
-            Size::XSmall => 0.75,
-            Size::Small => 0.875,
-            Size::Large => 1.125,
-            _ => 1.,
-        });
+        let indicator_size = indicator_size(self.size);
 
         let base = self.base;
         let children = self.children;
@@ -246,15 +238,15 @@ impl RenderOnce for Checkbox {
             .clone();
         let is_focused = focus_handle.is_focused(window);
 
-        let unchecked_border = cx.theme().input;
-        let checked_color = cx.theme().primary;
+        let unchecked_border = crate::custom_style::border();
+        let checked_color = crate::custom_style::input_selected();
         let disabled_indicator_color = if checked {
             checked_color.opacity(0.5)
         } else {
             unchecked_border.opacity(0.5)
         };
         let radius = cx.theme().radius.min(px(4.));
-        let disabled_text_color = cx.theme().muted_foreground;
+        let disabled_text_color = crate::custom_style::muted_text();
         let instance_style = self.style.clone();
         base.role(self.role)
             .checked(checked)
@@ -280,9 +272,9 @@ impl RenderOnce for Checkbox {
             })
             .h_flex()
             .gap_2()
-            .items_start()
+            .items_center()
             .line_height(relative(1.))
-            .text_color(cx.theme().foreground)
+            .text_color(crate::custom_style::text())
             .map(|this| match self.size {
                 Size::Size(_) => this,
                 size => this.input_text_size(size),
@@ -296,33 +288,25 @@ impl RenderOnce for Checkbox {
                 CheckboxIndicator::new()
                     .checked(checked)
                     .disabled(self.disabled)
-                    .relative()
                     .size(indicator_size)
-                    // Center on the first 1.25em line, including when the label wraps.
-                    .when(has_content, |this| this.mt(indicator_size * 0.125))
                     .flex_shrink_0()
                     .border_1()
                     .rounded(radius)
                     .when(!checked, |this| {
-                        this.bg(cx.theme().input_background())
+                        this.bg(crate::custom_style::input())
                             .when(!self.disabled, |this| this.border_color(unchecked_border))
                     })
                     .styles(|styles| {
                         styles
-                            .checked(|style| {
-                                style
-                                    .border_color(checked_color)
-                                    .bg(cx.theme().tokens.primary)
-                            })
+                            .checked(|style| style.border_color(checked_color).bg(checked_color))
                             .disabled(|style| {
                                 style
                                     .border_color(disabled_indicator_color)
                                     .when(checked, |style| style.bg(disabled_indicator_color))
                             })
                     })
-                    .child(checkbox_check_icon(
+                    .child(checked_indicator(
                         self.id,
-                        self.size,
                         checked,
                         self.disabled,
                         window,
@@ -341,9 +325,9 @@ impl RenderOnce for Checkbox {
                                 this.child(
                                     div()
                                         .size_full()
-                                        .text_color(cx.theme().foreground)
+                                        .text_color(crate::custom_style::text())
                                         .when(self.disabled, |this| {
-                                            this.text_color(cx.theme().muted_foreground)
+                                            this.text_color(crate::custom_style::muted_text())
                                         })
                                         .child(label),
                                 )

@@ -1,7 +1,7 @@
 use gpui_kit::component::{
     ActiveTheme as _, Colorize, Sizable, Size, StyledExt,
     color_picker::{ColorPicker, ColorPickerEvent, ColorPickerState, ColorSelect},
-    h_flex, indigo_500, v_flex,
+    custom_style, h_flex, indigo_500, v_flex,
 };
 use gpui_kit::{
     App, AppContext, Context, Entity, Focusable, Hsla, InteractiveElement, IntoElement,
@@ -91,7 +91,7 @@ impl Render for ColorPickerStory {
                             .p_4()
                             .rounded(cx.theme().radius_lg)
                             .border_1()
-                            .border_color(cx.theme().border)
+                            .border_color(custom_style::border())
                             .child(
                                 h_flex()
                                     .w_full()
@@ -105,7 +105,7 @@ impl Render for ColorPickerStory {
                                             .child(
                                                 div()
                                                     .text_sm()
-                                                    .text_color(cx.theme().muted_foreground)
+                                                    .text_color(crate::custom_style::muted_text())
                                                     .child(
                                                         "Used for primary actions and highlights.",
                                                     ),
@@ -120,7 +120,7 @@ impl Render for ColorPickerStory {
                                         .overflow_hidden()
                                         .rounded(cx.theme().radius_lg)
                                         .border_1()
-                                        .border_color(cx.theme().border)
+                                        .border_color(custom_style::border())
                                         .child(
                                             div()
                                                 .w_full()
@@ -135,16 +135,15 @@ impl Render for ColorPickerStory {
                                                 .justify_between()
                                                 .px_3()
                                                 .py_2()
-                                                .bg(cx.theme().muted)
+                                                .bg(crate::custom_style::muted_bg())
                                                 .child(
                                                     div()
                                                         .text_sm()
-                                                        .text_color(cx.theme().muted_foreground)
+                                                        .text_color(crate::custom_style::muted_text())
                                                         .child("Selected color"),
                                                 )
                                                 .child(
                                                     div()
-                                                        .font_family("monospace")
                                                         .font_medium()
                                                         .child(color.to_hex()),
                                                 ),

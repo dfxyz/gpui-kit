@@ -722,8 +722,8 @@ impl gpui_base::RootPlugin for WindowState {
         surface.style().refine(
             &gpui::StyleRefinement::default()
                 .font_family(cx.theme().font_family.clone())
-                .bg(cx.theme().tokens.background)
-                .text_color(cx.theme().foreground)
+                .bg(crate::custom_style::base())
+                .text_color(crate::custom_style::text())
                 .rounded_tl(radii.top_left)
                 .rounded_tr(radii.top_right)
                 .rounded_bl(radii.bottom_left)

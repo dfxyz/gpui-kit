@@ -6,14 +6,11 @@ use gpui::{
 };
 use gpui_component_macros::IntoPlot;
 
-use crate::{
-    ActiveTheme,
-    plot::{
-        AxisLabelPlacement, Curve, PathCaches, Plot, PlotAppear, PlotAxis,
-        scale::{PlotValue, Scale, ScaleLinear, ScalePoint},
-        shape::Line,
-        tooltip::{CrossLine, Dot, Tooltip, TooltipState},
-    },
+use crate::plot::{
+    AxisLabelPlacement, Curve, PathCaches, Plot, PlotAppear, PlotAxis,
+    scale::{PlotValue, Scale, ScaleLinear, ScalePoint},
+    shape::Line,
+    tooltip::{CrossLine, Dot, Tooltip, TooltipState},
 };
 
 use super::{
@@ -411,7 +408,7 @@ where
             origin: bounds.origin + point(px(left), px(0.)),
             size: Size::new(bounds.size.width - px(left), bounds.size.height),
         };
-        let mut axis = PlotAxis::new().stroke(cx.theme().border);
+        let mut axis = PlotAxis::new().stroke(crate::custom_style::border());
         if self.x_axis {
             let labeled = labeled_items(
                 axis_point_count(self.point_count, self.data.len()),
@@ -424,7 +421,7 @@ where
                 &x,
                 axis_point_count(self.point_count, self.data.len()),
                 &labeled,
-                cx.theme().muted_foreground,
+                crate::custom_style::muted_text(),
             )
             .into_iter()
             .map(|mut label| {
@@ -440,7 +437,7 @@ where
         }
 
         // Draw line
-        let stroke = self.stroke.unwrap_or(cx.theme().chart_2);
+        let stroke = self.stroke.unwrap_or(crate::custom_style::chart_2());
         // The x domain holds one entry per datum, so a point's x is its index's
         // tick; looking its value up in the domain would make each paint O(n^2).
         let y_fn = y_fn.clone();
@@ -532,7 +529,7 @@ where
     ) -> Option<AnyElement> {
         let (x_fn, y_fn) = (self.x.as_ref()?, self.y.as_ref()?);
         let d = self.data.get(state.index)?;
-        let stroke = self.stroke.unwrap_or(cx.theme().chart_2);
+        let stroke = self.stroke.unwrap_or(crate::custom_style::chart_2());
         let name = self.name.clone().unwrap_or_default();
         let dot = *state.dots.first()?;
 
@@ -548,7 +545,7 @@ where
                 Dot::new(dot)
                     .size(HOVER_DOT_SIZE)
                     .halo(HOVER_HALO_SIZE)
-                    .stroke(cx.theme().background)
+                    .stroke(crate::custom_style::base())
                     .fill(stroke),
             ));
 

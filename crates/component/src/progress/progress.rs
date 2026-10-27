@@ -83,7 +83,7 @@ impl RenderOnce for Progress {
         let bg = self
             .color
             .map(Background::from)
-            .unwrap_or(cx.theme().tokens.progress_bar.into());
+            .unwrap_or(crate::custom_style::primary().into());
         let value = self.value;
         let loading = self.loading;
         let accessibility_label = self.accessibility_label;

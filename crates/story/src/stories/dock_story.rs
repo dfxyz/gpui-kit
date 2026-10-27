@@ -1,8 +1,8 @@
 use std::rc::Rc;
 
 use gpui_kit::component::{
-    ActiveTheme as _,
     button::Button,
+    custom_style,
     dock::{
         BasePanel, DockArea, DockLayout, DockPlacement, DockSkin, Panel, PanelEvent, panel_handle,
     },
@@ -66,11 +66,11 @@ impl Panel for DemoPanel {
 }
 
 impl Render for DemoPanel {
-    fn render(&mut self, _: &mut Window, cx: &mut Context<Self>) -> impl IntoElement {
+    fn render(&mut self, _: &mut Window, _cx: &mut Context<Self>) -> impl IntoElement {
         div()
             .size_full()
             .p_4()
-            .text_color(cx.theme().foreground)
+            .text_color(custom_style::text())
             .child(self.body.clone())
     }
 }
@@ -186,7 +186,7 @@ impl Render for DockStory {
                     .flex_1()
                     .min_h_0()
                     .border_t_1()
-                    .border_color(cx.theme().border)
+                    .border_color(custom_style::border())
                     .child(self.dock_area.clone()),
             )
     }

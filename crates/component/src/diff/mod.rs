@@ -789,11 +789,11 @@ fn render_diff(
         .size_full()
         .min_w_0()
         .min_h_0()
-        .bg(cx.theme().background)
-        .text_color(cx.theme().foreground)
+        .bg(crate::custom_style::base())
+        .text_color(crate::custom_style::text())
         .text_sm()
         .border_1()
-        .border_color(cx.theme().border)
+        .border_color(crate::custom_style::border())
         .child(body)
         .refine_style(&props.style)
         .into_any_element()
@@ -888,7 +888,7 @@ fn measure_code_width(
     lane_width: Pixels,
     mode: DiffMode,
     window: &mut Window,
-    cx: &App,
+    _cx: &App,
 ) -> Pixels {
     // Glyph widths vary within a font, so shape several candidates rather
     // than trusting the single widest by cell count.
@@ -926,7 +926,7 @@ fn measure_code_width(
                     &[TextRun {
                         len: text.len(),
                         font: font.clone(),
-                        color: cx.theme().foreground,
+                        color: crate::custom_style::text(),
                         background_color: None,
                         underline: None,
                         strikethrough: None,
@@ -1011,15 +1011,15 @@ fn render_hunk_separator(
     file: usize,
     hunk: usize,
     code: &CodePresentation,
-    cx: &App,
+    _cx: &App,
 ) -> AnyElement {
     let hunks = code.files[file].hunks();
     let row = h_flex()
         .w_full()
         .px_3()
-        .bg(cx.theme().muted.opacity(0.35))
+        .bg(crate::custom_style::muted_bg())
         .text_xs()
-        .text_color(cx.theme().muted_foreground);
+        .text_color(crate::custom_style::muted_text());
     match code.hunk_separator {
         DiffHunkSeparator::Metadata => row
             .h_6()
@@ -1042,7 +1042,7 @@ fn render_fold(
     file: usize,
     pairs: std::ops::Range<usize>,
     code: &CodePresentation,
-    cx: &App,
+    _cx: &App,
 ) -> AnyElement {
     let document = &code.files[file];
     // A fold bordering the hunk start has no source above it, and one
@@ -1061,7 +1061,7 @@ fn render_fold(
             .ghost()
             .xsmall()
             .w_auto()
-            .text_color(cx.theme().muted_foreground)
+            .text_color(crate::custom_style::muted_text())
             .on_click(move |_, _, cx| {
                 state.update(cx, |state, cx| {
                     state.expand_fold(file, pairs.clone(), expansion, cx)
@@ -1073,7 +1073,7 @@ fn render_fold(
         .h_6()
         .px_2()
         .gap_1()
-        .bg(cx.theme().muted.opacity(0.35))
+        .bg(crate::custom_style::muted_bg())
         .when(partial && pairs.start > hunk.start, |this| {
             this.child(
                 expand(("expand-down", pairs.start), FoldExpansion::Down)
@@ -1132,7 +1132,7 @@ fn render_conflict(
         .px_3()
         .gap_2()
         .text_xs()
-        .text_color(cx.theme().muted_foreground)
+        .text_color(crate::custom_style::muted_text())
         .bg(conflict_tint(Some(part), cx).opacity(0.25));
     if let Some(resolution) = resolution {
         let label = match resolution {
@@ -1141,7 +1141,7 @@ fn render_conflict(
             _ => t!("Diff.AcceptedBoth"),
         };
         return row
-            .bg(cx.theme().muted.opacity(0.35))
+            .bg(crate::custom_style::muted_bg())
             .child(label.to_string())
             .child(choose(
                 "undo-resolution",
@@ -1184,7 +1184,7 @@ fn conflict_tint(part: Option<ConflictPart>, cx: &App) -> Hsla {
     match part {
         Some(ConflictPart::Current) => cx.theme().success,
         Some(ConflictPart::Incoming) => cx.theme().info,
-        _ => cx.theme().muted_foreground,
+        _ => crate::custom_style::muted_text(),
     }
 }
 
@@ -1200,8 +1200,8 @@ fn render_file_header(
             .into_any_element();
     }
     let document = &code.files[file];
-    let foreground = cx.theme().muted_foreground;
-    let border = cx.theme().border;
+    let foreground = crate::custom_style::muted_text();
+    let border = crate::custom_style::border();
     let collapsed = code.state.read(cx).is_file_collapsed(document.path());
     let content = if let Some(render) = &code.header.content {
         render(document, window, cx)
@@ -1318,7 +1318,7 @@ fn file_annotations(
 }
 
 /// Summarizes a file without source rows: binary, metadata-only or empty.
-fn render_notice(file: &DiffFile, cx: &App) -> AnyElement {
+fn render_notice(file: &DiffFile, _cx: &App) -> AnyElement {
     let message = if !file.has_changes() {
         t!("Diff.NoChanges")
     } else if file.is_binary() {
@@ -1334,7 +1334,7 @@ fn render_notice(file: &DiffFile, cx: &App) -> AnyElement {
         .py_2()
         .gap_1()
         .text_xs()
-        .text_color(cx.theme().muted_foreground)
+        .text_color(crate::custom_style::muted_text())
         .children(
             file.extended_headers()
                 .iter()
@@ -1350,7 +1350,7 @@ fn render_gutter(
     side: DiffSide,
     ix: Option<usize>,
     code: &CodePresentation,
-    cx: &App,
+    _cx: &App,
 ) -> AnyElement {
     let hover = matches!(
         code.hover_highlight,
@@ -1366,7 +1366,7 @@ fn render_gutter(
         .w(code.gutter_width)
         .pr_1()
         .when(hover, |this| {
-            this.hover(|this| this.bg(cx.theme().list_hover))
+            this.hover(|this| this.bg(crate::custom_style::common_hover_bg()))
         })
         .when_some(ix, |this, ix| {
             let position = code.position(file, side, ix);
@@ -1385,8 +1385,8 @@ fn render_gutter(
                     .items_center()
                     .justify_end()
                     .text_size(code.font_size)
-                    .text_color(cx.theme().muted_foreground)
-                    .hover(|this| this.text_color(cx.theme().foreground))
+                    .text_color(crate::custom_style::editor_muted_text())
+                    .hover(|this| this.text_color(crate::custom_style::text()))
                     .role(gpui::accesskit::Role::Button)
                     .aria_label(
                         t!(
@@ -1443,10 +1443,11 @@ fn render_cell(
         .min_w_0()
         .flex_shrink_0()
         .when(side == DiffSide::Original, |this| {
-            this.border_r_1().border_color(cx.theme().border)
+            this.border_r_1()
+                .border_color(crate::custom_style::border())
         })
         .when(ix.is_none(), |this| {
-            this.bg(cx.theme().muted.opacity(0.3))
+            this.bg(crate::custom_style::muted_bg().blend(gpui::black().opacity(0.05)))
                 .child(div().h(code.row_height))
         });
     let Some(ix) = ix else {
@@ -1577,7 +1578,7 @@ fn line_highlights(
         highlights.push((
             0..line.display().len(),
             HighlightStyle {
-                background_color: Some(cx.theme().selection),
+                background_color: Some(crate::custom_style::selection()),
                 ..Default::default()
             },
         ));
@@ -1624,8 +1625,8 @@ fn add_annotation_button(
             .items_center()
             .justify_center()
             .rounded(cx.theme().radius)
-            .bg(cx.theme().primary)
-            .text_color(cx.theme().primary_foreground)
+            .bg(crate::custom_style::primary())
+            .text_color(crate::custom_style::reversed_text())
             .when(!at_selection_end, |this| {
                 this.opacity(0.)
                     .group_hover("diff-line", |this| this.opacity(1.))
@@ -1733,7 +1734,7 @@ fn code_line(
             .text_color(if changed {
                 status
             } else {
-                cx.theme().muted_foreground
+                crate::custom_style::muted_text()
             })
             .child(match (changed && conflict_part.is_none(), side) {
                 (false, _) => " ",
@@ -1814,9 +1815,9 @@ fn code_line(
         .when_some(decoration, |this, background| {
             this.child(div().absolute().inset_0().bg(background))
         })
-        .when(selected, |this| this.bg(cx.theme().selection))
+        .when(selected, |this| this.bg(crate::custom_style::selection()))
         .when(hover_line && !selected, |this| {
-            this.hover(|this| this.bg(cx.theme().list_hover))
+            this.hover(|this| this.bg(crate::custom_style::common_hover_bg()))
         })
         .when_some(code.on_line_hover.clone(), |this, handler| {
             let position = position.clone();
@@ -1909,7 +1910,7 @@ fn line_extras(
                 .h_6()
                 .px_3()
                 .text_xs()
-                .text_color(cx.theme().muted_foreground)
+                .text_color(crate::custom_style::muted_text())
                 .child(label)
                 .into_any_element(),
         );
@@ -1955,8 +1956,8 @@ fn annotation_elements(
                 .py_3()
                 .border_t_1()
                 .border_b_1()
-                .border_color(cx.theme().border)
-                .bg(cx.theme().muted.opacity(0.18))
+                .border_color(crate::custom_style::border())
+                .bg(crate::custom_style::muted_bg().opacity(0.5))
                 .child(render(annotation, window, cx))
                 .into_any_element()
         })

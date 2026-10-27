@@ -3,6 +3,7 @@ use gpui_kit::component::{
     ActiveTheme as _, Disableable as _, IconName, IndexPath, Sizable as _, Size,
     button::{Button, Toggle},
     combobox::{Combobox, ComboboxState},
+    custom_style,
     dock::PanelControl,
     input::{Input, InputState},
     searchable_list::SearchableVec,
@@ -167,7 +168,7 @@ impl Render for ToolbarStory {
                             .with_size(self.size)
                             .disabled(self.disabled)
                             .border_1()
-                            .border_color(cx.theme().border)
+                            .border_color(custom_style::border())
                             .rounded(cx.theme().radius)
                             .child(
                                 ToolbarGroup::new("document-group")
@@ -259,7 +260,7 @@ impl Render for ToolbarStory {
                             .with_size(self.size)
                             .disabled(self.disabled)
                             .border_1()
-                            .border_color(cx.theme().border)
+                            .border_color(custom_style::border())
                             .rounded(cx.theme().radius)
                             .child(
                                 Input::new(&self.query)

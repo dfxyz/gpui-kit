@@ -105,7 +105,7 @@ pub(crate) fn render_resize_handle(
         // nothing to give: shrinking it collapses the divider.
         .flex_none()
         .flex()
-        .bg(cx.theme().border)
+        .bg(crate::custom_style::border())
         // Along the hairline the pill is far shorter than the line, so centring
         // it there is safe. Across the hairline it is thicker than the line and
         // has to overhang, and neither flex alignment can be trusted to centre
@@ -120,7 +120,7 @@ pub(crate) fn render_resize_handle(
                 // `flex_none` keeps the one-pixel line from squashing it.
                 .flex_none()
                 .rounded(cx.theme().radius_full())
-                .bg(cx.theme().muted_foreground)
+                .bg(crate::custom_style::muted_text())
                 .opacity(opacity)
                 // Half the overhang, pulled back so the pill straddles the
                 // hairline evenly.

@@ -1,6 +1,7 @@
 use gpui_kit::component::{
-    ActiveTheme, IconName, Sizable as _, Size, StyledExt,
+    IconName, Sizable as _, Size, StyledExt,
     avatar::{Avatar, AvatarGroup},
+    custom_style,
     dock::PanelControl,
     v_flex,
 };
@@ -138,7 +139,7 @@ impl Render for AvatarStory {
                             .src(AVATARS[2])
                             .with_size(px(100.))
                             .border_3()
-                            .border_color(cx.theme().foreground)
+                            .border_color(custom_style::text())
                             .shadow_sm(),
                     ),
             )

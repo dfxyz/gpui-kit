@@ -1,5 +1,5 @@
 use crate::section;
-use gpui_kit::component::{ActiveTheme as _, dock::PanelControl, v_flex};
+use gpui_kit::component::{ActiveTheme as _, custom_style, dock::PanelControl, v_flex};
 use gpui_kit::{
     App, AppContext, Context, Entity, FocusHandle, Focusable, IntoElement, ParentElement as _,
     Render, Styled, Window, div, img, px,
@@ -60,7 +60,7 @@ impl Render for ImageStory {
                         .justify_center()
                         .rounded(cx.theme().radius_lg)
                         .border_1()
-                        .border_color(cx.theme().border)
+                        .border_color(custom_style::border())
                         .child(
                             img("https://pub.lbkrs.com/files/202503/vEnnmgUM6bo362ya/sdk.svg")
                                 .h_24(),

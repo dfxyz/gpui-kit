@@ -1,6 +1,5 @@
 use gpui_kit::component::{
-    ActiveTheme, StyledExt, avatar::Avatar, button::Button, h_flex, hover_card::HoverCard,
-    link::Link, v_flex,
+    StyledExt, avatar::Avatar, button::Button, h_flex, hover_card::HoverCard, link::Link, v_flex,
 };
 use gpui_kit::{
     Anchor, App, AppContext as _, Context, Entity, IntoElement, ParentElement as _, Render,
@@ -37,7 +36,7 @@ impl Render for HoverCardStory {
 
 impl HoverCardStory {
     /// Basic hover card example
-    fn render_basic_example(&self, cx: &mut Context<Self>) -> impl IntoElement {
+    fn render_basic_example(&self, _cx: &mut Context<Self>) -> impl IntoElement {
         section("Default")
             .description("Shows supporting information without changing the current view.")
             .w(px(520.))
@@ -46,7 +45,7 @@ impl HoverCardStory {
                 .trigger(
                     div()
                         .child("Hover over me")
-                        .text_color(cx.theme().primary)
+                        .text_color(crate::custom_style::primary())
                         .cursor_pointer()
                         .text_sm(),
                 )
@@ -63,7 +62,7 @@ impl HoverCardStory {
                         .child(
                             div()
                                 .child("You can display rich content when hovering over a trigger element.")
-                                .text_color(cx.theme().muted_foreground)
+                                .text_color(crate::custom_style::muted_text())
                                 .text_sm(),
                         ),
                 ),
@@ -80,7 +79,7 @@ impl HoverCardStory {
                     .child(
                         HoverCard::new("user-profile")
                             .trigger(Link::new("user-profile-link").child("@huacnlee"))
-                            .content(|_, _, cx| {
+                            .content(|_, _, _cx| {
                                 h_flex()
                                     .w(px(320.))
                                     .gap_3()
@@ -98,7 +97,7 @@ impl HoverCardStory {
                                             .child(
                                                 div()
                                                     .child("@huacnlee")
-                                                    .text_color(cx.theme().link)
+                                                    .text_color(crate::custom_style::blue_text())
                                                     .text_sm(),
                                             )
                                             .child(

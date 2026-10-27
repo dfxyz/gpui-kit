@@ -280,7 +280,7 @@ impl Element for CodeText {
                 layers.push((
                     line.display_range(start - line.source().start..end - line.source().start),
                     HighlightStyle {
-                        background_color: Some(crate::ActiveTheme::theme(cx).selection),
+                        background_color: Some(crate::custom_style::selection()),
                         ..Default::default()
                     },
                 ));

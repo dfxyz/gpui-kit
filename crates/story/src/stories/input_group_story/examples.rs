@@ -2,6 +2,7 @@ use super::*;
 use gpui_kit::component::{
     StyledExt as _,
     button::Button,
+    custom_style,
     form::{Field, Form},
     group_box::GroupBox,
     h_flex,
@@ -296,7 +297,7 @@ impl InputGroupStory {
                     .child(InputGroupText::new().child("https://")))))
     }
 
-    pub(super) fn render_labels(&self, cx: &Context<Self>) -> impl IntoElement {
+    pub(super) fn render_labels(&self, _cx: &Context<Self>) -> impl IntoElement {
         section("Labels and descriptions").child(
             column()
                 .child(labeled(
@@ -309,7 +310,7 @@ impl InputGroupStory {
                     self.extra_input("label-email", "Notification email").addon(
                         InputGroupAddon::new("label-email-addon")
                             .align(Align::BlockStart)
-                            .child(Label::new("Email").text_color(cx.theme().foreground))
+                            .child(Label::new("Email").text_color(custom_style::text()))
                             .child(
                                 InputGroupButton::new("label-email-help")
                                     .ml_auto()

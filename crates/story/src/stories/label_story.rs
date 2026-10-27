@@ -3,7 +3,7 @@ use gpui_kit::*;
 use gpui_kit::component::{
     ActiveTheme, IconName, StyledExt,
     button::{Button, ButtonVariants as _, Toggle},
-    h_flex,
+    custom_style, h_flex,
     input::{Input, InputEvent, InputState},
     label::{HighlightsMatch, Label},
     v_flex,
@@ -159,7 +159,7 @@ impl Render for LabelStory {
                                     .p_4()
                                     .rounded(cx.theme().radius_lg)
                                     .border_1()
-                                    .border_color(cx.theme().border)
+                                    .border_color(custom_style::border())
                                     .child(
                                         Label::new("Design system documentation")
                                             .highlights(ht.clone())
@@ -189,7 +189,7 @@ impl Render for LabelStory {
                                     .gap_2()
                                     .p_4()
                                     .rounded(cx.theme().radius_lg)
-                                    .bg(cx.theme().muted.opacity(0.4))
+                                    .bg(custom_style::muted_bg())
                                     .child(Label::new("Start aligned"))
                                     .child(Label::new("Center aligned").text_center())
                                     .child(Label::new("End aligned").text_right()),
@@ -217,14 +217,14 @@ impl Render for LabelStory {
                             .p_4()
                             .rounded(cx.theme().radius_lg)
                             .border_1()
-                            .border_color(cx.theme().border)
+                            .border_color(custom_style::border())
                             .child(
                                 v_flex()
                                     .gap_1()
                                     .child(
                                         div()
                                             .text_xs()
-                                            .text_color(cx.theme().muted_foreground)
+                                            .text_color(crate::custom_style::muted_text())
                                             .child("Available balance"),
                                     )
                                     .child(

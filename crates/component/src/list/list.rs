@@ -4,13 +4,13 @@ use std::ops::Range;
 use crate::actions::{Cancel, Confirm, SelectDown, SelectUp};
 use crate::input::InputState;
 use crate::list::cache::{MeasuredEntrySize, RowEntry, RowsCache};
+use crate::{Icon, IndexPath, Selectable, Sizable, StyledExt};
 use crate::{
-    ActiveTheme, IconName, Size,
+    IconName, Size,
     input::{Input, InputEvent},
     scroll::Scrollbar,
     v_flex,
 };
-use crate::{Icon, IndexPath, Selectable, Sizable, StyledExt};
 use crate::{VirtualListScrollHandle, list::ListDelegate, v_virtual_list};
 use gpui::{
     App, AvailableSpace, ClickEvent, Context, DefiniteLength, EdgesRefinement, EventEmitter,
@@ -697,13 +697,13 @@ where
                             _ => this.px_2(),
                         })
                         .border_b_1()
-                        .border_color(cx.theme().border)
+                        .border_color(crate::custom_style::border())
                         .child(
                             Input::new(&input)
                                 .with_size(self.options.size)
                                 .prefix(
                                     Icon::new(IconName::Search)
-                                        .text_color(cx.theme().muted_foreground),
+                                        .text_color(crate::custom_style::muted_text()),
                                 )
                                 .cleanable(true)
                                 .p_0()

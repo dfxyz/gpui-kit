@@ -245,11 +245,11 @@ where
             .on_action(window.listener_for(&self.state, TableState::action_select_last_column))
             .on_action(window.listener_for(&self.state, TableState::action_select_page_up))
             .on_action(window.listener_for(&self.state, TableState::action_select_page_down))
-            .bg(cx.theme().tokens.table)
+            .bg(crate::custom_style::base())
             .when(bordered, |this| {
                 this.rounded(cx.theme().radius)
                     .border_1()
-                    .border_color(cx.theme().border)
+                    .border_color(crate::custom_style::border())
             })
             .child(self.state)
             // Clicking a row focuses the table too, so only keyboard focus

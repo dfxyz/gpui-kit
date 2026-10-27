@@ -8,7 +8,7 @@ use gpui::{
 use rust_i18n::t;
 
 use crate::{
-    ActiveTheme, Icon, IconName, Sizable, StyledExt,
+    Icon, IconName, Sizable, StyledExt,
     button::{Button, ButtonVariants},
     h_flex,
     label::Label,
@@ -245,7 +245,7 @@ impl SettingPage {
                     .p_4()
                     .gap_3()
                     .border_b_1()
-                    .border_color(cx.theme().border)
+                    .border_color(crate::custom_style::border())
                     .refine_style(&self.header_style)
                     .child(
                         h_flex()
@@ -279,7 +279,7 @@ impl SettingPage {
                         this.child(
                             Label::new(description)
                                 .text_sm()
-                                .text_color(cx.theme().muted_foreground),
+                                .text_color(crate::custom_style::muted_text()),
                         )
                     }),
             )

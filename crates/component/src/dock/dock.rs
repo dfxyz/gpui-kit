@@ -17,7 +17,6 @@ use gpui_base::{
 };
 
 use crate::{
-    ActiveTheme as _,
     dock::{
         DockSkin, SkinShared, invalid_panel::InvalidPanel, panel_handle, report_user_toggle,
         tab_panel::TabGroupSkin,
@@ -58,12 +57,12 @@ impl DockAreaRenderer for DockSkin {
         Some(render_resize_handle(handle, window, cx))
     }
 
-    fn split_frame(&self, node: NodeId, _: Axis, _: &mut Window, cx: &mut App) -> Stateful<Div> {
+    fn split_frame(&self, node: NodeId, _: Axis, _: &mut Window, _cx: &mut App) -> Stateful<Div> {
         // The size is base's; the background is this skin's, and is the only
         // reason this hook is implemented at all.
         div()
             .id(("dock-split-frame", node.as_u64()))
-            .bg(cx.theme().tokens.tab_bar)
+            .bg(crate::custom_style::muted_bg())
     }
 
     fn render_dock(

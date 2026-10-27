@@ -1,4 +1,4 @@
-use gpui_kit::component::{button::*, input::*, select::*, separator::*, *};
+use gpui_kit::component::{button::*, custom_style, input::*, select::*, separator::*, *};
 use gpui_kit::*;
 use itertools::Itertools as _;
 use serde::{Deserialize, Serialize};
@@ -311,11 +311,11 @@ impl Render for SelectStory {
                             .w(px(280.))
                             .with_size(self.size)
                             .disabled(self.disabled)
-                            .empty(|_, cx| {
+                            .empty(|_, _cx| {
                                 h_flex()
                                     .h_24()
                                     .justify_center()
-                                    .text_color(cx.theme().muted_foreground)
+                                    .text_color(crate::custom_style::muted_text())
                                     .child("No Data")
                             }),
                     ),
@@ -328,9 +328,9 @@ impl Render for SelectStory {
                     .child(
                         h_flex()
                             .border_1()
-                            .border_color(cx.theme().input)
+                            .border_color(custom_style::border())
                             .rounded(cx.theme().radius_lg)
-                            .text_color(cx.theme().secondary_foreground)
+                            .text_color(custom_style::text())
                             .w(px(280.))
                             .gap_1()
                             .child(

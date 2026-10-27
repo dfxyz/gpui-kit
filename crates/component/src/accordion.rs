@@ -107,7 +107,7 @@ impl RenderOnce for Accordion {
             // joined by their separators.
             .when(self.bordered, |this| {
                 this.border_1()
-                    .border_color(cx.theme().border)
+                    .border_color(crate::custom_style::border())
                     .rounded(cx.theme().radius_lg)
                     .overflow_hidden()
             })
@@ -303,7 +303,9 @@ impl RenderOnce for AccordionItem {
                 Size::Large => this.py_3().px_4(),
                 _ => this.py_2().px_3(),
             })
-            .when(self.open, |this| this.text_color(cx.theme().foreground))
+            .when(self.open, |this| {
+                this.text_color(crate::custom_style::text())
+            })
             .refine_style(&self.title_style)
             .child(
                 h_flex()
@@ -327,7 +329,7 @@ impl RenderOnce for AccordionItem {
                     Icon::new(IconName::ChevronDown)
                         .xsmall()
                         .flex_none()
-                        .text_color(cx.theme().muted_foreground)
+                        .text_color(crate::custom_style::muted_text())
                         .rotate(percentage(if self.open { 0.5 } else { 0. })),
                 )
                 .when_some(self.on_toggle_click, |this, on_toggle_click| {
@@ -375,10 +377,11 @@ impl RenderOnce for AccordionItem {
                 )
                 .v_flex()
                 .w_full()
-                .bg(cx.theme().tokens.accordion)
+                .bg(crate::custom_style::base())
                 .overflow_hidden()
                 .when(!self.last, |this| {
-                    this.border_b_1().border_color(cx.theme().border)
+                    this.border_b_1()
+                        .border_color(crate::custom_style::border())
                 })
                 .text_size(text_size)
                 .refine_style(&self.style),

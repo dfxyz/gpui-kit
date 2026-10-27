@@ -1,6 +1,7 @@
 use gpui_kit::{
     App, AppContext, Axis, Context, Element, Entity, FocusHandle, Focusable, Global, IntoElement,
-    ParentElement as _, Render, SharedString, Styled, Window, prelude::FluentBuilder, px,
+    ParentElement as _, Render, SharedString, Styled, Window, base::Selectable as _,
+    prelude::FluentBuilder, px,
 };
 
 use gpui_kit::component::{
@@ -369,13 +370,7 @@ impl SettingsStory {
                                         Button::new(value)
                                             .label(value)
                                             .with_size(options.size())
-                                            .map(|this| {
-                                                if current == value {
-                                                    this.primary()
-                                                } else {
-                                                    this.outline()
-                                                }
-                                            })
+                                            .selected(current == value)
                                             .on_click(move |_, _, cx| {
                                                 AppSettings::global_mut(cx).density = value.into();
                                             })
@@ -454,7 +449,7 @@ impl SettingsStory {
                 .resettable(resettable)
                 .icon(Icon::new(IconName::Info))
                 .group(
-                    SettingGroup::new().item(SettingItem::render(|_options, _, cx| {
+                    SettingGroup::new().item(SettingItem::render(|_options, _, _cx| {
                         v_flex()
                             .gap_3()
                             .w_full()
@@ -468,7 +463,7 @@ impl SettingsStory {
                                     desktop application by using GPUI.",
                                 )
                                 .text_sm()
-                                .text_color(cx.theme().muted_foreground),
+                                .text_color(crate::custom_style::muted_text()),
                             )
                             .into_any()
                     })),

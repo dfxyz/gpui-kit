@@ -4,6 +4,7 @@ use gpui_kit::component::{
     TITLE_BAR_HEIGHT, TitleBar, WindowExt,
     button::Button,
     command::{Command, CommandEntry, CommandState},
+    custom_style,
     dock::{
         BasePanel, Panel, PanelControl, PanelEvent, PanelInfo, PanelState, TitleStyle,
         panel_handle, register_panel,
@@ -232,6 +233,11 @@ pub fn init(cx: &mut App) {
     themes::init(cx);
     stories::init(cx);
 
+    #[cfg(all(debug_assertions, not(target_family = "wasm")))]
+    if let Ok(dir) = std::env::current_dir() {
+        gpui_kit::component::custom_style::watch(dir.join("custom_style.json"), cx);
+    }
+
     #[cfg(not(target_family = "wasm"))]
     {
         let http_client =
@@ -395,7 +401,7 @@ impl RenderOnce for StorySection {
                                 this.child(
                                     div()
                                         .text_xs()
-                                        .text_color(cx.theme().muted_foreground)
+                                        .text_color(crate::custom_style::muted_text())
                                         .child(description),
                                 )
                             }),
@@ -814,11 +820,11 @@ impl Panel for StoryContainer {
         self.name.clone().into_any_element()
     }
 
-    fn title_style(&self, cx: &App) -> Option<TitleStyle> {
+    fn title_style(&self, _cx: &App) -> Option<TitleStyle> {
         if let Some(bg) = self.title_bg {
             Some(TitleStyle {
                 background: bg,
-                foreground: cx.theme().foreground,
+                foreground: custom_style::text(),
             })
         } else {
             None

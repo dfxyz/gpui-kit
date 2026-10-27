@@ -6,7 +6,7 @@ use gpui::{
     Pixels, Refineable as _, RenderOnce, ScrollHandle, SharedString,
     StatefulInteractiveElement as _, StyleRefinement, Styled, StyledImage as _, Window, black,
     canvas, div, img, linear_color_stop, linear_gradient, point, prelude::FluentBuilder as _, px,
-    relative, rems, white,
+    relative, rems,
 };
 use gpui_base::{
     is_mobile,
@@ -397,7 +397,6 @@ impl Attachment {
 
 impl RenderOnce for Attachment {
     fn render(mut self, _: &mut Window, cx: &mut App) -> impl IntoElement {
-        let tokens = cx.theme().semantic_tokens();
         let size = self.size;
         let axis = self.axis;
         let status = self.status;
@@ -424,18 +423,18 @@ impl RenderOnce for Attachment {
             .rounded(radius)
             .border_1()
             .border_color(if status.is_failed() {
-                tokens.colors.destructive
+                crate::custom_style::red_text().opacity(crate::custom_style::text_to_border_alpha())
             } else {
-                tokens.colors.border
+                crate::custom_style::border()
             })
             .when(status.is_pending(), |this| this.border_dashed())
-            .bg(tokens.colors.background)
-            .text_color(tokens.colors.foreground)
+            .bg(crate::custom_style::base())
+            .text_color(crate::custom_style::text())
             // Register `hover` unconditionally: a conditionally registered
             // hover style stays cached when the condition later flips off.
             .hover(move |style| {
                 if clickable {
-                    style.bg(tokens.colors.muted.opacity(0.5))
+                    style.bg(crate::custom_style::common_hover_bg().opacity(0.5))
                 } else {
                     style
                 }
@@ -470,7 +469,7 @@ impl RenderOnce for Attachment {
             // A thin bar along the bottom edge tracks the upload, hugging the
             // card's rounded corners.
             .when_some(progress_bar, |this, percent| {
-                this.child(upload_bar(percent, radius, tokens.colors.primary))
+                this.child(upload_bar(percent, radius, crate::custom_style::primary()))
             })
             .when_some(self.id.zip(self.on_click), |this, (id, on_click)| {
                 // The click layer is painted before the actions slot, so the
@@ -594,28 +593,24 @@ fn upload_bar_path(bounds: Bounds<Pixels>, percent: f32, radius: Pixels) -> Opti
 /// The glyphs go in as children: an icon-only `Button` scales its icon with
 /// the button, and this disc wants a glyph much smaller than that.
 fn remove_button(id: ElementId, on_remove: ControlHandler, cx: &App) -> Button {
-    let tokens = cx.theme().semantic_tokens();
     Button::new((id, "remove"))
-        // The custom variant thins its color to 20%; the disc must stay
-        // opaque, so the surface is set on the instance instead.
         .custom(
             ButtonCustomVariant::new(cx)
-                .hover(tokens.colors.muted)
-                .active(tokens.colors.muted)
-                .foreground(tokens.colors.foreground),
+                .hover(crate::custom_style::base().blend(crate::custom_style::common_hover_bg()))
+                .active(crate::custom_style::base().blend(crate::custom_style::common_active_bg())),
         )
         .accessibility_label(t!("Attachment.Remove"))
         .child(
             Icon::new(IconName::Close)
                 .size(px(10.))
-                .text_color(tokens.colors.foreground),
+                .text_color(crate::custom_style::text()),
         )
         .size(REMOVE_BUTTON_SIZE)
         .p_0()
         .rounded(cx.theme().radius_full())
-        .bg(tokens.colors.background)
+        .bg(crate::custom_style::base())
         .border_1()
-        .border_color(tokens.colors.border)
+        .border_color(crate::custom_style::border())
         .shadow_sm()
         .on_click(move |event, window, cx| on_remove(event, window, cx))
 }
@@ -623,19 +618,22 @@ fn remove_button(id: ElementId, on_remove: ControlHandler, cx: &App) -> Button {
 /// The retry control over a failed image preview: a surface-colored disc
 /// with the destructive refresh glyph.
 fn retry_button(id: ElementId, on_retry: ControlHandler, cx: &App) -> Button {
-    let tokens = cx.theme().semantic_tokens();
     Button::new((id, "retry"))
-        .ghost()
+        .custom(
+            ButtonCustomVariant::new(cx)
+                .hover(crate::custom_style::base().blend(crate::custom_style::common_hover_bg()))
+                .active(crate::custom_style::base().blend(crate::custom_style::common_active_bg())),
+        )
         .accessibility_label(t!("Attachment.Retry"))
         .child(
             Icon::new(IconName::RefreshCw)
                 .size(px(12.))
-                .text_color(tokens.colors.destructive),
+                .text_color(crate::custom_style::red_text()),
         )
         .size(RETRY_BUTTON_SIZE)
         .p_0()
         .rounded(cx.theme().radius_full())
-        .bg(tokens.colors.background)
+        .bg(crate::custom_style::base())
         .shadow_sm()
         .on_click(move |event, window, cx| on_retry(event, window, cx))
 }
@@ -794,7 +792,7 @@ impl RenderOnce for AttachmentMedia {
         let glyph = if has_source {
             None
         } else if status.is_in_progress() {
-            Some(busy(tokens.colors.primary))
+            Some(busy(crate::custom_style::primary()))
         } else if status.is_failed() {
             Some(match self.retry.clone() {
                 Some((id, on_retry)) => retry_button(id, on_retry, cx).into_any_element(),
@@ -808,13 +806,13 @@ impl RenderOnce for AttachmentMedia {
         let scrim = if !has_source {
             None
         } else if status.is_in_progress() {
-            Some((PROGRESS_SCRIM, busy(white())))
+            Some((PROGRESS_SCRIM, busy(crate::custom_style::reversed_text())))
         } else if status.is_failed() {
             let control = match self.retry {
                 Some((id, on_retry)) => retry_button(id, on_retry, cx).into_any_element(),
                 None => Icon::new(IconName::Ban)
                     .size(glyph_size)
-                    .text_color(white())
+                    .text_color(crate::custom_style::reversed_text())
                     .into_any_element(),
             };
             Some((FAILED_SCRIM, control))
@@ -839,14 +837,14 @@ impl RenderOnce for AttachmentMedia {
             })
             .rounded(radius)
             .bg(if failed_media {
-                tokens.colors.destructive.opacity(0.1)
+                crate::custom_style::red_text().opacity(crate::custom_style::text_to_bg_alpha())
             } else {
-                tokens.colors.muted
+                crate::custom_style::muted_bg()
             })
             .text_color(if failed_media {
-                tokens.colors.destructive
+                crate::custom_style::red_text()
             } else {
-                tokens.colors.foreground
+                crate::custom_style::text()
             })
             .when_some(source, |this, source| {
                 // gpui clips rectangularly, so the slot's `overflow_hidden` cannot
@@ -985,8 +983,7 @@ impl Styled for AttachmentContent {
 }
 
 impl RenderOnce for AttachmentContent {
-    fn render(self, _: &mut Window, cx: &mut App) -> impl IntoElement {
-        let tokens = cx.theme().semantic_tokens();
+    fn render(self, _: &mut Window, _cx: &mut App) -> impl IntoElement {
         // The retry link follows the first typed description while failed;
         // the percentage joins it while uploading.
         let mut retry = self.retry.filter(|_| self.status.is_failed());
@@ -1010,7 +1007,7 @@ impl RenderOnce for AttachmentContent {
                             .child(
                                 div()
                                     .text_xs()
-                                    .text_color(tokens.colors.muted_foreground)
+                                    .text_color(crate::custom_style::muted_text())
                                     .child("·"),
                             )
                             .child(
@@ -1135,13 +1132,12 @@ impl Styled for AttachmentDescription {
 }
 
 impl RenderOnce for AttachmentDescription {
-    fn render(self, _: &mut Window, cx: &mut App) -> impl IntoElement {
-        let tokens = cx.theme().semantic_tokens();
+    fn render(self, _: &mut Window, _: &mut App) -> impl IntoElement {
         let color = self
             .status
             .is_some_and(AttachmentStatus::is_failed)
-            .then_some(tokens.colors.destructive)
-            .unwrap_or(tokens.colors.muted_foreground);
+            .then_some(crate::custom_style::red_text())
+            .unwrap_or(crate::custom_style::muted_text());
 
         div()
             .max_w_full()

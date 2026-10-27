@@ -61,7 +61,7 @@ pub trait Colorize: Sized {
 }
 
 /// Helper functions for Oklab color space conversions
-mod oklab {
+pub(crate) mod oklab {
     use gpui::Rgba;
 
     /// Convert sRGB component to linear RGB
@@ -112,6 +112,15 @@ mod oklab {
     /// Convert Oklab to RGB color space
     #[allow(non_snake_case)]
     pub fn oklab_to_rgb(L: f32, a: f32, b: f32) -> Rgba {
+        let mut color = oklab_to_rgb_unclamped(L, a, b);
+        color.r = color.r.clamp(0.0, 1.0);
+        color.g = color.g.clamp(0.0, 1.0);
+        color.b = color.b.clamp(0.0, 1.0);
+        color
+    }
+
+    #[allow(non_snake_case)]
+    pub fn oklab_to_rgb_unclamped(L: f32, a: f32, b: f32) -> Rgba {
         // Oklab to LMS
         let l_ = L + 0.3963377774 * a + 0.2158037573 * b;
         let m_ = L - 0.1055613458 * a - 0.0638541728 * b;
@@ -128,9 +137,9 @@ mod oklab {
 
         // Linear RGB to sRGB
         Rgba {
-            r: from_linear(lr).clamp(0.0, 1.0),
-            g: from_linear(lg).clamp(0.0, 1.0),
-            b: from_linear(lb).clamp(0.0, 1.0),
+            r: from_linear(lr),
+            g: from_linear(lg),
+            b: from_linear(lb),
             a: 1.0,
         }
     }

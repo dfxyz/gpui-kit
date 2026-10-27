@@ -3,7 +3,7 @@ use gpui_kit::component::{
     Icon, IconName, ThemeStyled as _,
     button::{Button, ButtonVariants as _},
     command::{CommandEntry, CommandItem},
-    h_flex,
+    custom_style, h_flex,
     input::{Input, InputEvent, InputState},
     separator::Separator,
     sidebar::{Sidebar, SidebarCollapsible, SidebarHeader, SidebarMenu, SidebarMenuItem},
@@ -310,7 +310,7 @@ impl Render for Gallery {
                     .id("header")
                     .p_4()
                     .border_b_1()
-                    .border_color(cx.theme().border)
+                    .border_color(custom_style::border())
                     .justify_between()
                     .items_start()
                     .child(
@@ -319,7 +319,7 @@ impl Render for Gallery {
                             .child(div().text_2xl().font_semibold().child(story_name))
                             .child(
                                 div()
-                                    .text_color(cx.theme().muted_foreground)
+                                    .text_color(crate::custom_style::muted_text())
                                     .child(description),
                             ),
                     ),
@@ -356,8 +356,8 @@ impl Render for Gallery {
                                             .items_center()
                                             .justify_center()
                                             .rounded(cx.theme().radius_lg)
-                                            .bg(cx.theme().primary)
-                                            .text_color(cx.theme().primary_foreground)
+                                            .bg(custom_style::primary())
+                                            .text_color(custom_style::reversed_text())
                                             .size_8()
                                             .flex_shrink_0()
                                             .child(Icon::new(IconName::GalleryVerticalEnd)),
@@ -373,7 +373,7 @@ impl Render for Gallery {
                                             .child("GPUI Component")
                                             .child(
                                                 div()
-                                                    .text_color(cx.theme().muted_foreground)
+                                                    .text_color(crate::custom_style::muted_text())
                                                     .child("Component showcase")
                                                     .text_xs(),
                                             ),
@@ -381,7 +381,8 @@ impl Render for Gallery {
                             )
                             .child(
                                 div()
-                                    .bg(cx.theme().sidebar_accent)
+                                    .bg(custom_style::muted_bg()
+                                        .blend(gpui_kit::black().opacity(0.05)))
                                     .rounded_full_style(cx)
                                     .px_1()
                                     .flex_1()

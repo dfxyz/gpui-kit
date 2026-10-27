@@ -1,7 +1,7 @@
 use std::time::Duration;
 
 use gpui_kit::component::{
-    ActiveTheme as _, StyledExt as _,
+    StyledExt as _,
     attachment::{
         Attachment, AttachmentContent, AttachmentDescription, AttachmentStatus, AttachmentTitle,
     },
@@ -61,7 +61,7 @@ impl Render for ShimmerStory {
         let replay_count = self.replay_count;
         let shared_style = ShimmerStyle::new()
             .duration(Duration::from_secs(3))
-            .highlight_color(cx.theme().primary)
+            .highlight_color(crate::custom_style::primary())
             .spread(0.42);
 
         v_flex()
@@ -75,7 +75,7 @@ impl Render for ShimmerStory {
                     .child(ShimmerText::new("Thinking…"))
                     .child(
                         ShimmerText::new("Searching the current project…")
-                            .text_color(cx.theme().muted_foreground),
+                            .text_color(crate::custom_style::muted_text()),
                     ),
             )
             .child(
@@ -87,11 +87,11 @@ impl Render for ShimmerStory {
                     .child(ShimmerText::new("Automatic theme-aware highlight"))
                     .child(
                         ShimmerText::new("Primary highlight")
-                            .highlight_color(cx.theme().primary),
+                            .highlight_color(crate::custom_style::primary()),
                     )
                     .child(
                         ShimmerText::new("Success highlight")
-                            .highlight_color(cx.theme().success),
+                            .highlight_color(crate::custom_style::green_text()),
                     ),
             )
             .child(
@@ -177,7 +177,7 @@ impl Render for ShimmerStory {
                     .child(
                         ShimmerText::new("Compact supporting status")
                             .text_sm()
-                            .text_color(cx.theme().muted_foreground),
+                            .text_color(crate::custom_style::muted_text()),
                     )
                     .child(
                         ShimmerText::new("Prominent status")

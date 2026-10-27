@@ -4,7 +4,7 @@ use gpui::{
 };
 use smallvec::SmallVec;
 
-use crate::{ActiveTheme, StyledExt, h_flex};
+use crate::{StyledExt, h_flex};
 
 /// A horizontal status bar, usually placed at the bottom of a window or pane.
 ///
@@ -75,7 +75,7 @@ impl Styled for StatusBar {
 }
 
 impl RenderOnce for StatusBar {
-    fn render(self, _: &mut Window, cx: &mut App) -> impl IntoElement {
+    fn render(self, _: &mut Window, _cx: &mut App) -> impl IntoElement {
         // The center aligns by which ends are pinned: centered with both left
         // and right, end-aligned with only left, otherwise start-aligned (only
         // right, or neither) — so a bar with just `child`s reads like a container.
@@ -89,10 +89,10 @@ impl RenderOnce for StatusBar {
             .py_1()
             .px_2()
             .border_t_1()
-            .border_color(cx.theme().status_bar_border)
-            .bg(cx.theme().tokens.status_bar)
+            .border_color(crate::custom_style::border())
+            .bg(crate::custom_style::status_bar())
             .text_xs()
-            .text_color(cx.theme().muted_foreground)
+            .text_color(crate::custom_style::text())
             .refine_style(&self.style)
             .when(has_left, |this| this.child(region().children(self.left)))
             .child(

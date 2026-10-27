@@ -177,8 +177,8 @@ impl RenderOnce for Sheet {
             .test_support()
             .absolute()
             .occlude()
-            .bg(cx.theme().tokens.background)
-            .border_color(cx.theme().border)
+            .bg(crate::custom_style::base())
+            .border_color(crate::custom_style::border())
             .shadow_xl()
             .refine_style(&self.style)
             .map(|this| {

@@ -1,6 +1,7 @@
 use gpui_kit::component::{
     ActiveTheme as _, Icon, IconName, Sizable as _, StyledExt as _,
     button::{Button, ButtonVariants as _},
+    custom_style,
     link::Link,
     marker::{
         Marker, MarkerAlignment, MarkerContent, MarkerIcon, MarkerLoadingStyle, MarkerVariant,
@@ -127,7 +128,7 @@ impl Render for MarkerStory {
                     .gap_3()
                     .child(
                         Marker::new()
-                            .text_color(cx.theme().success)
+                            .text_color(custom_style::green_text())
                             .icon(MarkerIcon::new().child(Icon::new(IconName::CircleCheck)))
                             .content(MarkerContent::new().child("Online")),
                     )
@@ -143,7 +144,7 @@ impl Render for MarkerStory {
                     )
                     .child(
                         Marker::new()
-                            .text_color(cx.theme().danger)
+                            .text_color(custom_style::red_text())
                             .icon(MarkerIcon::new().child(Icon::new(IconName::Info)))
                             .content(MarkerContent::new().child("Message could not be delivered")),
                     ),
@@ -200,7 +201,7 @@ impl Render for MarkerStory {
                             .with_shimmer_style(
                                 ShimmerStyle::new()
                                     .duration(Duration::from_secs(3))
-                                    .highlight_color(cx.theme().primary)
+                                    .highlight_color(custom_style::primary())
                                     .spread(0.45)
                                     .reverse(true),
                             )
@@ -210,7 +211,7 @@ impl Render for MarkerStory {
                     )
                     .child(
                         ShimmerText::new("Reusable shimmer without a Marker")
-                            .text_color(cx.theme().muted_foreground),
+                            .text_color(crate::custom_style::muted_text()),
                     ),
             )
             .child(
@@ -249,7 +250,7 @@ impl Render for MarkerStory {
                             .loading(true)
                             .with_loading_style(MarkerLoadingStyle::Shimmer)
                             .with_shimmer_style(
-                                ShimmerStyle::new().highlight_color(cx.theme().primary),
+                                ShimmerStyle::new().highlight_color(custom_style::primary()),
                             )
                             .content(MarkerContent::new().text("Semantic primary highlight")),
                     )
@@ -282,7 +283,7 @@ impl Render for MarkerStory {
                         Marker::new()
                             .with_variant(MarkerVariant::Separator)
                             .separator_style(
-                                StyleRefinement::default().bg(cx.theme().primary.opacity(0.35)),
+                                StyleRefinement::default().bg(custom_style::primary().opacity(0.5)),
                             )
                             .icon(MarkerIcon::new().child(Icon::new(IconName::Star)))
                             .content(MarkerContent::new().child("Pinned messages")),
@@ -303,7 +304,7 @@ impl Render for MarkerStory {
                     .child(
                         Marker::new()
                             .with_variant(MarkerVariant::Border)
-                            .border_color(cx.theme().primary.opacity(0.4))
+                            .border_color(custom_style::primary().opacity(0.4))
                             .content(
                                 MarkerContent::new().child("New replies since your last visit"),
                             ),
@@ -349,8 +350,8 @@ impl Render for MarkerStory {
                             .px_3()
                             .py_2()
                             .rounded(cx.theme().radius)
-                            .bg(cx.theme().accent)
-                            .text_color(cx.theme().accent_foreground)
+                            .bg(custom_style::common_active_bg())
+                            .text_color(custom_style::text())
                             .icon(MarkerIcon::new().child(Icon::new(IconName::Star)))
                             .content(MarkerContent::new().child("Pinned message")),
                     ),

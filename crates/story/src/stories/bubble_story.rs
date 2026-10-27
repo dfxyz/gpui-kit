@@ -323,7 +323,7 @@ impl Render for BubbleStory {
                                         div()
                                             .size_10()
                                             .rounded(cx.theme().radius)
-                                            .bg(cx.theme().primary_foreground.opacity(0.18)),
+                                            .bg(crate::custom_style::reversed_text().opacity(0.18)),
                                     )
                                     .child(v_flex().child("design-notes.pdf").child(
                                         div().text_xs().opacity(0.75).child("2.4 MB · PDF"),
@@ -348,9 +348,9 @@ impl Render for BubbleStory {
                         start_bubble().content(
                             BubbleContent::new()
                                 .rounded(cx.theme().radius)
-                                .bg(cx.theme().success.opacity(0.15))
-                                .text_color(cx.theme().success)
-                                .border_color(cx.theme().success.opacity(0.35))
+                                .bg(crate::custom_style::green_text().opacity(0.15))
+                                .text_color(crate::custom_style::green_text())
+                                .border_color(crate::custom_style::green_text().opacity(0.35))
                                 .child("Custom semantic color"),
                         ),
                     ),

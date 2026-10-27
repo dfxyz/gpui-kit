@@ -1,7 +1,7 @@
 // You can draw any chart you want by using the `Plot`.
 
 use gpui_kit::component::{
-    ActiveTheme,
+    custom_style,
     plot::{
         AxisText, Grid, IntoPlot, Plot, PlotAxis, axis_gutter,
         label::TEXT_SIZE,
@@ -71,7 +71,7 @@ impl Plot for StackedBarChart {
                 AxisText::new(
                     d.date.clone(),
                     x_tick + band_width / 2.,
-                    cx.theme().muted_foreground,
+                    crate::custom_style::muted_text(),
                 )
                 .align(TextAlign::Center)
             })
@@ -79,23 +79,23 @@ impl Plot for StackedBarChart {
         PlotAxis::new()
             .x(height)
             .x_label(x_label)
-            .stroke(cx.theme().border)
+            .stroke(custom_style::border())
             .paint(&bounds, window, cx);
 
         // 4. Setup color scale
         let keys = self.series.iter().map(|s| s.key.clone()).collect();
         let colors = vec![
-            cx.theme().chart_4,
-            cx.theme().chart_3,
-            cx.theme().chart_2,
-            cx.theme().chart_1,
+            custom_style::chart_4(),
+            custom_style::chart_3(),
+            custom_style::chart_2(),
+            custom_style::chart_1(),
         ];
         let ordinal = ScaleOrdinal::new(keys, colors);
 
         // 5. Draw grid lines
         Grid::new()
             .y((0..=3).map(|i| height * i as f32 / 4.0))
-            .stroke(cx.theme().border)
+            .stroke(custom_style::border())
             .dash_array(&[px(4.), px(2.)])
             .paint(&bounds, window);
 
@@ -106,7 +106,7 @@ impl Plot for StackedBarChart {
             let y1 = y.clone();
 
             let key = &series.key;
-            let fill = ordinal.map(&key).unwrap_or(cx.theme().chart_4);
+            let fill = ordinal.map(&key).unwrap_or(custom_style::chart_4());
 
             Bar::new()
                 .data(&series.points)
@@ -162,7 +162,7 @@ impl Plot for StackedBarChart {
         cursor: Point<Pixels>,
         bounds: Bounds<Pixels>,
         _window: &mut Window,
-        cx: &mut App,
+        _cx: &mut App,
     ) -> Option<AnyElement> {
         let d = self.data.get(state.index)?;
 
@@ -170,10 +170,10 @@ impl Plot for StackedBarChart {
         let ordinal = ScaleOrdinal::new(
             self.series.iter().map(|s| s.key.clone()).collect(),
             vec![
-                cx.theme().chart_4,
-                cx.theme().chart_3,
-                cx.theme().chart_2,
-                cx.theme().chart_1,
+                custom_style::chart_4(),
+                custom_style::chart_3(),
+                custom_style::chart_2(),
+                custom_style::chart_1(),
             ],
         );
 
@@ -202,7 +202,7 @@ impl Plot for StackedBarChart {
         // One row per stacked series (its segment value at this band).
         let mut total = 0.;
         for series in self.series.iter() {
-            let color = ordinal.map(&series.key).unwrap_or(cx.theme().chart_4);
+            let color = ordinal.map(&series.key).unwrap_or(custom_style::chart_4());
             let value = series
                 .points
                 .get(state.index)

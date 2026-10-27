@@ -1,5 +1,5 @@
 use gpui_kit::component::{
-    ActiveTheme as _, Icon, IconName, Sizable as _, WindowExt as _,
+    Icon, IconName, Sizable as _, WindowExt as _,
     button::{Button, ButtonVariants as _},
     dock::PanelControl,
     h_flex,
@@ -56,7 +56,7 @@ impl Focusable for StatusBarStory {
 }
 
 impl Render for StatusBarStory {
-    fn render(&mut self, _: &mut Window, cx: &mut Context<Self>) -> impl IntoElement {
+    fn render(&mut self, _: &mut Window, _cx: &mut Context<Self>) -> impl IntoElement {
         v_flex()
             .w_full()
             .items_center()
@@ -93,7 +93,9 @@ impl Render for StatusBarStory {
                                                 .child(
                                                     Icon::new(IconName::CircleCheck)
                                                         .xsmall()
-                                                        .text_color(cx.theme().green),
+                                                        .text_color(
+                                                            crate::custom_style::green_text(),
+                                                        ),
                                                 )
                                                 .child("0"),
                                         )
@@ -102,9 +104,9 @@ impl Render for StatusBarStory {
                                                 .items_center()
                                                 .gap_1()
                                                 .child(
-                                                    Icon::new(IconName::Info)
-                                                        .xsmall()
-                                                        .text_color(cx.theme().blue),
+                                                    Icon::new(IconName::Info).xsmall().text_color(
+                                                        crate::custom_style::blue_text(),
+                                                    ),
                                                 )
                                                 .child("2"),
                                         ),

@@ -3869,6 +3869,7 @@ name = "gpui-component"
 version = "0.9.1"
 dependencies = [
  "anyhow",
+ "arc-swap",
  "block2 0.6.2",
  "chrono",
  "core-text",

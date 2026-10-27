@@ -1,6 +1,6 @@
 use chrono::{Datelike, Days, Duration, Utc};
 use gpui_kit::component::{
-    ActiveTheme as _, Sizable as _, Size, StyledExt, calendar,
+    Sizable as _, Size, StyledExt, calendar,
     date_picker::{DatePicker, DatePickerEvent, DatePickerState, DateRangePreset},
     time_field::{HourCycle, TimePrecision},
     v_flex,
@@ -241,7 +241,7 @@ impl Render for DatePickerStory {
                     .child(
                         div()
                             .text_sm()
-                            .text_color(cx.theme().muted_foreground)
+                            .text_color(crate::custom_style::muted_text())
                             .child(format!("Value: {:?}", self.date_picker_value)),
                     ),
             )
@@ -275,7 +275,7 @@ impl Render for DatePickerStory {
                     .child(
                         div()
                             .text_sm()
-                            .text_color(cx.theme().muted_foreground)
+                            .text_color(crate::custom_style::muted_text())
                             .child(format!("Value: {:?}", self.date_time_value)),
                     ),
             )
@@ -345,7 +345,7 @@ impl Render for DatePickerStory {
                     .description("Appearance-free input.")
                     .w_128()
                     .child(
-                        div().w(px(280.)).bg(cx.theme().secondary).child(
+                        div().w(px(280.)).bg(crate::custom_style::muted_bg()).child(
                             DatePicker::new(&self.without_appearance_picker)
                                 .with_size(self.size)
                                 .w(px(280.))

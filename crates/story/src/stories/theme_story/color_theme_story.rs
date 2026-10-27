@@ -1,7 +1,7 @@
 use gpui_kit::component::{
     ActiveTheme as _, Icon, IconName, IndexPath, StyledExt as _, ThemeColor, ThemeStyled as _,
     button::{Button, ButtonVariants as _},
-    h_flex,
+    custom_style, h_flex,
     input::{Input, InputEvent, InputState},
     menu::PopupMenuItem,
     scroll::ScrollableElement,
@@ -454,7 +454,7 @@ impl ThemeColorsStory {
                                                     .rounded(cx.theme().radius.half())
                                                     .bg(color_value)
                                                     .border_1()
-                                                    .border_color(cx.theme().border)
+                                                    .border_color(custom_style::border())
                                                     .flex_shrink_0(),
                                             )
                                     })

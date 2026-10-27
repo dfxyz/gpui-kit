@@ -3,7 +3,7 @@ use gpui::{
     StyleRefinement, Styled, div, prelude::FluentBuilder as _,
 };
 
-use crate::{ActiveTheme, Sizable, Size, StyledExt as _, avatar::Avatar};
+use crate::{Sizable, Size, StyledExt as _, avatar::Avatar};
 
 /// A grouped avatars to display in a compact layout.
 #[derive(IntoElement)]
@@ -74,7 +74,7 @@ impl InteractiveElement for AvatarGroup {
 }
 
 impl RenderOnce for AvatarGroup {
-    fn render(self, _: &mut gpui::Window, cx: &mut gpui::App) -> impl IntoElement {
+    fn render(self, _: &mut gpui::Window, _cx: &mut gpui::App) -> impl IntoElement {
         let item_ml = -super::avatar_size(self.size) * 0.3;
         let avatars_len = self.avatars.len();
 
@@ -86,8 +86,8 @@ impl RenderOnce for AvatarGroup {
                 Some(
                     Avatar::new()
                         .name("⋯")
-                        .bg(cx.theme().tokens.secondary)
-                        .text_color(cx.theme().muted_foreground)
+                        .bg(crate::custom_style::muted_bg())
+                        .text_color(crate::custom_style::muted_text())
                         .with_size(self.size)
                         .ml_1(),
                 )

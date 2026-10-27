@@ -1,5 +1,5 @@
 use crate::{
-    ActiveTheme, Collapsible, Icon, IconName, Side, Sizable, StyledExt,
+    Collapsible, Icon, IconName, Side, Sizable, StyledExt,
     button::{Button, ButtonVariants},
     h_flex,
     scroll::ScrollableElement,
@@ -419,9 +419,9 @@ impl<E: SidebarItem> RenderOnce for Sidebar<E> {
             .h_full()
             .overflow_hidden()
             .relative()
-            .bg(cx.theme().tokens.sidebar)
-            .text_color(cx.theme().sidebar_foreground)
-            .border_color(cx.theme().sidebar_border)
+            .bg(crate::custom_style::muted_bg())
+            .text_color(crate::custom_style::text())
+            .border_color(crate::custom_style::border())
             .map(|this| match self.side {
                 Side::Left => this.border_r_1(),
                 Side::Right => this.border_l_1(),

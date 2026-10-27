@@ -3,11 +3,11 @@ use std::rc::Rc;
 use gpui::{
     App, ClickEvent, ElementId, Empty, Hsla, InteractiveElement, IntoElement, ParentElement as _,
     RenderOnce, Role, SharedString, StatefulInteractiveElement, StyleRefinement, Styled, Window,
-    div, prelude::FluentBuilder as _, px, rems, transparent_white,
+    div, prelude::FluentBuilder as _, px, rems,
 };
 
 use crate::{
-    ActiveTheme as _, Colorize, Icon, IconName, Sizable, Size, StyledExt, h_flex,
+    ActiveTheme as _, Icon, IconName, Sizable, Size, StyledExt, h_flex,
     text::{Text, TextViewStyle},
 };
 
@@ -23,33 +23,46 @@ pub enum AlertVariant {
 }
 
 impl AlertVariant {
-    fn fg(&self, cx: &App) -> Hsla {
+    fn fg(&self, _cx: &App) -> Hsla {
         match self {
-            Self::Default => cx.theme().foreground,
-            Self::Info => cx.theme().info,
-            Self::Success => cx.theme().success,
-            Self::Warning => cx.theme().warning,
-            Self::Error => cx.theme().danger,
+            Self::Default => crate::custom_style::text(),
+            Self::Info => crate::custom_style::cyan_text(),
+            Self::Success => crate::custom_style::green_text(),
+            Self::Warning => crate::custom_style::yellow_text(),
+            Self::Error => crate::custom_style::red_text(),
         }
     }
 
-    fn bg(&self, cx: &App) -> Hsla {
+    fn bg(&self, _cx: &App) -> Hsla {
         match self {
-            Self::Default => cx.theme().background,
-            Self::Info => cx.theme().info.mix_oklab(transparent_white(), 0.04),
-            Self::Success => cx.theme().success.mix_oklab(transparent_white(), 0.04),
-            Self::Warning => cx.theme().warning.mix_oklab(transparent_white(), 0.04),
-            Self::Error => cx.theme().danger.mix_oklab(transparent_white(), 0.04),
+            Self::Default => crate::custom_style::base(),
+            Self::Info => {
+                crate::custom_style::cyan_text().opacity(crate::custom_style::text_to_bg_alpha())
+            }
+            Self::Success => {
+                crate::custom_style::green_text().opacity(crate::custom_style::text_to_bg_alpha())
+            }
+            Self::Warning => {
+                crate::custom_style::yellow_text().opacity(crate::custom_style::text_to_bg_alpha())
+            }
+            Self::Error => {
+                crate::custom_style::red_text().opacity(crate::custom_style::text_to_bg_alpha())
+            }
         }
     }
 
-    fn border_color(&self, cx: &App) -> Hsla {
+    fn border_color(&self, _cx: &App) -> Hsla {
         match self {
-            Self::Default => cx.theme().border,
-            Self::Info => cx.theme().info.mix_oklab(transparent_white(), 0.3),
-            Self::Success => cx.theme().success.mix_oklab(transparent_white(), 0.3),
-            Self::Warning => cx.theme().warning.mix_oklab(transparent_white(), 0.3),
-            Self::Error => cx.theme().danger.mix_oklab(transparent_white(), 0.3),
+            Self::Default => crate::custom_style::border(),
+            Self::Info => crate::custom_style::cyan_text()
+                .opacity(crate::custom_style::text_to_border_alpha()),
+            Self::Success => crate::custom_style::green_text()
+                .opacity(crate::custom_style::text_to_border_alpha()),
+            Self::Warning => crate::custom_style::yellow_text()
+                .opacity(crate::custom_style::text_to_border_alpha()),
+            Self::Error => {
+                crate::custom_style::red_text().opacity(crate::custom_style::text_to_border_alpha())
+            }
         }
     }
 }

@@ -8,7 +8,7 @@ use std::{
 
 use gpui::{
     Anchor, Animation, AnimationExt, AnyElement, AnyWindowHandle, App, AppContext, ClickEvent,
-    Context, DismissEvent, ElementId, Entity, EventEmitter, FocusHandle, Global,
+    Context, DismissEvent, ElementId, Entity, EventEmitter, FocusHandle, Global, Hsla,
     InteractiveElement as _, IntoElement, ParentElement as _, Pixels, Render, SharedString,
     StatefulInteractiveElement, StyleRefinement, Styled, Subscription, SystemNotification,
     SystemNotificationResponse, WeakEntity, Window, WindowId, div, prelude::FluentBuilder, px,
@@ -44,13 +44,23 @@ pub enum NotificationType {
 }
 
 impl NotificationType {
-    fn icon(&self, cx: &App) -> Icon {
+    fn color(&self) -> Hsla {
         match self {
-            Self::Info => Icon::new(IconName::Info).text_color(cx.theme().info),
-            Self::Success => Icon::new(IconName::CircleCheck).text_color(cx.theme().success),
-            Self::Warning => Icon::new(IconName::TriangleAlert).text_color(cx.theme().warning),
-            Self::Error => Icon::new(IconName::CircleX).text_color(cx.theme().danger),
+            Self::Info => crate::custom_style::cyan_text(),
+            Self::Success => crate::custom_style::green_text(),
+            Self::Warning => crate::custom_style::yellow_text(),
+            Self::Error => crate::custom_style::red_text(),
         }
+    }
+
+    fn icon(&self, _cx: &App) -> Icon {
+        let icon = match self {
+            Self::Info => IconName::Info,
+            Self::Success => IconName::CircleCheck,
+            Self::Warning => IconName::TriangleAlert,
+            Self::Error => IconName::CircleX,
+        };
+        Icon::new(icon).text_color(self.color())
     }
 }
 
@@ -412,6 +422,10 @@ impl Render for Notification {
 
         let transition_status = self.transition_status;
         let closing = transition_status == ToastTransitionStatus::Ending;
+        let type_color = self.type_.and_then(|type_| match type_ {
+            NotificationType::Info => None,
+            _ => Some(type_.color()),
+        });
         let icon = match self.type_ {
             None => self.icon.clone(),
             Some(type_) => Some(type_.icon(cx)),
@@ -427,8 +441,12 @@ impl Render for Notification {
             .relative()
             .w_full()
             .border_1()
-            .border_color(cx.theme().border)
-            .bg(cx.theme().tokens.popover)
+            .border_color(crate::custom_style::border())
+            .bg(match type_color {
+                Some(color) => crate::custom_style::popover()
+                    .blend(color.opacity(crate::custom_style::text_to_bg_alpha())),
+                None => crate::custom_style::popover(),
+            })
             .rounded(cx.theme().radius_lg)
             .shadow(toast_shadow(1.))
             .py_3p5()

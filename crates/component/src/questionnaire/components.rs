@@ -410,7 +410,6 @@ impl RenderOnce for QuestionnaireProgress {
         let total = progress.total();
         let label: SharedString =
             t!("Questionnaire.progress", current = current, total = total).into();
-        let colors = cx.theme().semantic_tokens().colors;
         let has_children = !self.children.is_empty();
 
         let size = resolve_size(self.size, &self.state, cx);
@@ -422,7 +421,7 @@ impl RenderOnce for QuestionnaireProgress {
                 .aria_min_numeric_value(0.)
                 .aria_max_numeric_value(total as f64)
                 .aria_numeric_value(current as f64)
-                .text_color(colors.muted_foreground),
+                .text_color(crate::custom_style::muted_text()),
             size,
             cx,
         )
@@ -433,7 +432,7 @@ impl RenderOnce for QuestionnaireProgress {
 }
 
 macro_rules! questionnaire_item_part {
-    ($name:ident, $fallback:ident, $style:ident, $color:ident, $closes_item_gap:expr) => {
+    ($name:ident, $fallback:ident, $style:ident, $color:expr, $closes_item_gap:expr) => {
         #[derive(IntoElement)]
         pub struct $name {
             state: Entity<QuestionnaireState>,
@@ -485,13 +484,12 @@ macro_rules! questionnaire_item_part {
                 if !has_children && fallback.is_none() {
                     return gpui::Empty.into_any_element();
                 }
-                let colors = cx.theme().semantic_tokens().colors;
                 // The item stacks its parts on one gap. A title with no
                 // description of its own closes the gap the description would
                 // have filled, so answers never crowd the question.
                 let closes_item_gap = $closes_item_gap && item_description(definition).is_none();
                 let size = resolve_size(self.size, &self.state, cx);
-                $style(div().w_full().text_color(colors.$color), size, cx)
+                $style(div().w_full().text_color($color), size, cx)
                     .when(closes_item_gap, |this| {
                         this.mb(QuestionnaireMetrics::new(size, cx).item_gap)
                     })
@@ -510,14 +508,14 @@ questionnaire_item_part!(
     QuestionnaireTitle,
     item_label,
     title_text_style,
-    foreground,
+    crate::custom_style::text(),
     true
 );
 questionnaire_item_part!(
     QuestionnaireDescription,
     item_description,
     description_text_style,
-    muted_foreground,
+    crate::custom_style::muted_text(),
     false
 );
 
@@ -786,7 +784,6 @@ fn style_choice_card<T>(
 where
     T: Styled + ParentElement + StatefulInteractiveElement + gpui::prelude::FluentBuilder,
 {
-    let tokens = cx.theme().semantic_tokens();
     base.flex()
         .items_start()
         .gap(metrics.choice_gap)
@@ -796,22 +793,20 @@ where
         .py(metrics.choice_padding_y)
         .border_1()
         .border_color(if invalid {
-            tokens.colors.destructive
+            crate::custom_style::red_text()
         } else if selected {
-            tokens.colors.primary.opacity(0.4)
+            crate::custom_style::primary()
         } else {
-            tokens.colors.input
+            crate::custom_style::border()
         })
         .bg(if selected {
-            tokens.colors.muted
-        } else if cx.theme().is_dark() {
-            tokens.colors.input.opacity(0.2)
+            crate::custom_style::common_active_bg()
         } else {
-            tokens.colors.background.opacity(0.)
+            crate::custom_style::base()
         })
         .rounded(metrics.choice_radius)
         .when(!disabled, |this| {
-            this.hover(|style| style.bg(tokens.colors.muted.opacity(0.5)))
+            this.hover(|style| style.bg(crate::custom_style::common_hover_bg()))
         })
         .when(focused, |this| this.focus_ring_style(window, cx))
         .when(disabled, |this| this.opacity(0.5))
@@ -851,9 +846,8 @@ impl RenderOnce for QuestionnaireChoice {
         let invalid = choice_state.is_invalid();
         let shortcut = choice_state.shortcut().cloned();
         let focus_handle = state.choice_focus_handle(&self.item, &self.value).cloned();
-        let colors = cx.theme().semantic_tokens().colors;
         let radius = cx.theme().semantic_tokens().radius;
-        let indicator_background = cx.theme().input_background();
+        let indicator_background = crate::custom_style::input();
         let mono_font = cx.theme().semantic_tokens().typography.mono.clone();
         let size = resolve_size(self.size, &self.state, cx);
         let metrics = QuestionnaireMetrics::new(size, cx);
@@ -875,12 +869,12 @@ impl RenderOnce for QuestionnaireChoice {
                 .size(metrics.indicator_size)
                 .border_1()
                 .border_color(if selected {
-                    colors.primary
+                    crate::custom_style::primary()
                 } else {
-                    colors.input
+                    crate::custom_style::border()
                 })
                 .bg(if selected {
-                    colors.primary
+                    crate::custom_style::primary()
                 } else {
                     indicator_background
                 })
@@ -892,7 +886,7 @@ impl RenderOnce for QuestionnaireChoice {
                         svg()
                             .size(metrics.indicator_check_size)
                             .path(check_path.clone())
-                            .text_color(colors.primary_foreground),
+                            .text_color(crate::custom_style::reversed_text()),
                     )
                 })
                 .when(selected && !multiple, |this| {
@@ -900,7 +894,7 @@ impl RenderOnce for QuestionnaireChoice {
                         div()
                             .size(metrics.indicator_mark_size)
                             .rounded(radius.full)
-                            .bg(colors.primary_foreground),
+                            .bg(crate::custom_style::reversed_text()),
                     )
                 })
                 .into_any_element()
@@ -927,13 +921,17 @@ impl RenderOnce for QuestionnaireChoice {
             .refine_style(&self.content_style)
             .when(!has_children, |this| {
                 this.child(text_style(
-                    div().text_color(colors.foreground).child(label.clone()),
+                    div()
+                        .text_color(crate::custom_style::text())
+                        .child(label.clone()),
                     size,
                     cx,
                 ))
                 .when_some(description.clone(), |this, description| {
                     this.child(secondary_text_style(
-                        div().text_color(colors.muted_foreground).child(description),
+                        div()
+                            .text_color(crate::custom_style::muted_text())
+                            .child(description),
                         size,
                         cx,
                     ))
@@ -956,9 +954,9 @@ impl RenderOnce for QuestionnaireChoice {
                 .justify_center()
                 .size(metrics.shortcut_size)
                 .p_0()
-                .bg(colors.background)
-                .border_color(colors.input)
-                .text_color(colors.muted_foreground)
+                .bg(crate::custom_style::muted_bg())
+                .border_color(crate::custom_style::border())
+                .text_color(crate::custom_style::muted_text())
                 .font_family(mono_font.clone())
                 .text_size(metrics.shortcut_text_size)
                 .font_weight(gpui::FontWeight::MEDIUM)
@@ -1067,9 +1065,8 @@ impl ParentElement for QuestionnaireChoiceDescription {
 
 impl RenderOnce for QuestionnaireChoiceDescription {
     fn render(self, _: &mut Window, cx: &mut App) -> impl IntoElement {
-        let colors = cx.theme().semantic_tokens().colors;
         secondary_text_style(
-            div().text_color(colors.muted_foreground),
+            div().text_color(crate::custom_style::muted_text()),
             self.size.unwrap_or(Size::Medium),
             cx,
         )
@@ -1141,7 +1138,7 @@ impl RenderOnce for QuestionnaireInput {
             .pl(metrics.choice_padding_x)
             .rounded(metrics.choice_radius)
             .when(item_state.is_invalid(), |this| {
-                this.border_color(cx.theme().semantic_tokens().colors.destructive)
+                this.border_color(crate::custom_style::red_text())
             })
             .refine_style(&self.style)
             .into_any_element()
@@ -1215,14 +1212,13 @@ impl RenderOnce for QuestionnaireError {
             return gpui::Empty.into_any_element();
         }
         let has_children = !self.children.is_empty();
-        let colors = cx.theme().semantic_tokens().colors;
         let spacing = cx.theme().semantic_tokens().spacing;
         let size = resolve_size(self.size, &self.state, cx);
 
         secondary_text_style(
             questionnaire_error_root(element_id(&self.state, format!("error-{}", self.item)))
                 .mt(spacing.sm)
-                .text_color(colors.destructive),
+                .text_color(crate::custom_style::red_text()),
             size,
             cx,
         )

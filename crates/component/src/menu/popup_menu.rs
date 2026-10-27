@@ -1377,8 +1377,8 @@ impl PopupMenu {
                 .p_0()
                 .my_0p5()
                 .mx_neg_1()
-                .border_b(px(2.))
-                .border_color(cx.theme().border)
+                .border_b(px(1.))
+                .border_color(crate::custom_style::border())
                 .disabled(true),
             PopupMenuItem::Label(label) => this.disabled(true).cursor_default().child(
                 h_flex()
@@ -1461,7 +1461,7 @@ impl PopupMenu {
                                     .child(
                                         Icon::new(IconName::ExternalLink)
                                             .xsmall()
-                                            .text_color(cx.theme().muted_foreground),
+                                            .text_color(crate::custom_style::muted_text()),
                                     ),
                             )
                         })
@@ -1505,7 +1505,7 @@ impl PopupMenu {
                                 .child(
                                     Icon::new(IconName::ChevronRight)
                                         .xsmall()
-                                        .text_color(cx.theme().muted_foreground),
+                                        .text_color(crate::custom_style::muted_text()),
                                 ),
                         ),
                 )
@@ -1608,7 +1608,7 @@ impl Render for PopupMenu {
             .on_action(cx.listener(Self::dismiss))
             .on_mouse_down_out(cx.listener(Self::on_mouse_down_out))
             .popover_style(cx)
-            .text_color(cx.theme().popover_foreground)
+            .text_color(crate::custom_style::text())
             .relative()
             .occlude()
             .child(

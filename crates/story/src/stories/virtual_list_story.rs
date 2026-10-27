@@ -1,9 +1,9 @@
 use std::{ops::Range, rc::Rc};
 
 use gpui_kit::component::{
-    ActiveTheme as _, VirtualListScrollHandle,
+    VirtualListScrollHandle,
     button::Button,
-    h_flex,
+    custom_style, h_flex,
     scroll::{ScrollableElement, ScrollbarAxis},
     v_flex, v_virtual_list,
 };
@@ -205,7 +205,7 @@ impl Render for VirtualListStory {
     ) -> impl gpui_kit::IntoElement {
         let columns_count = self.columns_count;
 
-        fn render_item(cx: &App) -> Div {
+        fn render_item(_cx: &App) -> Div {
             div()
                 .flex()
                 .h_full()
@@ -214,7 +214,7 @@ impl Render for VirtualListStory {
                 .text_sm()
                 .w(ITEM_SIZE.width)
                 .h(ITEM_SIZE.height)
-                .bg(cx.theme().secondary)
+                .bg(crate::custom_style::muted_bg())
         }
 
         v_flex()
@@ -264,7 +264,7 @@ impl Render for VirtualListStory {
                                 .track_scroll(&self.scroll_handle)
                                 .p_4()
                                 .border_1()
-                                .border_color(cx.theme().border)
+                                .border_color(custom_style::border())
                                 .gap_1(),
                             )
                             .scrollbar(&self.scroll_handle, self.axis),

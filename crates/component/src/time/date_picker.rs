@@ -244,7 +244,7 @@ impl DatePickerState {
             time_field,
             time_field_pushed: false,
             _subscriptions,
-            first_day_of_week: Weekday::Sun,
+            first_day_of_week: Weekday::Mon,
             bounds: Bounds::default(),
         }
     }
@@ -531,8 +531,8 @@ impl DatePickerState {
             return format.clone();
         }
         match self.edited_time_precision() {
-            Some(precision) => format!("%Y/%m/%d {}", precision.format(self.hour_cycle)).into(),
-            None => "%Y/%m/%d".into(),
+            Some(precision) => format!("%Y-%m-%d {}", precision.format(self.hour_cycle)).into(),
+            None => "%Y-%m-%d".into(),
         }
     }
 }
@@ -643,7 +643,7 @@ impl DatePicker {
         self
     }
 
-    fn render_time_field(size: Size, state: &DatePickerState, cx: &App) -> impl IntoElement {
+    fn render_time_field(size: Size, state: &DatePickerState, _cx: &App) -> impl IntoElement {
         h_flex()
             .map(|this| match size {
                 Size::Small => this.mt_2().pt_2(),
@@ -652,14 +652,14 @@ impl DatePicker {
             .gap_3()
             .justify_between()
             .border_t_1()
-            .border_color(cx.theme().border)
+            .border_color(crate::custom_style::border())
             .child(
                 div()
                     .map(|this| match size {
                         Size::Small => this.text_xs(),
                         _ => this.text_sm(),
                     })
-                    .text_color(cx.theme().muted_foreground)
+                    .text_color(crate::custom_style::muted_text())
                     .child(SharedString::from(t!("DatePicker.time"))),
             )
             .child(
@@ -690,7 +690,7 @@ impl RenderOnce for DatePicker {
             .format(&state.display_format())
             .unwrap_or(placeholder.clone());
 
-        let (bg, fg) = input_style(self.disabled, cx);
+        let (bg, fg) = input_style(self.disabled);
 
         let picker_state = self.state.clone();
 
@@ -726,10 +726,10 @@ impl RenderOnce for DatePicker {
                             .text_color(fg)
                             .when(self.disabled, |this| this.opacity(0.5))
                             .border_1()
-                            .border_color(cx.theme().input)
+                            .border_color(crate::custom_style::border())
                             .rounded(cx.theme().radius)
                             .when(is_focused, |this| {
-                                this.border_1().border_color(cx.theme().ring)
+                                this.border_1().border_color(crate::custom_style::ring())
                             })
                     })
                     .when(
@@ -764,7 +764,7 @@ impl RenderOnce for DatePicker {
                                         this.font_features(tabular_figures())
                                     })
                                     .when(!state.date.is_some(), |this| {
-                                        this.text_color(cx.theme().muted_foreground)
+                                        this.text_color(crate::custom_style::muted_text())
                                     })
                                     .child(display_title),
                             )
@@ -778,7 +778,7 @@ impl RenderOnce for DatePicker {
                                     this.child(
                                         Icon::new(IconName::Calendar)
                                             .xsmall()
-                                            .text_color(cx.theme().muted_foreground),
+                                            .text_color(crate::custom_style::muted_text()),
                                     )
                                 })
                             }),

@@ -274,14 +274,14 @@ impl TabBar {
                     div()
                         .w_full()
                         .h(inner_height)
-                        .bg(cx.theme().tokens.background)
+                        .bg(crate::custom_style::base())
                         .rounded(inner_radius)
                         .shadow(raised_shadow()),
                 ),
                 TabVariant::Pill => el.flex().items_center().child(
                     div()
                         .size_full()
-                        .bg(cx.theme().tokens.primary)
+                        .bg(crate::custom_style::primary())
                         .rounded(cx.theme().radius_full()),
                 ),
                 TabVariant::Underline => el.child(
@@ -291,7 +291,7 @@ impl TabBar {
                         .right_0()
                         .bottom_0()
                         .h(px(2.))
-                        .bg(cx.theme().tokens.primary),
+                        .bg(crate::custom_style::primary()),
                 ),
                 _ => el,
             });
@@ -385,15 +385,19 @@ impl RenderOnce for TabBar {
         let (bg, paddings, gap): (Background, _, _) = match self.variant {
             TabVariant::Tab => {
                 let padding = Edges::all(px(0.));
-                (cx.theme().tokens.tab_bar.into(), padding, px(0.))
+                (crate::custom_style::muted_bg().into(), padding, px(0.))
             }
             TabVariant::Outline => {
                 let padding = Edges::all(px(0.));
-                (cx.theme().transparent.into(), padding, default_gap)
+                (
+                    crate::custom_style::transparent().into(),
+                    padding,
+                    default_gap,
+                )
             }
             TabVariant::Pill => {
                 let padding = Edges::all(px(0.));
-                (cx.theme().transparent.into(), padding, px(4.))
+                (crate::custom_style::transparent().into(), padding, px(4.))
             }
             TabVariant::Segmented => {
                 let padding_x = match self.size {
@@ -407,7 +411,7 @@ impl RenderOnce for TabBar {
                     ..Default::default()
                 };
 
-                (cx.theme().tokens.tab_bar_segmented.into(), padding, px(2.))
+                (crate::custom_style::muted_bg().into(), padding, px(2.))
             }
             TabVariant::Underline => {
                 // This gap is same as the tab inner_paddings
@@ -418,10 +422,14 @@ impl RenderOnce for TabBar {
                     _ => px(16.),
                 };
 
-                (cx.theme().transparent.into(), Edges::all(px(0.)), gap)
+                (
+                    crate::custom_style::transparent().into(),
+                    Edges::all(px(0.)),
+                    gap,
+                )
             }
             TabVariant::Folder => (
-                cx.theme().tokens.tab_bar.into(),
+                crate::custom_style::muted_bg().into(),
                 Edges::all(px(0.)),
                 FOLDER_TAB_GAP,
             ),
@@ -639,7 +647,7 @@ impl RenderOnce for TabBar {
             .flex()
             .items_center()
             .bg(bg)
-            .text_color(cx.theme().tab_foreground)
+            .text_color(crate::custom_style::text())
             .when(
                 self.variant == TabVariant::Underline || self.variant == TabVariant::Tab,
                 |this| {
@@ -651,7 +659,7 @@ impl RenderOnce for TabBar {
                             .bottom_0()
                             .size_full()
                             .border_b_1()
-                            .border_color(cx.theme().border),
+                            .border_color(crate::custom_style::border()),
                     )
                 },
             )
@@ -2101,8 +2109,8 @@ mod tests {
 
     /// The underline indicators the frame drawn last painted.
     fn painted_indicators(cx: &mut gpui::VisualTestContext) -> Vec<Bounds<Pixels>> {
-        cx.update(|window, cx| {
-            let primary: Background = cx.theme().tokens.primary.into();
+        cx.update(|window, _cx| {
+            let primary: Background = crate::custom_style::primary().into();
             let scale_factor = window.scale_factor();
             window
                 .painted_quads()

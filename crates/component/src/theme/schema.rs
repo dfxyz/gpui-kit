@@ -1081,11 +1081,11 @@ impl Theme {
         } else {
             self.light_theme = config.clone();
         }
-        if let Some(style) = &config.highlight {
+        if let Some(style) = config.highlight.clone() {
             let highlight_theme = Arc::new(HighlightTheme {
                 name: config.name.to_string(),
                 appearance: config.mode,
-                style: style.clone(),
+                style: crate::custom_style::custom_highlight_theme_style(style),
             });
             self.highlight_theme = highlight_theme.clone();
         }

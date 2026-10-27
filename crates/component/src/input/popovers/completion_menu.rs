@@ -135,7 +135,7 @@ impl RenderOnce for CompletionMenuItem {
             (
                 range,
                 HighlightStyle {
-                    color: Some(cx.theme().blue),
+                    color: Some(cx.theme().green),
                     ..Default::default()
                 },
             )
@@ -161,7 +161,7 @@ impl RenderOnce for CompletionMenuItem {
                     .when_some(item.detail.as_ref(), |this, detail| {
                         this.child(
                             Label::new(detail.clone())
-                                .text_color(cx.theme().muted_foreground)
+                                .text_color(crate::custom_style::muted_text())
                                 .when(deprecated, |this| this.line_through())
                                 .italic(),
                         )

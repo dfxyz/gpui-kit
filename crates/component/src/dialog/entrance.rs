@@ -13,9 +13,9 @@ use serde::{Deserialize, Serialize};
 #[non_exhaustive]
 pub enum DialogEntrance {
     /// Slide down from the window top while fading in, preserving the legacy entrance.
-    #[default]
     SlideDown,
     /// Fade in at the final position without movement.
+    #[default]
     Fade,
     /// Fade in while settling from just above the final position.
     ///

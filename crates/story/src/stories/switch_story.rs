@@ -4,8 +4,8 @@ use gpui_kit::{
 };
 
 use gpui_kit::component::{
-    ActiveTheme, Disableable as _, Sizable, Size, StyledExt, h_flex, separator::Separator,
-    switch::Switch, v_flex,
+    ActiveTheme, Disableable as _, Sizable, Size, StyledExt, custom_style, h_flex,
+    separator::Separator, switch::Switch, v_flex,
 };
 
 use crate::{ChangeStorySize, section, story_toolbar};
@@ -81,7 +81,7 @@ impl Render for SwitchStory {
                         v_flex()
                             .w_full()
                             .border_1()
-                            .border_color(theme.border)
+                            .border_color(custom_style::border())
                             .rounded(theme.radius_lg)
                             .child(
                                 h_flex()
@@ -97,7 +97,7 @@ impl Render for SwitchStory {
                                             .child(
                                                 div()
                                                     .text_sm()
-                                                    .text_color(theme.muted_foreground)
+                                                    .text_color(crate::custom_style::muted_text())
                                                     .child("New features and release notes."),
                                             ),
                                     )
@@ -126,7 +126,7 @@ impl Render for SwitchStory {
                                             .child(
                                                 div()
                                                     .text_sm()
-                                                    .text_color(theme.muted_foreground)
+                                                    .text_color(crate::custom_style::muted_text())
                                                     .child("Important activity on your account."),
                                             ),
                                     )
@@ -149,7 +149,7 @@ impl Render for SwitchStory {
                         v_flex()
                             .w(px(320.))
                             .border_1()
-                            .border_color(theme.border)
+                            .border_color(custom_style::border())
                             .rounded(theme.radius_lg)
                             .child(
                                 Switch::new("long-label")
@@ -200,7 +200,7 @@ impl Render for SwitchStory {
                             .with_size(self.size)
                             .checked(self.switch4)
                             .label("Success")
-                            .color(theme.success)
+                            .color(crate::custom_style::green_text())
                             .on_click(cx.listener(|this, checked, _, cx| {
                                 this.switch4 = *checked;
                                 cx.notify();
@@ -211,7 +211,7 @@ impl Render for SwitchStory {
                             .with_size(self.size)
                             .checked(self.switch5)
                             .label("Destructive")
-                            .color(theme.danger)
+                            .color(crate::custom_style::red_text())
                             .on_click(cx.listener(|this, checked, _, cx| {
                                 this.switch5 = *checked;
                                 cx.notify();
@@ -222,7 +222,7 @@ impl Render for SwitchStory {
                             .with_size(self.size)
                             .checked(true)
                             .label("Disabled")
-                            .color(theme.success)
+                            .color(crate::custom_style::green_text())
                             .disabled(true),
                     ),
             )

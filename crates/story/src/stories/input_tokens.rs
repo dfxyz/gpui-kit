@@ -3,7 +3,7 @@
 //! maps a token's ID back to the resource it names.
 use gpui_kit::assets::IconName;
 use gpui_kit::component::{
-    ActiveTheme as _, Disableable as _, Sizable as _,
+    Disableable as _, Sizable as _,
     button::{Button, ButtonVariants as _},
     checkbox::Checkbox,
     h_flex,
@@ -287,7 +287,7 @@ impl TokenExample {
                     div()
                         .flex_shrink_0()
                         .w(rems(5.5))
-                        .text_color(cx.theme().muted_foreground)
+                        .text_color(crate::custom_style::muted_text())
                         .child(label),
                 )
                 .child(div().min_w_0().flex_1().child(value))

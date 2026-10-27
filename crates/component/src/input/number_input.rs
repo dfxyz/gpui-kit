@@ -123,16 +123,16 @@ impl Styled for NumberInput {
 impl RenderOnce for NumberInput {
     fn render(self, window: &mut Window, cx: &mut App) -> impl IntoElement {
         let focused = self.state.read(cx).focus_handle(cx).is_focused(window) && !self.disabled;
-        let (bg, _) = input_style(self.disabled, cx);
+        let (bg, _) = input_style(self.disabled);
         let border_color = if self.disabled {
-            cx.theme().input.opacity(0.5)
+            crate::custom_style::border().opacity(0.5)
         } else {
-            cx.theme().input
+            crate::custom_style::border()
         };
         // Transparent like a ghost button, but tinted to the frame on hover.
-        let button_foreground = cx.theme().secondary_foreground;
-        let button_hover = cx.theme().input.opacity(0.4);
-        let button_active = cx.theme().input.opacity(0.6);
+        let button_foreground = crate::custom_style::text();
+        let button_hover = crate::custom_style::common_hover_bg();
+        let button_active = crate::custom_style::common_active_bg();
         let button_size = self.size;
         // The buttons sit inside the 1px frame, so their corners are a pixel
         // tighter than the frame's, or they paint over its inner curve.
@@ -212,7 +212,7 @@ impl RenderOnce for NumberInput {
                     .border_1()
                     .border_color(border_color)
                     .when(focused, |this| {
-                        this.border_1().border_color(cx.theme().ring)
+                        this.border_1().border_color(crate::custom_style::ring())
                     })
             })
             .refine_style(&self.style)

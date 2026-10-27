@@ -1,8 +1,7 @@
 use crate::{ColorName, Sizable, Size, StyledExt, theme::ActiveTheme as _};
 use gpui::{
-    AbsoluteLength, AnyElement, App, Hsla, InteractiveElement as _, IntoElement, ParentElement,
-    RenderOnce, StyleRefinement, Styled, Window, div, prelude::FluentBuilder as _, relative, rems,
-    transparent_white,
+    AbsoluteLength, AnyElement, App, Hsla, IntoElement, ParentElement, RenderOnce, StyleRefinement,
+    Styled, Window, div, prelude::FluentBuilder as _, relative, rems, transparent_white,
 };
 
 /// The variant of the Tag.
@@ -26,12 +25,20 @@ pub enum TagVariant {
 impl TagVariant {
     fn bg(&self, cx: &App) -> Hsla {
         match self {
-            Self::Primary => cx.theme().primary,
-            Self::Secondary => cx.theme().secondary,
-            Self::Danger => cx.theme().danger,
-            Self::Success => cx.theme().success,
-            Self::Warning => cx.theme().warning,
-            Self::Info => cx.theme().info,
+            Self::Primary => crate::custom_style::primary(),
+            Self::Secondary => crate::custom_style::base_alternative(),
+            Self::Danger => {
+                crate::custom_style::red_text().opacity(crate::custom_style::text_to_bg_alpha())
+            }
+            Self::Success => {
+                crate::custom_style::green_text().opacity(crate::custom_style::text_to_bg_alpha())
+            }
+            Self::Warning => {
+                crate::custom_style::yellow_text().opacity(crate::custom_style::text_to_bg_alpha())
+            }
+            Self::Info => {
+                crate::custom_style::cyan_text().opacity(crate::custom_style::text_to_bg_alpha())
+            }
             Self::Color(color) => {
                 if cx.theme().is_dark() {
                     color.scale(950).opacity(0.5)
@@ -45,12 +52,17 @@ impl TagVariant {
 
     fn border(&self, cx: &App) -> Hsla {
         match self {
-            Self::Primary => cx.theme().primary,
-            Self::Secondary => cx.theme().border,
-            Self::Danger => cx.theme().danger,
-            Self::Success => cx.theme().success,
-            Self::Warning => cx.theme().warning,
-            Self::Info => cx.theme().info,
+            Self::Primary => crate::custom_style::primary(),
+            Self::Secondary => crate::custom_style::border(),
+            Self::Danger => {
+                crate::custom_style::red_text().opacity(crate::custom_style::text_to_border_alpha())
+            }
+            Self::Success => crate::custom_style::green_text()
+                .opacity(crate::custom_style::text_to_border_alpha()),
+            Self::Warning => crate::custom_style::yellow_text()
+                .opacity(crate::custom_style::text_to_border_alpha()),
+            Self::Info => crate::custom_style::cyan_text()
+                .opacity(crate::custom_style::text_to_border_alpha()),
             Self::Color(color) => {
                 if cx.theme().is_dark() {
                     color.scale(800).opacity(0.5)
@@ -66,46 +78,16 @@ impl TagVariant {
         match self {
             Self::Primary => {
                 if outline {
-                    cx.theme().primary
+                    crate::custom_style::primary()
                 } else {
-                    cx.theme().primary_foreground
+                    crate::custom_style::reversed_text()
                 }
             }
-            Self::Secondary => {
-                if outline {
-                    cx.theme().muted_foreground
-                } else {
-                    cx.theme().secondary_foreground
-                }
-            }
-            Self::Danger => {
-                if outline {
-                    cx.theme().danger
-                } else {
-                    cx.theme().danger_foreground
-                }
-            }
-            Self::Success => {
-                if outline {
-                    cx.theme().success
-                } else {
-                    cx.theme().success_foreground
-                }
-            }
-            Self::Warning => {
-                if outline {
-                    cx.theme().warning
-                } else {
-                    cx.theme().warning_foreground
-                }
-            }
-            Self::Info => {
-                if outline {
-                    cx.theme().info
-                } else {
-                    cx.theme().info_foreground
-                }
-            }
+            Self::Secondary => crate::custom_style::text(),
+            Self::Danger => crate::custom_style::red_text(),
+            Self::Success => crate::custom_style::green_text(),
+            Self::Warning => crate::custom_style::yellow_text(),
+            Self::Info => crate::custom_style::cyan_text(),
             Self::Color(color) => {
                 if cx.theme().is_dark() {
                     color.scale(300)
@@ -266,7 +248,6 @@ impl RenderOnce for Tag {
             .text_color(fg)
             .border_color(border)
             .rounded(rounded)
-            .hover(|this| this.opacity(0.9))
             .refine_style(&self.style)
             .children(self.children)
     }

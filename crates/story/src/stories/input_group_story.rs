@@ -3,6 +3,7 @@ use std::collections::BTreeMap;
 use gpui_kit::component::{
     ActiveTheme as _, Disableable as _, Icon, IconName, Sizable as _, Size,
     button::ButtonVariants as _,
+    custom_style,
     input::{
         InputContentType, InputEvent, InputGroup, InputGroupAddon,
         InputGroupAddonAlignment as Align, InputGroupButton, InputGroupInput, InputGroupText,
@@ -251,7 +252,7 @@ impl Render for InputGroupStory {
                             .child(InputGroupButton::new("favorite-url")
                                 .icon(IconName::Star)
                                 .accessibility_label("Favorite website").tooltip("Favorite website")
-                                .when(self.starred, |button| button.text_color(cx.theme().primary))
+                                .when(self.starred, |button| button.text_color(custom_style::primary()))
                                 .on_click(cx.listener(|this, _, _, cx| { this.starred = !this.starred; cx.notify(); })))))
                     .child(InputGroup::new("input-group-amount")
                         .input(InputGroupInput::new(&self.amount).aria_label("Amount"))
@@ -301,7 +302,7 @@ impl Render for InputGroupStory {
                         .addon(InputGroupAddon::new("shortcut-key").align(Align::InlineEnd)
                             .child(Kbd::new(Keystroke::parse("enter").unwrap()))))
                     .when_some(self.last_search.clone(), |this, query| {
-                        this.child(div().text_sm().text_color(cx.theme().muted_foreground)
+                        this.child(div().text_sm().text_color(crate::custom_style::muted_text())
                             .child(format!("Submitted search: {query}")))
                     })
                     .child(InputGroup::new("input-group-loading").readonly(true)
@@ -317,7 +318,7 @@ impl Render for InputGroupStory {
                             .input(InputGroupInput::new(&self.email).aria_label("Email address").content_type(InputContentType::EmailAddress))
                             .addon(InputGroupAddon::new("email-icon").child(icon(IconName::Info))))
                         .child(div().text_sm()
-                            .text_color(if invalid { cx.theme().danger } else { cx.theme().muted_foreground })
+                            .text_color(if invalid { custom_style::red_text() } else { crate::custom_style::muted_text() })
                             .child(if invalid { "Enter an email address such as you@example.com." } else { "Validation comes from the application's field value." })))
                     .child(InputGroup::new("input-group-disabled").disabled(true)
                         .input(InputGroupInput::new(&self.disabled).aria_label("Disabled input"))
@@ -327,7 +328,7 @@ impl Render for InputGroupStory {
                     .child(v_flex().gap_2()
                         .child(InputGroup::new("input-group-disabled-invalid").disabled(true).invalid(true)
                             .input(InputGroupInput::new(&self.disabled_invalid).aria_label("Disabled invalid input")))
-                        .child(div().text_sm().text_color(cx.theme().danger)
+                        .child(div().text_sm().text_color(custom_style::red_text())
                             .child("The error remains visible while editing is unavailable."))),
             ))
             .child(self.render_textarea_examples(cx))
@@ -336,7 +337,7 @@ impl Render for InputGroupStory {
                     .child(InputGroup::new("input-group-notes")
                         .input(InputGroupTextarea::new(&self.notes).aria_label("Script text"))
                         .addon(InputGroupAddon::new("notes-header").align(Align::BlockStart)
-                            .border_b_1().border_color(cx.theme().border)
+                            .border_b_1().border_color(custom_style::border())
                             .child(InputGroupText::new().child(icon(IconName::File)).child("script.js"))
                             .child(InputGroupButton::new("copy-notes").ml_auto()
                                 .icon(IconName::Copy).accessibility_label("Copy script").tooltip("Copy script")
@@ -344,7 +345,7 @@ impl Render for InputGroupStory {
                                     cx.write_to_clipboard(ClipboardItem::new_string(this.notes.read(cx).value().to_string()));
                                 }))))
                         .addon(InputGroupAddon::new("notes-footer").align(Align::BlockEnd)
-                            .border_t_1().border_color(cx.theme().border)
+                            .border_t_1().border_color(custom_style::border())
                             .child(InputGroupText::new().child(format!("Run count: {}", self.runs)))
                             .child(InputGroupButton::new("run-notes").ml_auto().secondary().label("Run")
                                 .on_click(cx.listener(|this, _, _, cx| { this.runs += 1; cx.notify(); }))))),
@@ -368,7 +369,7 @@ impl Render for InputGroupStory {
                                 .disabled(message.trim().is_empty() || characters > 280)
                                 .on_click(cx.listener(|this, _, window, cx| this.send(window, cx))))))
                     .when_some(self.last_message.clone(), |this, message| {
-                        this.child(div().text_sm().text_color(cx.theme().muted_foreground).child(format!("Sent: {message}")))
+                        this.child(div().text_sm().text_color(crate::custom_style::muted_text()).child(format!("Sent: {message}")))
                     }),
             ))
             .child(section("Sizes").child(

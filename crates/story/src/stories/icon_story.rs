@@ -1,5 +1,5 @@
 use gpui_kit::component::{
-    ActiveTheme as _, Icon, IconName, Sizable,
+    Icon, IconName, Sizable,
     button::{Button, ButtonVariant, ButtonVariants},
     dock::PanelControl,
     h_flex,
@@ -98,7 +98,7 @@ impl Render for IconStory {
                                         Icon::default()
                                             .data(SEARCH_SVG)
                                             .large()
-                                            .text_color(cx.theme().primary),
+                                            .text_color(crate::custom_style::primary()),
                                     )
                                     .child(
                                         Button::new("embedded-search")
@@ -138,7 +138,7 @@ impl Render for IconStory {
                             .child(
                                 gpui_kit::div()
                                     .text_sm()
-                                    .text_color(cx.theme().muted_foreground)
+                                    .text_color(crate::custom_style::muted_text())
                                     .child(self.message),
                             ),
                     ),
@@ -175,12 +175,12 @@ impl Render for IconStory {
                     .child(
                         Icon::new(IconName::Maximize)
                             .size_6()
-                            .text_color(cx.theme().green),
+                            .text_color(crate::custom_style::green_text()),
                     )
                     .child(
                         Icon::new(IconName::Minimize)
                             .size_6()
-                            .text_color(cx.theme().red),
+                            .text_color(crate::custom_style::red_text()),
                     ),
             )
             .child(
@@ -203,7 +203,7 @@ impl Render for IconStory {
                                 Button::new("like2")
                                     .icon(
                                         Icon::new(IconName::HeartOff)
-                                            .text_color(cx.theme().red)
+                                            .text_color(crate::custom_style::red_text())
                                             .size_6(),
                                     )
                                     .with_variant(ButtonVariant::Ghost),
@@ -212,7 +212,7 @@ impl Render for IconStory {
                                 Button::new("like3")
                                     .icon(
                                         Icon::new(IconName::Heart)
-                                            .text_color(cx.theme().green)
+                                            .text_color(crate::custom_style::green_text())
                                             .size_6(),
                                     )
                                     .with_variant(ButtonVariant::Ghost),

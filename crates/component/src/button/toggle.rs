@@ -160,8 +160,8 @@ impl RenderOnce for Toggle {
         let disabled = self.disabled;
         let hoverable = !disabled && !checked;
         let rounding = cx.theme().radius;
-        let pressed_background = cx.theme().tokens.accent;
-        let pressed_foreground = cx.theme().accent_foreground;
+        let pressed_background = crate::custom_style::common_active_bg();
+        let pressed_foreground = crate::custom_style::text();
         let instance_style = self.style.clone();
 
         BaseToggle::new(self.id)
@@ -202,8 +202,8 @@ impl RenderOnce for Toggle {
                     .when(self.border_edges.right, |this| this.border_r_1())
                     .when(self.border_edges.top, |this| this.border_t_1())
                     .when(self.border_edges.bottom, |this| this.border_b_1())
-                    .border_color(cx.theme().border)
-                    .bg(cx.theme().tokens.background)
+                    .border_color(crate::custom_style::border())
+                    .bg(crate::custom_style::base())
             })
             // Always register the hover style: GPUI only refreshes the cached
             // hover state while one is present. If a checked toggle skipped it,
@@ -213,8 +213,8 @@ impl RenderOnce for Toggle {
                 if !hoverable {
                     return this;
                 }
-                this.bg(cx.theme().tokens.accent)
-                    .text_color(cx.theme().accent_foreground)
+                this.bg(crate::custom_style::common_hover_bg())
+                    .text_color(crate::custom_style::text())
             })
             .styles(|styles| {
                 styles.pressed(|style| {
