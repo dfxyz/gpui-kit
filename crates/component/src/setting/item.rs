@@ -6,7 +6,7 @@ use gpui_base::LogicalStyledExt as _;
 use std::{any::TypeId, ops::Deref, rc::Rc};
 
 use crate::{
-    ActiveTheme as _, AxisExt, StyledExt as _,
+    AxisExt, StyledExt as _,
     label::Label,
     setting::{
         AnySettingField, ElementField, RenderOptions,
@@ -303,7 +303,7 @@ impl SettingItem {
                                         div()
                                             .size_full()
                                             .text_sm()
-                                            .text_color(cx.theme().muted_foreground)
+                                            .text_color(crate::custom_style::muted_text())
                                             .child(description),
                                     )
                                 }),

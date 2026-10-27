@@ -1,6 +1,6 @@
 use chrono::NaiveTime;
 use gpui_kit::component::{
-    ActiveTheme as _, Disableable as _, Sizable as _, Size, StyledExt,
+    Disableable as _, Sizable as _, Size, StyledExt,
     time_field::{HourCycle, TimeField, TimeFieldEvent, TimeFieldState, TimePrecision},
     v_flex,
 };
@@ -104,7 +104,7 @@ impl Render for TimeFieldStory {
                     .child(
                         div()
                             .text_sm()
-                            .text_color(cx.theme().muted_foreground)
+                            .text_color(crate::custom_style::muted_text())
                             .child(format!("Value: {}", self.value)),
                     ),
             )

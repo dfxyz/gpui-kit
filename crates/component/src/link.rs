@@ -3,7 +3,7 @@ use gpui::{
     RenderOnce, SharedString, StatefulInteractiveElement, StyleRefinement, Styled, div,
 };
 
-use crate::{ActiveTheme as _, StyledExt};
+use crate::StyledExt;
 
 /// A Link element like a `<a>` tag in HTML.
 #[derive(IntoElement)]
@@ -67,24 +67,19 @@ impl ParentElement for Link {
 }
 
 impl RenderOnce for Link {
-    fn render(self, _: &mut gpui::Window, cx: &mut gpui::App) -> impl IntoElement {
+    fn render(self, _: &mut gpui::Window, _cx: &mut gpui::App) -> impl IntoElement {
         let href = self.href.clone();
         let on_click = self.on_click;
 
         div()
             .id(self.id)
-            .text_color(cx.theme().link)
+            .text_color(crate::custom_style::blue_text())
             .text_decoration_1()
-            .text_decoration_color(cx.theme().link.opacity(0.5))
-            .hover(|this| {
-                this.text_color(cx.theme().link.opacity(0.8))
-                    .text_decoration_1()
-                    .text_decoration_color(cx.theme().link)
-            })
+            .text_decoration_color(crate::custom_style::blue_text())
             .active(|this| {
-                this.text_color(cx.theme().link.opacity(0.6))
+                this.text_color(crate::custom_style::purple_text())
                     .text_decoration_1()
-                    .text_decoration_color(cx.theme().link)
+                    .text_decoration_color(crate::custom_style::purple_text())
             })
             .cursor_pointer()
             .refine_style(&self.style)

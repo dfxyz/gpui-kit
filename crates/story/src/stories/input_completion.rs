@@ -283,7 +283,7 @@ impl CompletionExample {
                     .child(
                         div().flex().gap_2().text_sm().child(*name).child(
                             div()
-                                .text_color(cx.theme().muted_foreground)
+                                .text_color(crate::custom_style::muted_text())
                                 .child(description(name)),
                         ),
                     )
@@ -333,7 +333,7 @@ impl Render for CompletionExample {
             .child(
                 div()
                     .text_sm()
-                    .text_color(cx.theme().muted_foreground)
+                    .text_color(crate::custom_style::muted_text())
                     .child(self.status.clone()),
             )
     }

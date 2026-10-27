@@ -2,10 +2,10 @@ use gpui::{
     AnyElement, App, IntoElement, ParentElement, RenderOnce, StyleRefinement, Styled, Window,
     prelude::FluentBuilder as _,
 };
+use gpui_base::LogicalStyledExt as _;
 use smallvec::SmallVec;
 
-use crate::{ActiveTheme, StyledExt, h_flex};
-use gpui_base::LogicalStyledExt as _;
+use crate::{StyledExt, h_flex};
 
 /// A horizontal status bar, usually placed at the bottom of a window or pane.
 ///
@@ -98,10 +98,10 @@ impl RenderOnce for StatusBar {
             .py_1()
             .px_2()
             .border_t_1()
-            .border_color(cx.theme().status_bar_border)
-            .bg(cx.theme().tokens.status_bar)
+            .border_color(crate::custom_style::border())
+            .bg(crate::custom_style::status_bar())
             .text_xs()
-            .text_color(cx.theme().muted_foreground)
+            .text_color(crate::custom_style::text())
             .refine_style(&self.style)
             .when(has_left, |this| this.child(region().children(self.left)))
             .child(

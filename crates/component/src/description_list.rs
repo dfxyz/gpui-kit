@@ -286,14 +286,15 @@ impl RenderOnce for DescriptionList {
             .when(self.bordered, |this| {
                 this.rounded(cx.theme().radius)
                     .border_1()
-                    .border_color(cx.theme().border)
+                    .border_color(crate::custom_style::border())
             })
             .children(rows.into_iter().enumerate().map(|(ix, items)| {
                 let is_last = ix == rows_len - 1;
                 h_flex()
                     .flex_row_dir(cx)
                     .when(self.bordered && !is_last, |this| {
-                        this.border_b_1().border_color(cx.theme().border)
+                        this.border_b_1()
+                            .border_color(crate::custom_style::border())
                     })
                     .children({
                         items.into_iter().enumerate().map(|(item_ix, item)| {
@@ -315,9 +316,7 @@ impl RenderOnce for DescriptionList {
                                                 .when(self.layout.is_horizontal(), |this| {
                                                     this.h_full()
                                                 })
-                                                .text_color(
-                                                    cx.theme().description_list_label_foreground,
-                                                )
+                                                .text_color(crate::custom_style::text())
                                                 .text_sm()
                                                 .px(padding_x)
                                                 .py(padding_y)
@@ -331,8 +330,8 @@ impl RenderOnce for DescriptionList {
                                                     .when(self.layout.is_vertical(), |this| {
                                                         this.border_b_1()
                                                     })
-                                                    .border_color(cx.theme().border)
-                                                    .bg(cx.theme().tokens.description_list_label)
+                                                    .border_color(crate::custom_style::border())
+                                                    .bg(crate::custom_style::base_alternative())
                                                 })
                                                 .map(|this| match label_width {
                                                     Some(label_width) => {
@@ -352,7 +351,7 @@ impl RenderOnce for DescriptionList {
                                         )
                                 }
                                 _ => div().h_2().w_full().when(self.bordered, |this| {
-                                    this.bg(cx.theme().tokens.description_list_label)
+                                    this.bg(crate::custom_style::base_alternative())
                                 }),
                             }
                         })

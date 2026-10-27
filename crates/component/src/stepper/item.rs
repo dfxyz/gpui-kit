@@ -5,10 +5,7 @@ use gpui::{
 };
 use gpui_base::{LogicalStyledExt as _, TestSupportExt as _};
 
-use crate::{
-    ActiveTheme as _, AxisExt, Icon, Sizable, Size, StyledExt as _,
-    stepper::trigger::StepperTrigger,
-};
+use crate::{AxisExt, Icon, Sizable, Size, StyledExt as _, stepper::trigger::StepperTrigger};
 
 /// A step item within a [`Stepper`].
 #[derive(IntoElement)]
@@ -262,7 +259,7 @@ impl RenderOnce for StepperSeparator {
                 })
             })
             .refine_style(&self.style)
-            .bg(cx.theme().border)
-            .when(self.checked, |this| this.bg(cx.theme().tokens.primary))
+            .bg(crate::custom_style::border())
+            .when(self.checked, |this| this.bg(crate::custom_style::primary()))
     }
 }

@@ -5,7 +5,7 @@ use gpui_kit::component::{
         Carousel, CarouselContent, CarouselEvent, CarouselItem, CarouselNext, CarouselPagination,
         CarouselPaginationItem, CarouselPrevious, CarouselState,
     },
-    h_flex, v_flex,
+    custom_style, h_flex, v_flex,
 };
 use gpui_kit::prelude::FluentBuilder as _;
 use gpui_kit::*;
@@ -96,9 +96,9 @@ impl CarouselStory {
             .p_6()
             .rounded(cx.theme().radius_tokens().xl)
             .border_1()
-            .border_color(cx.theme().border)
-            .bg(cx.theme().background)
-            .text_color(cx.theme().foreground)
+            .border_color(custom_style::border())
+            .bg(custom_style::base())
+            .text_color(custom_style::text())
             .font_semibold()
             .when(matches!(typography, SlideTypography::Large), |this| {
                 this.text_size(rems(2.25))

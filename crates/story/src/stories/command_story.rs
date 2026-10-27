@@ -4,7 +4,7 @@ use gpui_kit::component::{
     ActiveTheme as _, Disableable as _, Icon, IconName, WindowExt as _,
     button::Button,
     command::{Command, CommandEntry, CommandGroup, CommandItem, CommandState},
-    h_flex,
+    custom_style, h_flex,
     kbd::Kbd,
     v_flex,
 };
@@ -214,7 +214,7 @@ fn variable_rows() -> impl Iterator<Item = CommandItem> {
                 .py_1()
                 .child(div().text_sm().child("Compact custom row"))
         }),
-        CommandItem::new().label("large-row").child(|_, cx| {
+        CommandItem::new().label("large-row").child(|_, _cx| {
             v_flex()
                 .w_full()
                 .py_4()
@@ -223,7 +223,7 @@ fn variable_rows() -> impl Iterator<Item = CommandItem> {
                 .child(
                     div()
                         .text_xs()
-                        .text_color(cx.theme().muted_foreground)
+                        .text_color(crate::custom_style::muted_text())
                         .child("Its extra detail gives this row a different height."),
                 )
         }),
@@ -416,14 +416,14 @@ impl CommandStory {
                             .bordered(false)
                             .rounded(cx.theme().radius_lg)
                             .placeholder("Search stocks...")
-                            .empty(|_, _, cx| {
+                            .empty(|_, _, _cx| {
                                 v_flex()
                                     .w_full()
                                     .items_center()
                                     .gap_2()
                                     .py_6()
                                     .text_sm()
-                                    .text_color(cx.theme().muted_foreground)
+                                    .text_color(crate::custom_style::muted_text())
                                     .child(Icon::new(IconName::Search).size_8())
                                     .child("No stock found.")
                             })
@@ -555,11 +555,11 @@ fn stock_item(stock: (&'static str, &'static str, &'static str, f32)) -> Command
     CommandItem::new()
         .label(name)
         .keywords([symbol])
-        .child(move |_, cx| {
+        .child(move |_, _cx| {
             let change_color = if change < 0. {
-                cx.theme().chart_bearish
+                custom_style::chart_bearish()
             } else {
-                cx.theme().chart_bullish
+                custom_style::chart_bullish()
             };
 
             h_flex()
@@ -574,7 +574,7 @@ fn stock_item(stock: (&'static str, &'static str, &'static str, f32)) -> Command
                         .child(
                             div()
                                 .text_xs()
-                                .text_color(cx.theme().muted_foreground)
+                                .text_color(crate::custom_style::muted_text())
                                 .child(name),
                         ),
                 )
@@ -667,13 +667,13 @@ impl Render for CommandStory {
                                                             );
                                                         });
                                                     })
-                                                    .header(|state, _, cx| {
+                                                    .header(|state, _, _cx| {
                                                         h_flex()
                                                             .justify_between()
                                                             .px_3()
                                                             .py_2()
                                                             .border_b_1()
-                                                            .border_color(cx.theme().border)
+                                                            .border_color(custom_style::border())
                                                             .text_sm()
                                                             .child("Commands")
                                                             .child(format!(
@@ -681,7 +681,7 @@ impl Render for CommandStory {
                                                                 state.matched_count()
                                                             ))
                                                     })
-                                                    .footer(|_, _, cx| {
+                                                    .footer(|_, _, _cx| {
                                                         h_flex()
                                                             .gap_3()
                                                             .items_center()
@@ -689,9 +689,9 @@ impl Render for CommandStory {
                                                             .px_3()
                                                             .py_2()
                                                             .border_t_1()
-                                                            .border_color(cx.theme().border)
+                                                            .border_color(custom_style::border())
                                                             .text_xs()
-                                                            .text_color(cx.theme().muted_foreground)
+                                                            .text_color(crate::custom_style::muted_text())
                                                             .child(key_hint(
                                                                 &["up", "down"],
                                                                 "Navigate",

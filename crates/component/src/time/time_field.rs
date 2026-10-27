@@ -96,7 +96,7 @@ impl Styled for TimeField {
 impl RenderOnce for TimeField {
     fn render(self, window: &mut Window, cx: &mut App) -> impl IntoElement {
         let focused = self.state.read(cx).focus_handle(cx).is_focused(window);
-        let (bg, fg) = input_style(self.disabled, cx);
+        let (bg, fg) = input_style(self.disabled);
         let segment_radius = cx.theme().radius / 2.;
 
         div()
@@ -107,7 +107,7 @@ impl RenderOnce for TimeField {
             .bg(bg)
             .text_color(fg)
             .border_1()
-            .border_color(cx.theme().input)
+            .border_color(crate::custom_style::border())
             .rounded(cx.theme().radius)
             .input_text_size(self.size)
             .input_h(self.size)
@@ -115,7 +115,9 @@ impl RenderOnce for TimeField {
             .when(focused && !self.disabled, |this| {
                 this.focus_ring_style(window, cx)
             })
-            .when(self.invalid, |this| this.border_color(cx.theme().danger))
+            .when(self.invalid, |this| {
+                this.border_color(crate::custom_style::red_text())
+            })
             .child(
                 BaseTimeField::new(self.id, &self.state)
                     .disabled(self.disabled)
@@ -125,7 +127,7 @@ impl RenderOnce for TimeField {
                     .size_full()
                     .px_1()
                     .items_center()
-                    .render_segment(move |segment, state, _, cx| {
+                    .render_segment(move |segment, state, _, _cx| {
                         segment
                             .px_0p5()
                             .when(state.segment() == TimeSegment::Period, |this| {
@@ -134,7 +136,9 @@ impl RenderOnce for TimeField {
                                     .child(period_label(state.value() == 1))
                             })
                             .rounded(segment_radius)
-                            .when(state.is_selected(), |this| this.bg(cx.theme().selection))
+                            .when(state.is_selected(), |this| {
+                                this.bg(crate::custom_style::selection())
+                            })
                             .into_any_element()
                     }),
             )

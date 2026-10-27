@@ -85,10 +85,10 @@ impl RenderOnce for MenuItem {
             .text_xs()
             .line_height(relative(1.))
             .rounded(cx.theme().radius.half())
-            .hover(|this| this.bg(cx.theme().accent.opacity(0.8)))
+            .hover(|this| this.bg(crate::custom_style::common_hover_bg()))
             .when(self.selected, |this| {
-                this.bg(cx.theme().tokens.accent)
-                    .text_color(cx.theme().accent_foreground)
+                this.bg(crate::custom_style::common_hover_bg())
+                    .text_color(crate::custom_style::text())
             })
             .child(
                 div().child(StyledText::new(item.action.title.clone()).with_highlights(highlights)),

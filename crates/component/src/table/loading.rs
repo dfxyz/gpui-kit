@@ -1,4 +1,4 @@
-use crate::{ActiveTheme, Size, h_flex, skeleton::Skeleton, v_flex};
+use crate::{Size, h_flex, skeleton::Skeleton, v_flex};
 use gpui::{IntoElement, ParentElement as _, RenderOnce, Styled, prelude::FluentBuilder as _};
 
 #[derive(IntoElement)]
@@ -45,7 +45,7 @@ impl LoadingRow {
 }
 
 impl RenderOnce for LoadingRow {
-    fn render(self, _: &mut gpui::Window, cx: &mut gpui::App) -> impl IntoElement {
+    fn render(self, _: &mut gpui::Window, _cx: &mut gpui::App) -> impl IntoElement {
         let paddings = self.size.table_cell_padding();
         let height = self.size.table_row_height() * 0.5;
 
@@ -60,9 +60,12 @@ impl RenderOnce for LoadingRow {
             .items_center()
             .justify_between()
             .overflow_hidden()
-            .when(self.header, |this| this.bg(cx.theme().tokens.table_head))
+            .when(self.header, |this| {
+                this.bg(crate::custom_style::table_head())
+            })
             .when(!self.header, |this| {
-                this.border_t_1().border_color(cx.theme().table_row_border)
+                this.border_t_1()
+                    .border_color(crate::custom_style::border())
             })
             .child(
                 h_flex()

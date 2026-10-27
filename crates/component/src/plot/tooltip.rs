@@ -121,11 +121,11 @@ impl CrossLine {
     /// Build a single line along one axis: `vertical` runs top→bottom at the data point's
     /// `x`; otherwise left→right at its `y`. A dashed hairline draws a 1px dashed border; a
     /// solid band fills a `thickness`-wide strip centered on the data point.
-    fn line(&self, vertical: bool, cx: &App) -> Div {
+    fn line(&self, vertical: bool, _cx: &App) -> Div {
         let color = if self.dashed {
-            cx.theme().border.mix(cx.theme().foreground, 0.8)
+            crate::custom_style::border().mix(crate::custom_style::text(), 0.8)
         } else {
-            cx.theme().foreground.opacity(0.08)
+            crate::custom_style::text().opacity(0.08)
         };
         // The dashed hairline is a zero-width strip drawn entirely by its 1px border.
         let thickness = if self.dashed { px(0.) } else { self.thickness };
@@ -542,7 +542,7 @@ impl RenderOnce for Tooltip {
                                 })
                                 .child(
                                     div()
-                                        .text_color(cx.theme().muted_foreground)
+                                        .text_color(crate::custom_style::muted_text())
                                         .child(row.label),
                                 ),
                         )

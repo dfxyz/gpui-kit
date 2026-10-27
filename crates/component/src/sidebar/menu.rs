@@ -312,20 +312,20 @@ impl SidebarItem for SidebarMenuItem {
                     .refine_style(&self.style)
                     .when(is_hoverable, |this| {
                         this.hover(|this| {
-                            this.bg(cx.theme().sidebar_accent.opacity(0.8))
-                                .text_color(cx.theme().sidebar_accent_foreground)
+                            this.bg(crate::custom_style::common_hover_bg())
+                                .text_color(crate::custom_style::text())
                         })
                     })
                     .when(is_active, |this| {
                         this.font_medium()
-                            .bg(cx.theme().tokens.sidebar_accent)
-                            .text_color(cx.theme().sidebar_accent_foreground)
+                            .bg(crate::custom_style::common_active_bg())
+                            .text_color(crate::custom_style::text())
                     })
                     .when_some(self.icon.clone(), |this, icon| this.child(icon))
                     .when(is_collapsed, |this| {
                         this.justify_center().when(is_active, |this| {
-                            this.bg(cx.theme().tokens.sidebar_accent)
-                                .text_color(cx.theme().sidebar_accent_foreground)
+                            this.bg(crate::custom_style::common_active_bg())
+                                .text_color(crate::custom_style::text())
                         })
                     })
                     .when(!is_collapsed, |this| {
@@ -389,7 +389,7 @@ impl SidebarItem for SidebarMenuItem {
                             })
                     })
                     .when(is_disabled, |this| {
-                        this.text_color(cx.theme().muted_foreground)
+                        this.text_color(crate::custom_style::muted_text())
                     })
                     .when(!is_disabled, |this| {
                         this.on_click({
@@ -439,7 +439,7 @@ impl SidebarItem for SidebarMenuItem {
                     v_flex()
                         .id("submenu")
                         .border_s(gpui::px(1.), cx)
-                        .border_color(cx.theme().sidebar_border)
+                        .border_color(crate::custom_style::border())
                         .gap_1()
                         .ms(gpui::rems(0.875), cx)
                         .ps(gpui::rems(0.625), cx)

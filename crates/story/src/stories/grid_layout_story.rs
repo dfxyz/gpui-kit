@@ -277,27 +277,27 @@ fn tile_card(cx: &App) -> Div {
         .overflow_hidden()
         .rounded(cx.theme().radius_lg)
         .border_1()
-        .border_color(cx.theme().border)
-        .bg(cx.theme().background)
+        .border_color(crate::custom_style::border())
+        .bg(crate::custom_style::base())
 }
 
-fn tile_body(tile: &Tile, cx: &App) -> impl IntoElement {
+fn tile_body(tile: &Tile, _cx: &App) -> impl IntoElement {
     v_flex()
         .gap_1()
         .child(div().text_2xl().font_semibold().child(tile.value))
         .child(
             div()
                 .text_sm()
-                .text_color(cx.theme().muted_foreground)
+                .text_color(crate::custom_style::muted_text())
                 .child(tile.detail),
         )
 }
 
-fn tile_title(tile: &Tile, cx: &App) -> impl IntoElement {
+fn tile_title(tile: &Tile, _cx: &App) -> impl IntoElement {
     div()
         .text_sm()
         .font_medium()
-        .text_color(cx.theme().muted_foreground)
+        .text_color(crate::custom_style::muted_text())
         .child(tile.title)
 }
 
@@ -343,7 +343,7 @@ impl Render for GridLayoutStory {
                                 div()
                                     .text_xs()
                                     .font_family(cx.theme().mono_font_family.clone())
-                                    .text_color(cx.theme().muted_foreground)
+                                    .text_color(crate::custom_style::muted_text())
                                     .child(self.last_change.clone().unwrap_or_else(|| {
                                         match &self.selected {
                                             Some(id) => format!("Selected: {id}").into(),
@@ -375,8 +375,8 @@ impl Render for GridLayoutStory {
                                                 .px_4()
                                                 .py_2()
                                                 .border_b_1()
-                                                .border_color(cx.theme().border)
-                                                .bg(cx.theme().muted)
+                                                .border_color(crate::custom_style::border())
+                                                .bg(crate::custom_style::muted_bg())
                                                 .child(tile_title(tile, cx)),
                                         )
                                         .child(div().p_4().child(tile_body(tile, cx))),

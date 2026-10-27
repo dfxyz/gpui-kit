@@ -6,6 +6,7 @@ use gpui_kit::*;
 use gpui_kit::component::{
     ActiveTheme as _, IconName,
     button::Button,
+    custom_style,
     dock::PanelControl,
     h_flex,
     label::Label,
@@ -273,7 +274,7 @@ impl Render for TreeStory {
                                 })
                                 .p_1()
                                 .border_1()
-                                .border_color(cx.theme().border)
+                                .border_color(custom_style::border())
                                 .rounded(cx.theme().radius)
                                 .h(px(540.)),
                             )

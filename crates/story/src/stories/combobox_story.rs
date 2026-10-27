@@ -3,7 +3,7 @@ use gpui_kit::component::{
     button::Button,
     button::ButtonVariants as _,
     combobox::*,
-    h_flex,
+    custom_style, h_flex,
     searchable_list::{
         SearchableGroup, SearchableListChange, SearchableListDelegate, SearchableListItem,
         SearchableVec,
@@ -83,10 +83,8 @@ impl SearchableListItem for Industry {
     fn render(
         &self,
         _window: &mut gpui_kit::Window,
-        cx: &mut gpui_kit::App,
+        _cx: &mut gpui_kit::App,
     ) -> impl gpui_kit::IntoElement {
-        use gpui_kit::component::ActiveTheme as _;
-
         h_flex()
             .w_full()
             .gap_2()
@@ -94,7 +92,7 @@ impl SearchableListItem for Industry {
             .child(
                 Icon::new(self.icon.clone())
                     .small()
-                    .text_color(cx.theme().muted_foreground),
+                    .text_color(crate::custom_style::muted_text()),
             )
             .child(gpui_kit::div().child(self.label.clone()))
     }
@@ -259,14 +257,14 @@ impl SearchableListDelegate for FeaturedDelegate {
                     this.child(
                         Icon::new(IconName::Check)
                             .xsmall()
-                            .text_color(cx.theme().muted_foreground),
+                            .text_color(crate::custom_style::muted_text()),
                     )
                 })
                 .child(
                     div()
                         .rounded(cx.theme().radius.half())
-                        .bg(cx.theme().primary)
-                        .text_color(cx.theme().primary_foreground)
+                        .bg(custom_style::primary())
+                        .text_color(custom_style::reversed_text())
                         .px_1()
                         .text_xs()
                         .child("Featured"),
@@ -577,7 +575,7 @@ impl Render for ComboboxStory {
                         Combobox::new(&self.with_icon)
                             .placeholder("Select industry category")
                             .search_placeholder("Search…")
-                            .render_trigger(|trigger, _, cx| {
+                            .render_trigger(|trigger, _, _cx| {
                                 let (icon, title) = match trigger.selection() {
                                     [] => (None, None),
                                     [(_index, item)] => {
@@ -600,7 +598,7 @@ impl Render for ComboboxStory {
                                         this.child(
                                             Icon::new(icon)
                                                 .small()
-                                                .text_color(cx.theme().muted_foreground),
+                                                .text_color(crate::custom_style::muted_text()),
                                         )
                                     })
                                     .child(
@@ -610,13 +608,13 @@ impl Render for ComboboxStory {
                                             .truncate()
                                             .when_some(title, |this, title| this.child(title))
                                             .when(trigger.selection().is_empty(), |this| {
-                                                this.text_color(cx.theme().muted_foreground)
+                                                this.text_color(crate::custom_style::muted_text())
                                                     .child("Select industry category")
                                             }),
                                     )
                                     .child(
                                         Caret::new(trigger.size())
-                                            .text_color(cx.theme().muted_foreground),
+                                            .text_color(crate::custom_style::muted_text()),
                                     )
                                     .into_any_element()
                             })
@@ -644,13 +642,13 @@ impl Render for ComboboxStory {
                         Combobox::new(&self.with_footer)
                             .placeholder("Select university")
                             .search_placeholder("Search…")
-                            .footer(move |_, cx| {
+                            .footer(move |_, _| {
                                 let state = state.clone();
                                 Button::new("add-new")
                                     .ghost()
                                     .label("New university")
                                     .icon(Icon::new(IconName::Plus))
-                                    .text_color(cx.theme().foreground)
+                                    .text_color(custom_style::text())
                                     .w_full()
                                     .justify_start()
                                     .on_click(move |_, window, cx| {
@@ -703,13 +701,13 @@ impl Render for ComboboxStory {
                                             .child(
                                                 Icon::new(IconName::Palette)
                                                     .small()
-                                                    .text_color(cx.theme().primary),
+                                                    .text_color(custom_style::primary()),
                                             )
                                             .when_some(title, |this, title| {
                                                 this.child(
                                                     div()
-                                                        .bg(cx.theme().primary)
-                                                        .text_color(cx.theme().primary_foreground)
+                                                        .bg(custom_style::primary())
+                                                        .text_color(custom_style::reversed_text())
                                                         .rounded_full_style(cx)
                                                         .px_2()
                                                         .py_0p5()
@@ -718,17 +716,18 @@ impl Render for ComboboxStory {
                                                 )
                                             })
                                             .when(trigger.selection().is_empty(), |this| {
-                                                this.text_color(cx.theme().muted_foreground).child(
-                                                    trigger
-                                                        .placeholder()
-                                                        .cloned()
-                                                        .unwrap_or_else(|| "Select...".into()),
-                                                )
+                                                this.text_color(crate::custom_style::muted_text())
+                                                    .child(
+                                                        trigger
+                                                            .placeholder()
+                                                            .cloned()
+                                                            .unwrap_or_else(|| "Select...".into()),
+                                                    )
                                             }),
                                     )
                                     .child(
                                         Caret::new(trigger.size())
-                                            .text_color(cx.theme().muted_foreground),
+                                            .text_color(crate::custom_style::muted_text()),
                                     )
                                     .into_any_element()
                             })
@@ -748,7 +747,7 @@ impl Render for ComboboxStory {
 
                                 if items.is_empty() {
                                     return div()
-                                        .text_color(cx.theme().muted_foreground)
+                                        .text_color(crate::custom_style::muted_text())
                                         .child("Select frameworks")
                                         .into_any_element();
                                 }
@@ -773,7 +772,7 @@ impl Render for ComboboxStory {
                                                         .items_center()
                                                         .rounded(cx.theme().radius.half())
                                                         .border_1()
-                                                        .border_color(cx.theme().border)
+                                                        .border_color(custom_style::border())
                                                         .px_1()
                                                         .text_xs()
                                                         .child(div().truncate().child(item))
@@ -803,7 +802,9 @@ impl Render for ComboboxStory {
                                                     div()
                                                         .flex_shrink_0()
                                                         .text_xs()
-                                                        .text_color(cx.theme().muted_foreground)
+                                                        .text_color(
+                                                            crate::custom_style::muted_text(),
+                                                        )
                                                         .child(format!("+{hidden}")),
                                                 )
                                             }),
@@ -811,7 +812,7 @@ impl Render for ComboboxStory {
                                     .child(
                                         div().flex_shrink_0().child(
                                             Caret::new(trigger.size())
-                                                .text_color(cx.theme().muted_foreground),
+                                                .text_color(crate::custom_style::muted_text()),
                                         ),
                                     )
                                     .into_any_element()
@@ -865,7 +866,7 @@ impl Render for ComboboxStory {
 
                                 if trigger.selection().is_empty() {
                                     return div()
-                                        .text_color(cx.theme().muted_foreground)
+                                        .text_color(crate::custom_style::muted_text())
                                         .child("Select frameworks")
                                         .into_any_element();
                                 }
@@ -879,7 +880,7 @@ impl Render for ComboboxStory {
                                             div()
                                                 .rounded(cx.theme().radius.half())
                                                 .border_1()
-                                                .border_color(cx.theme().border)
+                                                .border_color(custom_style::border())
                                                 .px_1()
                                                 .text_xs()
                                                 .child(*item)
@@ -891,10 +892,10 @@ impl Render for ComboboxStory {
                                             div()
                                                 .rounded(cx.theme().radius.half())
                                                 .border_1()
-                                                .border_color(cx.theme().border)
+                                                .border_color(custom_style::border())
                                                 .px_1()
                                                 .text_xs()
-                                                .text_color(cx.theme().muted_foreground)
+                                                .text_color(crate::custom_style::muted_text())
                                                 .child(format!("+{} more", hidden)),
                                         )
                                     })
@@ -916,7 +917,7 @@ impl Render for ComboboxStory {
 
                                 if count == 0 {
                                     return div()
-                                        .text_color(cx.theme().muted_foreground)
+                                        .text_color(crate::custom_style::muted_text())
                                         .child("Select frameworks")
                                         .into_any_element();
                                 }
@@ -938,7 +939,7 @@ impl Render for ComboboxStory {
                                             .h(px(16.))
                                             .px_1()
                                             .rounded_full_style(cx)
-                                            .bg(cx.theme().red)
+                                            .bg(custom_style::red_text())
                                             .text_color(white())
                                             .text_size(px(10.))
                                             .line_height(relative(1.))
@@ -946,7 +947,7 @@ impl Render for ComboboxStory {
                                     )
                                     .child(
                                         div()
-                                            .text_color(cx.theme().foreground)
+                                            .text_color(custom_style::text())
                                             .child("frameworks selected"),
                                     )
                                     .into_any_element()

@@ -12,7 +12,7 @@ use gpui_base::{
 };
 
 use crate::{
-    Disableable, Icon, Sizable, Size, StyledExt,
+    Disableable, Icon, Selectable as _, Sizable, Size, StyledExt,
     button::{Button, ButtonVariants},
     h_flex,
     icon::IconName,
@@ -216,14 +216,9 @@ impl RenderOnce for Pagination {
                         let is_selected = page == current_page;
 
                         Button::new(page)
+                            .ghost()
+                            .selected(is_selected)
                             .with_size(self.size)
-                            .map(|this| {
-                                if is_selected {
-                                    this.outline()
-                                } else {
-                                    this.ghost()
-                                }
-                            })
                             .label(page.to_string())
                             .compact()
                             .disabled(is_disabled)

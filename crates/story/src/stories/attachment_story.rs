@@ -5,6 +5,7 @@ use gpui_kit::component::{
         AttachmentMedia, AttachmentStatus, AttachmentTitle,
     },
     button::{Button, ButtonVariants as _},
+    custom_style,
     shimmer::ShimmerStyle,
     v_flex,
 };
@@ -89,7 +90,7 @@ impl Render for AttachmentStory {
                     .max_w(rems(42.5))
                     .child(
                         AttachmentGroup::new("attachment-story-composer")
-                            .with_edge_fade(cx.theme().background)
+                            .with_edge_fade(custom_style::base())
                             .child(image_tile("composer-image", AttachmentStatus::Complete))
                             .child(
                                 image_tile("composer-image-uploading", AttachmentStatus::Uploading)
@@ -175,7 +176,7 @@ impl Render for AttachmentStory {
                                     .title(
                                         AttachmentTitle::new("transcript.pdf").with_shimmer_style(
                                             ShimmerStyle::new()
-                                                .highlight_color(cx.theme().primary)
+                                                .highlight_color(custom_style::primary())
                                                 .spread(0.45)
                                                 .reverse(true),
                                         ),
@@ -188,7 +189,7 @@ impl Render for AttachmentStory {
                             .id("lifecycle-complete")
                             .media(
                                 AttachmentMedia::new()
-                                    .text_color(cx.theme().success)
+                                    .text_color(custom_style::green_text())
                                     .child(Icon::new(IconName::CircleCheck)),
                             )
                             .content(
@@ -269,20 +270,20 @@ impl Render for AttachmentStory {
                         Attachment::new()
                             .w_full()
                             .rounded(cx.theme().radius)
-                            .bg(cx.theme().accent)
-                            .border_color(cx.theme().accent.opacity(0.5))
+                            .bg(custom_style::green_text().opacity(custom_style::text_to_bg_alpha()))
+                            .border_color(custom_style::green_text().opacity(custom_style::text_to_border_alpha()))
                             .media(
                                 AttachmentMedia::new()
                                     .rounded(cx.theme().radius)
-                                    .bg(cx.theme().primary.opacity(0.12))
-                                    .text_color(cx.theme().primary)
+                                    .bg(custom_style::primary().opacity(0.12))
+                                    .text_color(custom_style::primary())
                                     .child(Icon::new(IconName::FileText)),
                             )
                             .content(
                                 AttachmentContent::new()
                                     .title(
                                         AttachmentTitle::new("custom-theme.json")
-                                            .text_color(cx.theme().primary),
+                                            .text_color(custom_style::primary()),
                                     )
                                     .description(AttachmentDescription::new("JSON · 16 KB")),
                             ),
@@ -292,7 +293,7 @@ impl Render for AttachmentStory {
                             .axis(Axis::Vertical)
                             .media(
                                 AttachmentMedia::new().src(PREVIEW).overlay(
-                                    Icon::new(IconName::Play).text_color(cx.theme().foreground),
+                                    Icon::new(IconName::Play).text_color(custom_style::text()),
                                 ),
                             ),
                     ),

@@ -6,7 +6,7 @@ use gpui::{
 };
 
 use crate::{
-    ActiveTheme, StyledExt,
+    StyledExt,
     group_box::{GroupBox, GroupBoxVariant, GroupBoxVariants},
     label::Label,
     setting::{RenderOptions, SettingItem},
@@ -128,7 +128,7 @@ impl SettingGroup {
                         this.child(
                             Label::new(description)
                                 .text_sm()
-                                .text_color(cx.theme().muted_foreground),
+                                .text_color(crate::custom_style::muted_text()),
                         )
                     },
                 ))

@@ -6,15 +6,12 @@ use gpui::{
 };
 use gpui_component_macros::IntoPlot;
 
-use crate::{
-    ActiveTheme,
-    plot::{
-        AxisLabelPlacement, AxisLabelSide, AxisText, Grid, Plot, PlotAppear, PlotAxis, PlotLabel,
-        label::{TEXT_GAP, TEXT_HEIGHT, TEXT_SIZE, Text, measure_text_width},
-        scale::{PlotValue, Scale, ScaleBand, ScaleLinear},
-        shape::{Bar, BarAlignment},
-        tooltip::{CrossLine, PlotHover, Tooltip, TooltipState},
-    },
+use crate::plot::{
+    AxisLabelPlacement, AxisLabelSide, AxisText, Grid, Plot, PlotAppear, PlotAxis, PlotLabel,
+    label::{TEXT_GAP, TEXT_HEIGHT, TEXT_SIZE, Text, measure_text_width},
+    scale::{PlotValue, Scale, ScaleBand, ScaleLinear},
+    shape::{Bar, BarAlignment},
+    tooltip::{CrossLine, PlotHover, Tooltip, TooltipState},
 };
 
 use super::{
@@ -607,8 +604,8 @@ where
     /// of a gradient, or the default fill when `fill` returns a gradient,
     /// whose stops can't be read back. `frame` is the bar's, as `paint` lays it
     /// out.
-    fn bar_color(&self, d: &T, frame: Bounds<f32>, bounds: Bounds<Pixels>, cx: &App) -> Hsla {
-        let default = cx.theme().chart_2;
+    fn bar_color(&self, d: &T, frame: Bounds<f32>, bounds: Bounds<Pixels>, _cx: &App) -> Hsla {
+        let default = crate::custom_style::chart_2();
         if let Some(fill) = self.fill_gradient.as_ref() {
             let value = self
                 .value
@@ -809,7 +806,7 @@ where
         };
 
         // Draw band axis (with categorical labels).
-        let mut axis = PlotAxis::new().stroke(cx.theme().border);
+        let mut axis = PlotAxis::new().stroke(crate::custom_style::border());
         if self.label_axis {
             match alignment {
                 BarAlignment::Bottom | BarAlignment::Top => {
@@ -839,7 +836,7 @@ where
                                 Text::new(
                                     band_fn(d).into(),
                                     point(px(band_x + band_offset + band_width / 2.), px(label_y)),
-                                    cx.theme().muted_foreground,
+                                    crate::custom_style::muted_text(),
                                 )
                                 .align(TextAlign::Center),
                             )
@@ -854,7 +851,7 @@ where
                         &band_scale,
                         band_width,
                         &labeled_items(self.band_slots(), self.band_tick_count, self.tick_margin),
-                        cx.theme().muted_foreground,
+                        crate::custom_style::muted_text(),
                     );
                     let (side, align) = if matches!(alignment, BarAlignment::Left) {
                         (AxisLabelSide::Start, TextAlign::Right)
@@ -875,7 +872,7 @@ where
 
         // Draw grid, excluding the line at the baseline.
         if self.grid {
-            let grid = Grid::new().stroke(cx.theme().chart_grid);
+            let grid = Grid::new().stroke(crate::custom_style::border());
             let grid = if self.grid_dashed {
                 grid.dash_array(&[px(4.), px(2.)])
             } else {
@@ -895,7 +892,7 @@ where
         if self.value_axis {
             // Ticks run from `far` (the domain maximum) to `baseline` (the minimum),
             // so the labels walk the domain in the same direction.
-            let color = cx.theme().muted_foreground;
+            let color = crate::custom_style::muted_text();
             let texts = self
                 .value_tick_labels()
                 .into_iter()
@@ -947,10 +944,10 @@ where
         // Draw bars.
         let band_fn_cloned = band_fn.clone();
         let value_fn_cloned = value_fn.clone();
-        let default_fill: Background = cx.theme().chart_2.into();
+        let default_fill: Background = crate::custom_style::chart_2().into();
         let fill = self.fill.clone();
         let fill_gradient = self.fill_gradient.clone();
-        let label_color = cx.theme().foreground;
+        let label_color = crate::custom_style::text();
         let label_color_fn = self.label_color.clone();
         let min_length = self.min_length;
 
@@ -1306,6 +1303,7 @@ fn value_tick_positions(far: f32, baseline: f32, count: usize) -> Vec<f32> {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::theme::ActiveTheme as _;
 
     #[test]
     fn test_label_below_zero_line() {

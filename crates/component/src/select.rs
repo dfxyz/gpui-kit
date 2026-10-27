@@ -285,7 +285,7 @@ where
                         .flex_row_dir(cx)
                         .justify_center()
                         .py_6()
-                        .text_color(cx.theme().muted_foreground.opacity(0.6))
+                        .text_color(crate::custom_style::muted_text().opacity(0.6))
                         .child(Icon::new(IconName::Inbox).size(px(28.)))
                         .into_any_element()
                 }
@@ -489,7 +489,7 @@ where
     }
 
     fn display_title(&mut self, _: &Window, cx: &mut Context<Self>) -> impl IntoElement {
-        let default_title = div().text_color(cx.theme().muted_foreground).child(
+        let default_title = div().text_color(crate::custom_style::muted_text()).child(
             self.state
                 .placeholder
                 .clone()
@@ -522,7 +522,7 @@ where
 
         div()
             .when(self.state.disabled, |this| {
-                this.text_color(cx.theme().muted_foreground)
+                this.text_color(crate::custom_style::muted_text())
             })
             .child(title)
     }
@@ -558,7 +558,7 @@ where
         let allow_open = !(self.state.open || self.state.disabled);
         let outline_visible = self.state.open || (is_focused && !self.state.disabled);
 
-        let (bg, fg) = input_style(self.state.disabled, cx);
+        let (bg, fg) = input_style(self.state.disabled);
 
         self.state.list.update(cx, |list, cx| {
             list.set_searchable(searchable, cx);
@@ -582,19 +582,19 @@ where
                         .items_center()
                         .justify_between()
                         .border_1()
-                        .border_color(cx.theme().transparent)
+                        .border_color(crate::custom_style::transparent())
                         .when(self.state.appearance, |this| {
                             this.bg(bg)
                                 .text_color(fg)
                                 .when(self.state.disabled, |this| this.opacity(0.5))
-                                .border_color(cx.theme().input)
+                                .border_color(crate::custom_style::border())
                                 .rounded(cx.theme().radius)
                         })
                         .input_size(self.state.size)
                         .input_text_size(self.state.size)
                         .refine_style(&self.state.style)
                         .when(outline_visible && self.state.appearance, |this| {
-                            this.border_1().border_color(cx.theme().ring)
+                            this.border_1().border_color(crate::custom_style::ring())
                         })
                         .when(
                             outline_visible && self.state.appearance && self.focus_ring_enabled,
@@ -637,10 +637,10 @@ where
                                     let icon = match self.icon.clone() {
                                         Some(icon) => icon
                                             .xsmall()
-                                            .text_color(cx.theme().muted_foreground)
+                                            .text_color(crate::custom_style::muted_text())
                                             .into_any_element(),
                                         None => Caret::new(self.state.size)
-                                            .text_color(cx.theme().muted_foreground)
+                                            .text_color(crate::custom_style::muted_text())
                                             .into_any_element(),
                                     };
 
@@ -759,8 +759,9 @@ where
     /// Highlight the part of each row that matches the search query, default is `false`.
     ///
     /// Rows render with [`SearchableListItem::render_highlighted`]; the default
-    /// highlights the matched text of `title()` in the theme's
-    /// `list_highlight_foreground` color.
+    /// highlights the matched text of `title()` in
+    /// `custom_style::highlighted_text()`, the same color `Label` highlighting
+    /// and completion matches use.
     pub fn highlight_matches(mut self, highlight: bool) -> Self {
         self.options.highlight_matches = highlight;
         self

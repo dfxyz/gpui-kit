@@ -6,14 +6,11 @@ use gpui::{
 };
 use gpui_component_macros::IntoPlot;
 
-use crate::{
-    ActiveTheme,
-    plot::{
-        AxisLabelPlacement, Curve, PathCaches, Plot, PlotAppear, PlotAxis,
-        scale::{PlotValue, Scale, ScaleLinear, ScalePoint},
-        shape::Area,
-        tooltip::{CrossLine, Dot, Tooltip, TooltipState},
-    },
+use crate::plot::{
+    AxisLabelPlacement, Curve, PathCaches, Plot, PlotAppear, PlotAxis,
+    scale::{PlotValue, Scale, ScaleLinear, ScalePoint},
+    shape::Area,
+    tooltip::{CrossLine, Dot, Tooltip, TooltipState},
 };
 
 use super::{
@@ -421,7 +418,7 @@ where
             origin: bounds.origin + point(px(left), px(0.)),
             size: Size::new(bounds.size.width - px(left), bounds.size.height),
         };
-        let mut axis = PlotAxis::new().stroke(cx.theme().border);
+        let mut axis = PlotAxis::new().stroke(crate::custom_style::border());
         if self.x_axis {
             let labeled = labeled_items(
                 axis_point_count(self.point_count, self.data.len()),
@@ -434,7 +431,7 @@ where
                 &x,
                 axis_point_count(self.point_count, self.data.len()),
                 &labeled,
-                cx.theme().muted_foreground,
+                crate::custom_style::muted_text(),
             )
             .into_iter()
             .map(|mut label| {
@@ -450,8 +447,8 @@ where
         }
 
         // Draw area
-        let default_fill: Background = cx.theme().chart_2.opacity(0.4).into();
-        let default_stroke = cx.theme().chart_2;
+        let default_fill: Background = crate::custom_style::chart_2().opacity(0.4).into();
+        let default_stroke = crate::custom_style::chart_2();
         let areas = self.y.iter().enumerate().map(|(i, y_fn)| {
             let x = x.clone();
             let y = y.clone();
@@ -560,8 +557,8 @@ where
         let x_fn = self.x.as_ref()?;
         let d = self.data.get(state.index)?;
 
-        let default_color = cx.theme().chart_2;
-        let dot_stroke = cx.theme().background;
+        let default_color = crate::custom_style::chart_2();
+        let dot_stroke = crate::custom_style::base();
         let color = |i: usize| *self.strokes.get(i).unwrap_or(&default_color);
 
         // Follow the cursor; the crosshair and dots glide to the data point.

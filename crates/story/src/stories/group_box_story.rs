@@ -4,7 +4,7 @@ use gpui_kit::{
 };
 
 use gpui_kit::component::{
-    ActiveTheme as _, StyledExt,
+    StyledExt,
     button::{Button, ButtonVariants},
     checkbox::Checkbox,
     group_box::{GroupBox, GroupBoxVariants as _},
@@ -180,7 +180,7 @@ impl Render for GroupBoxStory {
                 section("Custom Style").w_128().child(
                     GroupBox::new()
                         .outline()
-                        .bg(cx.theme().group_box)
+                        .bg(crate::custom_style::muted_bg())
                         .rounded_xl()
                         .p_5()
                         .title("This is a custom style")

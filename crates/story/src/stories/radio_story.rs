@@ -4,7 +4,7 @@ use gpui_kit::{
 };
 
 use gpui_kit::component::{
-    ActiveTheme, Sizable, Size,
+    Sizable, Size,
     radio::{Radio, RadioGroup},
     v_flex,
 };
@@ -81,7 +81,7 @@ impl Render for RadioStory {
                                     .child(
                                         div()
                                             .text_xs()
-                                            .text_color(cx.theme().muted_foreground)
+                                            .text_color(crate::custom_style::muted_text())
                                             .child("Arrives in 3–5 business days."),
                                     ),
                             )
@@ -93,7 +93,7 @@ impl Render for RadioStory {
                                     .child(
                                         div()
                                             .text_xs()
-                                            .text_color(cx.theme().muted_foreground)
+                                            .text_color(crate::custom_style::muted_text())
                                             .child("Arrives the next business day."),
                                     ),
                             )
@@ -105,7 +105,7 @@ impl Render for RadioStory {
                                     .child(
                                         div()
                                             .text_xs()
-                                            .text_color(cx.theme().muted_foreground)
+                                            .text_color(crate::custom_style::muted_text())
                                             .child("Unavailable for this order."),
                                     )
                                     .disabled(true),

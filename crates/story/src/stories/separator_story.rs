@@ -1,5 +1,5 @@
 use crate::section;
-use gpui_kit::component::{ActiveTheme, h_flex, label::Label, separator::Separator, v_flex};
+use gpui_kit::component::{h_flex, label::Label, separator::Separator, v_flex};
 use gpui_kit::{
     App, AppContext, Context, Entity, Focusable, IntoElement, ParentElement, Render, Styled,
     Window, px,
@@ -40,7 +40,7 @@ impl Focusable for SeparatorStory {
 }
 
 impl Render for SeparatorStory {
-    fn render(&mut self, _: &mut Window, cx: &mut Context<Self>) -> impl IntoElement {
+    fn render(&mut self, _: &mut Window, _cx: &mut Context<Self>) -> impl IntoElement {
         v_flex()
             .gap_6()
             .child(
@@ -84,7 +84,7 @@ impl Render for SeparatorStory {
                             .child(
                                 v_flex().gap_y_2().child("Hello GPUI Component").child(
                                     Label::new(DESCRIPTION)
-                                        .text_color(cx.theme().muted_foreground)
+                                        .text_color(crate::custom_style::muted_text())
                                         .text_sm(),
                                 ),
                             )

@@ -296,8 +296,6 @@ impl Styled for MessageAvatar {
 
 impl RenderOnce for MessageAvatar {
     fn render(self, _: &mut Window, cx: &mut App) -> impl IntoElement {
-        let tokens = cx.theme().semantic_tokens();
-
         h_flex()
             .relative()
             .min_w_8()
@@ -307,7 +305,7 @@ impl RenderOnce for MessageAvatar {
             .self_end()
             .overflow_hidden()
             .rounded(cx.theme().radius_full())
-            .bg(tokens.colors.muted)
+            .bg(crate::custom_style::muted_bg())
             .refine_style(&self.style)
             .children(self.children)
     }
@@ -363,8 +361,6 @@ impl Styled for MessageHeader {
 
 impl RenderOnce for MessageHeader {
     fn render(self, _: &mut Window, cx: &mut App) -> impl IntoElement {
-        let tokens = cx.theme().semantic_tokens();
-
         h_flex()
             .flex_row_dir(cx)
             .max_w_full()
@@ -373,7 +369,7 @@ impl RenderOnce for MessageHeader {
             .text_xs()
             .line_height(relative(1.25))
             .font_medium()
-            .text_color(tokens.colors.muted_foreground)
+            .text_color(crate::custom_style::muted_text())
             .when(self.content_inset.unwrap_or(true), |this| this.px_3())
             .refine_style(&self.style)
             .children(self.children)
@@ -505,8 +501,6 @@ impl Styled for MessageFooter {
 
 impl RenderOnce for MessageFooter {
     fn render(self, _: &mut Window, cx: &mut App) -> impl IntoElement {
-        let tokens = cx.theme().semantic_tokens();
-
         h_flex()
             .flex_row_dir(cx)
             .max_w_full()
@@ -515,7 +509,7 @@ impl RenderOnce for MessageFooter {
             .text_xs()
             .line_height(relative(1.25))
             .font_medium()
-            .text_color(tokens.colors.muted_foreground)
+            .text_color(crate::custom_style::muted_text())
             .when(self.content_inset.unwrap_or(true), |this| this.px_3())
             .refine_style(&self.style)
             .children(self.children)

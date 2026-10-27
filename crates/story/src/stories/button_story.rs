@@ -89,10 +89,10 @@ impl Render for ButtonStory {
         let button = |id: &'static str| Button::new(id).with_size(self.size);
 
         let custom_variant = ButtonCustomVariant::new(cx)
-            .color(cx.theme().magenta)
-            .foreground(cx.theme().magenta)
-            .hover(cx.theme().magenta.opacity(0.1))
-            .active(cx.theme().magenta.opacity(0.2));
+            .color(crate::custom_style::magenta_text())
+            .foreground(crate::custom_style::magenta_text())
+            .hover(crate::custom_style::magenta_text().opacity(0.1))
+            .active(crate::custom_style::magenta_text().opacity(0.2));
 
         v_flex()
             .on_action(cx.listener(|this, action: &ButtonAction, window, cx| {
@@ -349,11 +349,7 @@ impl Render for ButtonStory {
                             .child(
                                 button("progress-button-1")
                                     .primary()
-                                    .icon(
-                                        ProgressCircle::new("circle-progress-1")
-                                            .color(cx.theme().primary_foreground)
-                                            .value(25.),
-                                    )
+                                    .icon(ProgressCircle::new("circle-progress-1").value(25.))
                                     .label("Installing..."),
                             )
                             .child(

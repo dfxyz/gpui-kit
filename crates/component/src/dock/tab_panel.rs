@@ -30,7 +30,7 @@ use rust_i18n::t;
 
 use crate::{
     ActiveTheme as _, IconName, Selectable as _, Sizable as _,
-    button::{Button, ButtonCustomVariant, ButtonVariants as _},
+    button::{Button, ButtonVariants as _},
     dock::{
         ClosePanel, PanelControl, PanelHandle, PanelStyle, SkinShared, ToggleZoom,
         toggle_dock_by_user,
@@ -77,10 +77,10 @@ impl Render for DragPanelPreview {
             .overflow_hidden()
             .whitespace_nowrap()
             .border_1()
-            .border_color(cx.theme().border)
+            .border_color(crate::custom_style::border())
             .rounded(cx.theme().radius)
-            .text_color(cx.theme().tab_foreground)
-            .bg(cx.theme().tokens.tab_active)
+            .text_color(crate::custom_style::text())
+            .bg(crate::custom_style::base())
             .opacity(0.75)
             .child(panel_title(&self.panel, window, cx))
     }
@@ -497,8 +497,8 @@ impl TabGroupSkin {
                         .border_e(px(1.), cx)
                         .border_b_1()
                         .h_full()
-                        .border_color(cx.theme().border)
-                        .bg(cx.theme().tokens.tab_bar)
+                        .border_color(crate::custom_style::border())
+                        .bg(crate::custom_style::muted_bg())
                         .px_2()
                         .children(left_button)
                         .children(bottom_button),
@@ -534,17 +534,7 @@ impl TabGroupSkin {
                                         Button::new(("close-tab", ix))
                                             .icon(IconName::Close)
                                             .xsmall()
-                                            // The regular ghost hover matches the
-                                            // inactive tab bar background in the
-                                            // default theme. Use a stronger theme
-                                            // surface while keeping a transparent
-                                            // idle background and no border.
-                                            .custom(
-                                                ButtonCustomVariant::new(cx)
-                                                    .foreground(cx.theme().secondary_foreground)
-                                                    .hover(*cx.theme().tokens.secondary_hover)
-                                                    .active(*cx.theme().tokens.secondary_active),
-                                            )
+                                            .ghost()
                                             // The 20px XS button has a 12px icon:
                                             // 4px inside plus 8px outside matches
                                             // the label's 12px leading padding.
@@ -617,7 +607,7 @@ impl TabGroupSkin {
                                         this.rounded_s(px(0.), cx)
                                             .border_s(px(2.), cx)
                                             .border_e(px(0.), cx)
-                                            .border_color(cx.theme().drag_border)
+                                            .border_color(crate::custom_style::drag_border())
                                     })
                                     .on_drop({
                                         let group = group.clone();
@@ -635,7 +625,7 @@ impl TabGroupSkin {
                                         this.rounded_s(px(0.), cx)
                                             .border_s(px(2.), cx)
                                             .border_e(px(0.), cx)
-                                            .border_color(cx.theme().drag_border)
+                                            .border_color(crate::custom_style::drag_border())
                                     })
                                     .on_drop({
                                         let group = group.clone();
@@ -656,8 +646,8 @@ impl TabGroupSkin {
                     .flex_grow_1()
                     .min_w_16()
                     .when(droppable, |this| {
-                        this.drag_over::<DragPanel>(|this, _, _, cx| {
-                            this.bg(cx.theme().tokens.drop_target)
+                        this.drag_over::<DragPanel>(|this, _, _, _cx| {
+                            this.bg(crate::custom_style::drag_target())
                         })
                         .on_drop({
                             let group = group.clone();
@@ -670,8 +660,8 @@ impl TabGroupSkin {
                                 group.drop_panel(drag.clone(), ix, false, window, cx);
                             }
                         })
-                        .drag_over::<AnyDrag>(|this, _, _, cx| {
-                            this.bg(cx.theme().tokens.drop_target)
+                        .drag_over::<AnyDrag>(|this, _, _, _cx| {
+                            this.bg(crate::custom_style::drag_target())
                         })
                         .on_drop({
                             let group = group.clone();
@@ -690,8 +680,8 @@ impl TabGroupSkin {
                         .border_s(px(1.), cx)
                         .border_b_1()
                         .h_full()
-                        .border_color(cx.theme().border)
-                        .bg(cx.theme().tokens.tab_bar)
+                        .border_color(crate::custom_style::border())
+                        .bg(crate::custom_style::muted_bg())
                         .px_2()
                         .gap_1()
                         .children(
@@ -716,7 +706,7 @@ impl TabGroupRenderer for TabGroupSkin {
         // this. What is left is the background and the two actions.
         div()
             .id("tab-panel")
-            .bg(cx.theme().tokens.background)
+            .bg(crate::custom_style::base())
             // A collapsed group is a strip of tabs with no content, and the
             // actions act on content. The old dock gated them the same way.
             .when(!group.is_collapsed(), |this| {
@@ -846,7 +836,7 @@ impl TabGroupRenderer for TabGroupSkin {
         Some(
             div()
                 .absolute()
-                .bg(cx.theme().tokens.drop_target)
+                .bg(crate::custom_style::drag_target())
                 .left(left)
                 .top(top)
                 .w(width)

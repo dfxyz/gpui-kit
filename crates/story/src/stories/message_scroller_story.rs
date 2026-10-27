@@ -4,7 +4,7 @@ use gpui_kit::component::{
     ActiveTheme as _, Disableable as _, IconName, Sizable as _, StyledExt as _,
     bubble::{Bubble, BubbleVariant},
     button::{Button, ButtonVariants as _},
-    h_flex,
+    custom_style, h_flex,
     input::{Input, InputState},
     marker::{Marker, MarkerContent, MarkerVariant},
     message::{Message, MessageAlignment, MessageContent},
@@ -389,10 +389,10 @@ impl MessageScrollerStory {
             .overflow_hidden()
             .rounded(cx.theme().radius_2xl())
             .border_1()
-            .border_color(cx.theme().border)
-            .bg(cx.theme().background)
-            .text_color(cx.theme().foreground)
-            .child(scroller.with_bottom_fade(cx.theme().background).size_full())
+            .border_color(custom_style::border())
+            .bg(custom_style::base())
+            .text_color(custom_style::text())
+            .child(scroller.with_bottom_fade(custom_style::base()).size_full())
     }
 }
 
@@ -483,9 +483,9 @@ impl Render for MessageScrollerStory {
                         .overflow_hidden()
                         .rounded(cx.theme().radius_4xl())
                         .border_1()
-                        .border_color(cx.theme().border)
-                        .bg(cx.theme().background)
-                        .text_color(cx.theme().foreground)
+                        .border_color(custom_style::border())
+                        .bg(custom_style::base())
+                        .text_color(custom_style::text())
                         .child(
                             h_flex()
                                 .w_full()
@@ -494,7 +494,7 @@ impl Render for MessageScrollerStory {
                                 .gap_2()
                                 .p_5()
                                 .border_b_1()
-                                .border_color(cx.theme().border)
+                                .border_color(custom_style::border())
                                 .child(
                                     v_flex()
                                         .gap_1()
@@ -502,7 +502,7 @@ impl Render for MessageScrollerStory {
                                         .child(
                                             div()
                                                 .text_sm()
-                                                .text_color(cx.theme().muted_foreground)
+                                                .text_color(crate::custom_style::muted_text())
                                                 .child("How can I help you today?"),
                                         ),
                                 )
@@ -531,7 +531,7 @@ impl Render for MessageScrollerStory {
                                     },
                                 )
                                 .with_list_style(StyleRefinement::default().p_5())
-                                .with_bottom_fade(cx.theme().background),
+                                .with_bottom_fade(custom_style::base()),
                             ),
                         )
                         .child(
@@ -541,7 +541,7 @@ impl Render for MessageScrollerStory {
                                     .gap_1()
                                     .p_2()
                                     .rounded_xl()
-                                    .bg(cx.theme().muted)
+                                    .bg(custom_style::muted_bg())
                                     .child(Input::new(&self.composer).appearance(false))
                                     .child(
                                         h_flex().w_full().justify_end().child(
@@ -561,7 +561,7 @@ impl Render for MessageScrollerStory {
                 .child(
                     div()
                         .text_xs()
-                        .text_color(cx.theme().muted_foreground)
+                        .text_color(crate::custom_style::muted_text())
                         .child(status),
                 ),
         )
@@ -623,7 +623,7 @@ impl Render for MessageScrollerStory {
                     .child(
                         div()
                             .text_xs()
-                            .text_color(cx.theme().muted_foreground)
+                            .text_color(crate::custom_style::muted_text())
                             .child(if streaming {
                                 "Streaming · existing row is remeasured as each token arrives"
                             } else {
@@ -754,8 +754,8 @@ impl Render for MessageScrollerStory {
                             .overflow_hidden()
                             .rounded(cx.theme().radius_2xl())
                             .border_1()
-                            .border_color(cx.theme().border)
-                            .bg(cx.theme().background)
+                            .border_color(custom_style::border())
+                            .bg(custom_style::base())
                             .when(empty, |this| {
                                 this.child(
                                     v_flex()
@@ -767,7 +767,7 @@ impl Render for MessageScrollerStory {
                                         .child(
                                             div()
                                                 .text_sm()
-                                                .text_color(cx.theme().muted_foreground)
+                                                .text_color(crate::custom_style::muted_text())
                                                 .child("Send a message to start the conversation"),
                                         ),
                                 )
@@ -788,7 +788,7 @@ impl Render for MessageScrollerStory {
                                         },
                                     )
                                     .with_list_style(StyleRefinement::default().p_4())
-                                    .with_bottom_fade(cx.theme().background)
+                                    .with_bottom_fade(custom_style::base())
                                     .size_full(),
                                 )
                             }),
@@ -817,7 +817,7 @@ impl Render for MessageScrollerStory {
                             .child(
                                 div()
                                     .text_sm()
-                                    .text_color(cx.theme().muted_foreground)
+                                    .text_color(crate::custom_style::muted_text())
                                     .child(if custom_scrolled_up { "Visible" } else { "Hidden" }),
                             ),
                     )
@@ -833,7 +833,7 @@ impl Render for MessageScrollerStory {
                                     .unwrap_or_else(|| div().into_any_element())
                             },
                         )
-                        .with_content_style(StyleRefinement::default().bg(cx.theme().background))
+                        .with_content_style(StyleRefinement::default().bg(custom_style::base()))
                         .with_list_style(StyleRefinement::default().p_4())
                         .with_row_style(StyleRefinement::default().pb_4())
                         .with_jump_button_label("Return to the latest message")

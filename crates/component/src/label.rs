@@ -9,7 +9,7 @@ use gpui::{
 use gpui_base::{LayoutDirection, LogicalStyledExt as _};
 use gpui_base::{TestSupportExt as _, TestTextExt as _};
 
-use crate::{ActiveTheme, StyledExt};
+use crate::StyledExt;
 
 const MASKED: &'static str = "•";
 
@@ -177,7 +177,7 @@ impl Label {
     fn measure_highlights(
         &self,
         length: usize,
-        cx: &mut App,
+        _cx: &mut App,
     ) -> Option<Vec<(Range<usize>, HighlightStyle)>> {
         if self.masked {
             return None;
@@ -196,7 +196,7 @@ impl Label {
             highlights.push((
                 ranges[1].clone(),
                 HighlightStyle {
-                    color: Some(cx.theme().muted_foreground),
+                    color: Some(crate::custom_style::muted_text()),
                     ..Default::default()
                 },
             ));
@@ -207,7 +207,7 @@ impl Label {
             highlights.push((
                 range.clone(),
                 HighlightStyle {
-                    color: Some(cx.theme().blue),
+                    color: Some(crate::custom_style::highlighted_text()),
                     ..Default::default()
                 },
             ));
@@ -245,7 +245,7 @@ impl RenderOnce for Label {
                 this.role(gpui::Role::Label).aria_value(text)
             })
             .line_height(rems(1.25))
-            .text_color(cx.theme().foreground)
+            .text_color(crate::custom_style::text())
             // Start-aligned in RTL; LTR keeps the inherited alignment.
             .when(LayoutDirection::global(cx).is_rtl(), |this| {
                 this.text_start(cx)
@@ -258,12 +258,12 @@ impl RenderOnce for Label {
     }
 }
 
-/// `text` with every occurrence of the search `query` drawn in the theme's
-/// `list_highlight_foreground` color, matched the way searchable lists filter:
+/// `text` with every occurrence of the search `query` drawn in
+/// `custom_style::highlighted_text()`, matched the way searchable lists filter:
 /// by case-insensitive substring.
-pub(crate) fn highlight_matches(text: SharedString, query: &str, cx: &App) -> StyledText {
+pub(crate) fn highlight_matches(text: SharedString, query: &str, _cx: &App) -> StyledText {
     let style = HighlightStyle {
-        color: Some(cx.theme().list_highlight_foreground),
+        color: Some(crate::custom_style::highlighted_text()),
         ..Default::default()
     };
     let highlights = match_ranges(&text, query)

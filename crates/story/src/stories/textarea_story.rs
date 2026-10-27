@@ -279,7 +279,7 @@ impl Render for TextareaStory {
                                     .px_2()
                                     .py_1()
                                     .rounded(cx.theme().radius)
-                                    .bg(cx.theme().muted)
+                                    .bg(crate::custom_style::muted_bg())
                                     .child(msg.clone())
                             }),
                         ))

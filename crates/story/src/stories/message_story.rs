@@ -7,6 +7,7 @@ use gpui_kit::component::{
     avatar::Avatar,
     bubble::{Bubble, BubbleReactions, BubbleVariant},
     button::{Button, ButtonVariants as _},
+    custom_style,
     message::{
         Message, MessageAlignment, MessageAvatar, MessageContent, MessageFooter, MessageGroup,
         MessageHeader,
@@ -131,7 +132,7 @@ impl Render for MessageStory {
                     )
                     .child(
                         Message::new()
-                            .avatar_slot(MessageAvatar::new().bg(cx.theme().transparent))
+                            .avatar_slot(MessageAvatar::new().bg(gpui_kit::component::custom_style::transparent()))
                             .content(
                                 MessageContent::new().bubble(
                                     Bubble::new()
@@ -152,7 +153,7 @@ impl Render for MessageStory {
                             .avatar(Avatar::new().name("Support team").size_8())
                             .header(
                                 MessageHeader::new()
-                                    .child(div().text_color(cx.theme().foreground).child("Support"))
+                                    .child(div().text_color(custom_style::text()).child("Support"))
                                     .child("·")
                                     .child("10:42 AM"),
                             )
@@ -237,7 +238,7 @@ impl Render for MessageStory {
                                     .gap_2()
                                     .child(
                                         div()
-                                            .text_color(cx.theme().danger)
+                                            .text_color(crate::custom_style::red_text())
                                             .child("Failed to send"),
                                     )
                                     .child(
@@ -361,7 +362,7 @@ impl Render for MessageStory {
                             )
                             .child(
                                 Message::new()
-                                    .avatar_slot(MessageAvatar::new().bg(cx.theme().transparent))
+                                    .avatar_slot(MessageAvatar::new().bg(gpui_kit::component::custom_style::transparent()))
                                     .content(
                                         MessageContent::new().bubble(
                                             Bubble::new()
@@ -380,7 +381,7 @@ impl Render for MessageStory {
                         Message::new()
                             .p_3()
                             .rounded(cx.theme().radius_lg)
-                            .bg(cx.theme().muted.opacity(0.35))
+                            .bg(crate::custom_style::muted_bg())
                             .header(MessageHeader::new().px_0().child("System"))
                             .content(
                                 MessageContent::new().child("The conversation has been archived."),

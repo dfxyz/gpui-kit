@@ -4,7 +4,7 @@ use gpui::{
 };
 use gpui_base::LogicalStyledExt as _;
 
-use crate::{ActiveTheme, Sizable, Size, StyledExt as _, avatar::Avatar};
+use crate::{Sizable, Size, StyledExt as _, avatar::Avatar};
 
 /// A grouped avatars to display in a compact layout.
 #[derive(IntoElement)]
@@ -90,8 +90,8 @@ impl RenderOnce for AvatarGroup {
                 Some(
                     Avatar::new()
                         .name("⋯")
-                        .bg(cx.theme().tokens.secondary)
-                        .text_color(cx.theme().muted_foreground)
+                        .bg(crate::custom_style::muted_bg())
+                        .text_color(crate::custom_style::muted_text())
                         .with_size(self.size)
                         .ms(gpui::rems(0.25), cx),
                 )

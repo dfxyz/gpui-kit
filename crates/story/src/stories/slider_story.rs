@@ -2,7 +2,7 @@ use gpui_kit::component::{
     ActiveTheme, Colorize as _, StyledExt, WindowExt,
     button::Button,
     clipboard::Clipboard,
-    h_flex,
+    custom_style, h_flex,
     slider::{Slider, SliderEvent, SliderScale, SliderState, SliderValue},
     v_flex,
 };
@@ -228,9 +228,9 @@ impl Render for SliderStory {
     fn render(&mut self, _: &mut Window, cx: &mut Context<Self>) -> impl IntoElement {
         let rgb = SharedString::from(self.slider_hsl_value.to_hex());
         let neutral_temperature = if cx.theme().mode.is_dark() {
-            cx.theme().foreground
+            custom_style::text()
         } else {
-            cx.theme().background
+            custom_style::base()
         };
         let warm_temperature = neutral_temperature.blend(cx.theme().warning.opacity(0.85));
         let cool_temperature = neutral_temperature.blend(cx.theme().info.opacity(0.65));
@@ -265,7 +265,7 @@ impl Render for SliderStory {
                             .p_4()
                             .rounded(cx.theme().radius_lg)
                             .border_1()
-                            .border_color(cx.theme().border)
+                            .border_color(custom_style::border())
                             .child(
                                 h_flex()
                                     .items_center()
@@ -274,7 +274,7 @@ impl Render for SliderStory {
                                     .child(
                                         div()
                                             .text_sm()
-                                            .text_color(cx.theme().muted_foreground)
+                                            .text_color(crate::custom_style::muted_text())
                                             .child(format!("{}", self.slider1_value)),
                                     ),
                             )
@@ -301,7 +301,7 @@ impl Render for SliderStory {
                                     .child(
                                         div()
                                             .text_sm()
-                                            .text_color(cx.theme().muted_foreground)
+                                            .text_color(crate::custom_style::muted_text())
                                             .child(format!("${}", self.slider3.read(cx).value())),
                                     ),
                             )
@@ -325,7 +325,7 @@ impl Render for SliderStory {
                                     .child(
                                         div()
                                             .text_sm()
-                                            .text_color(cx.theme().muted_foreground)
+                                            .text_color(crate::custom_style::muted_text())
                                             .child(format!(
                                                 "{} GB",
                                                 10. - self.slider_reverse.read(cx).value().start()
@@ -357,7 +357,7 @@ impl Render for SliderStory {
                                     .child(
                                         div()
                                             .text_sm()
-                                            .text_color(cx.theme().muted_foreground)
+                                            .text_color(crate::custom_style::muted_text())
                                             .child(format!("{:.0}", self.duration_months)),
                                     ),
                             )
@@ -380,14 +380,16 @@ impl Render for SliderStory {
                                                     div()
                                                         .w(px(1.))
                                                         .h(if major { px(6.) } else { px(3.) })
-                                                        .bg(cx.theme().muted_foreground),
+                                                        .bg(crate::custom_style::muted_text()),
                                                 )
                                                 .when(major, |this| {
                                                     this.child(
                                                         div()
                                                             .mt_2()
                                                             .text_sm()
-                                                            .text_color(cx.theme().muted_foreground)
+                                                            .text_color(
+                                                                crate::custom_style::muted_text(),
+                                                            )
                                                             .child(month.to_string()),
                                                     )
                                                 })
@@ -413,7 +415,7 @@ impl Render for SliderStory {
                                     .child(
                                         div()
                                             .text_sm()
-                                            .text_color(cx.theme().muted_foreground)
+                                            .text_color(crate::custom_style::muted_text())
                                             .child(format!("{:.0} K", self.temperature_kelvin)),
                                     ),
                             )

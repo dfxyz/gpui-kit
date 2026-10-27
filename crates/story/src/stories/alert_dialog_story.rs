@@ -4,8 +4,9 @@ use gpui_kit::{
 };
 
 use gpui_kit::component::{
-    ActiveTheme, Icon, IconName, StyledExt, WindowExt as _,
+    Icon, IconName, StyledExt, WindowExt as _,
     button::{Button, ButtonVariant, ButtonVariants},
+    custom_style,
     dialog::{
         AlertDialog, DialogAction, DialogClose, DialogDescription, DialogFooter, DialogHeader,
         DialogTitle,
@@ -71,7 +72,7 @@ impl Render for AlertDialogStory {
                                 window.push_notification("Continuing to edit", cx);
                                 true
                             })
-                            .content(|content, _, cx| {
+                            .content(|content, _, _cx| {
                                 content
                                     .child(DialogHeader::new().p_4().child(DialogTitle::new().child("Discard unsaved changes?")).child(
                                         DialogDescription::new().child(
@@ -81,8 +82,8 @@ impl Render for AlertDialogStory {
                                     .child(DialogFooter::new()
                                         .p_4()
                                         .border_t_1()
-                                        .border_color(cx.theme().border)
-                                        .bg(cx.theme().muted)
+                                        .border_color(custom_style::border())
+                                        .bg(custom_style::muted_bg())
                                         .child(
                                             DialogClose::new().child(
                                                 Button::new("cancel").outline().label("Cancel")
@@ -100,9 +101,9 @@ impl Render for AlertDialogStory {
                 .child(section("Imperative API").description("Open an alert directly from the window.").child(
                     Button::new("confirm-alert").outline().label("Delete File").on_click(cx.listener(
                         |_, _, window, cx| {
-                            window.open_alert_dialog(cx, |alert, _, cx| {
+                            window.open_alert_dialog(cx, |alert, _, _cx| {
                                 alert
-                                    .icon(Icon::new(IconName::Info).text_color(cx.theme().danger))
+                                    .icon(Icon::new(IconName::Info).text_color(custom_style::red_text()))
                                     .title("Delete File")
                                     .description(
                                         "Are you sure you want to delete this file? \
@@ -126,12 +127,12 @@ impl Render for AlertDialogStory {
                         window.push_notification("Thank you for allowing network access", cx);
                         true
                     })
-                    .content(|content, _, cx| {
+                    .content(|content, _, _cx| {
                         content
                             .child(
                                 DialogHeader::new()
                                     .items_center()
-                                    .child(Icon::new(IconName::TriangleAlert).size_10().text_color(cx.theme().warning))
+                                    .child(Icon::new(IconName::TriangleAlert).size_10().text_color(custom_style::yellow_text()))
                                     .child(
                                         DialogTitle::new().child("Network Permission Required"),
                                     ).child(
@@ -244,7 +245,7 @@ impl Render for AlertDialogStory {
                             true
                         })
                         .content(
-                        |content, _, cx| {
+                        |content, _, _cx| {
                             content
                                 .child(DialogHeader::new().child(DialogTitle::new().child("Update Available")).child(
                                     DialogDescription::new().child(
@@ -254,7 +255,6 @@ impl Render for AlertDialogStory {
                                 ))
                                 .child(
                                     DialogFooter::new()
-                                        .bg(cx.theme().muted)
                                         .child(
                                             DialogClose::new().child(
                                                 Button::new("later").flex_1().outline().label("Later")

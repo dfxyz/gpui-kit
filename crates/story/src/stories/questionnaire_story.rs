@@ -1,5 +1,5 @@
 use gpui_kit::component::{
-    ActiveTheme as _, Sizable, Size, StyledExt as _, WindowExt as _,
+    Sizable, Size, StyledExt as _, WindowExt as _,
     button::{Button, ButtonVariants as _},
     dialog::{Dialog, DialogClose, DialogDescription, DialogFooter, DialogHeader, DialogTitle},
     group_box::{GroupBox, GroupBoxVariants as _},
@@ -86,12 +86,12 @@ impl QuestionnaireStory {
 
     /// A muted summary line that fills the section width so long debug output
     /// wraps inside the card instead of spilling past its edges.
-    fn summary_line(text: impl IntoElement, cx: &App) -> Div {
+    fn summary_line(text: impl IntoElement) -> Div {
         div()
             .w_full()
             .text_xs()
             .text_center()
-            .text_color(cx.theme().muted_foreground)
+            .text_color(crate::custom_style::muted_text())
             .child(text)
     }
 
@@ -706,14 +706,14 @@ impl Render for QuestionnaireStory {
                             .child(
                                 QuestionnaireChoice::new(&custom_choice_state, "custom", "compact")
                                     .content_style(StyleRefinement::default().gap_2())
-                                    .render_indicator(|choice, _, cx| {
+                                    .render_indicator(|choice, _, _cx| {
                                         div()
                                             .size_4()
                                             .rounded_full()
                                             .bg(if choice.is_selected() {
-                                                cx.theme().primary
+                                                crate::custom_style::primary()
                                             } else {
-                                                cx.theme().muted
+                                                crate::custom_style::muted_bg()
                                             })
                                             .into_any_element()
                                     })
@@ -900,7 +900,6 @@ impl Render for QuestionnaireStory {
                     )
                     .child(Self::summary_line(
                         format!("External error: {external_error}"),
-                        cx,
                     )),
             )
             .child(
@@ -920,7 +919,7 @@ impl Render for QuestionnaireStory {
                             .w_full()
                             .text_sm()
                             .text_center()
-                            .text_color(cx.theme().muted_foreground)
+                            .text_color(crate::custom_style::muted_text())
                             .child(format!(
                                 "Current: {} · enabled items: {} · complete: {}",
                                 self.state
@@ -932,20 +931,19 @@ impl Render for QuestionnaireStory {
                                 self.state.read(cx).is_complete()
                             )),
                     )
-                    .child(Self::summary_line(status_summary, cx))
-                    .child(Self::summary_line(navigation_summary, cx))
+                    .child(Self::summary_line(status_summary))
+                    .child(Self::summary_line(navigation_summary))
                     .child(Self::summary_line(
                         if answer_summary.is_empty() {
                             "Answers: none".to_string()
                         } else {
                             format!("Answers: {answer_summary}")
                         },
-                        cx,
                     ))
                     .children(
                         event_log
                             .into_iter()
-                            .map(|event| Self::summary_line(event, cx)),
+                            .map(Self::summary_line),
                     ),
             )
             .child(
@@ -958,7 +956,7 @@ impl Render for QuestionnaireStory {
                             .gap_1()
                             .text_sm()
                             .text_center()
-                            .text_color(cx.theme().muted_foreground)
+                            .text_color(crate::custom_style::muted_text())
                             .child("Up/Down: move through choices and the freeform input; text editing keeps native arrow behavior.")
                             .child("Left/Right: switch items outside text input and radio focus; Right requires an answer.")
                             .child("Enter: confirm a filled answer. Command/Ctrl+Enter: confirm the current item.")
@@ -975,12 +973,11 @@ impl Render for QuestionnaireStory {
                         format!(
                             "Letters focus: {keyboard_focus} · answer={letters_answer:?} · draft={letters_draft:?}"
                         ),
-                        cx,
                     ))
                     .children(
                         keyboard_event_log
                             .into_iter()
-                            .map(|event| Self::summary_line(event, cx)),
+                            .map(Self::summary_line),
                     ),
             )
             .child(
@@ -1005,7 +1002,7 @@ impl Render for QuestionnaireStory {
                             .child(
                                 div()
                                     .text_xs()
-                                    .text_color(cx.theme().muted_foreground)
+                                    .text_color(crate::custom_style::muted_text())
                                     .child(if environment_enabled {
                                         "Environment enabled: Runtime is Cloud"
                                     } else {

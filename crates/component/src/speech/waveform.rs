@@ -4,7 +4,7 @@ use gpui::{
     linear_color_stop, linear_gradient, point, px, size,
 };
 
-use crate::{ActiveTheme as _, Sizable, Size, StyledExt as _};
+use crate::{Sizable, Size, StyledExt as _};
 
 use std::f32::consts::PI;
 
@@ -134,9 +134,9 @@ impl RenderOnce for SpeechWaveform {
             window.request_animation_frame();
         }
         let color = if capturing {
-            cx.theme().primary
+            crate::custom_style::green_text()
         } else {
-            cx.theme().muted_foreground
+            crate::custom_style::muted_text()
         };
         let content = match self.appearance {
             Appearance::Bars => bars(state, height, animate, color),

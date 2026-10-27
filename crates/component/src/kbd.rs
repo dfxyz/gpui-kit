@@ -241,12 +241,12 @@ impl RenderOnce for Kbd {
             // Lets a test ask whether a given shortcut hint was painted this
             // frame; a no-op outside test-support builds.
             .debug_selector(|| format!("kbd:{}", self.stroke.unparse(cx.platform_info().os)))
-            .text_color(cx.theme().muted_foreground)
-            .bg(cx.theme().tokens.muted)
+            .text_color(crate::custom_style::muted_text())
+            .bg(crate::custom_style::muted_bg())
             .when(self.outline, |this| {
                 this.border_1()
-                    .border_color(cx.theme().border)
-                    .bg(cx.theme().tokens.background)
+                    .border_color(crate::custom_style::border())
+                    .bg(crate::custom_style::base())
             })
             .py_0p5()
             .px_1()

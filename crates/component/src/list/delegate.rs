@@ -1,7 +1,7 @@
 use gpui::{AnyElement, App, Context, IntoElement, ParentElement as _, Styled as _, Task, Window};
 
 use crate::{
-    ActiveTheme as _, Icon, IconName, IndexPath, Selectable, h_flex,
+    Icon, IconName, IndexPath, Selectable, h_flex,
     list::{ListState, loading::Loading},
 };
 
@@ -79,7 +79,7 @@ pub trait ListDelegate: Sized + 'static {
         h_flex()
             .size_full()
             .justify_center()
-            .text_color(cx.theme().muted_foreground.opacity(0.6))
+            .text_color(crate::custom_style::muted_text().opacity(0.6))
             .child(Icon::new(IconName::Inbox).size_12())
             .into_any_element()
     }

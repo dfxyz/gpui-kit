@@ -48,17 +48,17 @@ pub fn grid_layout(
         let state = state.read(cx);
         state.is_draggable() || state.is_resizable()
     };
-    let selected = box_shadow(0., 0., 0., px(2.), theme.primary);
+    let selected = box_shadow(0., 0., 0., px(2.), crate::custom_style::primary());
     let ring = if theme.focus_ring {
         box_shadow(
             0.,
             0.,
             0.,
             FOCUS_RING_WIDTH,
-            theme.ring.alpha(FOCUS_RING_OPACITY),
+            crate::custom_style::ring().alpha(FOCUS_RING_OPACITY),
         )
     } else {
-        box_shadow(0., 0., 0., px(1.), theme.ring)
+        box_shadow(0., 0., 0., px(1.), crate::custom_style::ring())
     };
 
     GridLayout::new(id, state)
@@ -72,18 +72,17 @@ pub fn grid_layout(
         })
         .focused_item(move |style| style.shadow(vec![ring]))
         .placeholder(|_, cx| {
-            let theme = cx.theme();
             div()
                 .size_full()
-                .rounded(theme.radius_lg)
-                .bg(theme.primary.opacity(0.08))
+                .rounded(cx.theme().radius_lg)
+                .bg(crate::custom_style::drag_target())
                 .border_1()
                 .border_dashed()
-                .border_color(theme.primary.opacity(0.5))
+                .border_color(crate::custom_style::primary().opacity(0.5))
                 .into_any_element()
         })
-        .resize_handle(|_, cx| {
-            let color = cx.theme().muted_foreground;
+        .resize_handle(|_, _cx| {
+            let color = crate::custom_style::muted_text();
             // The corner mark sits a few pixels in from the item's corner, and
             // strengthens while the pointer is on the corner it marks.
             div()

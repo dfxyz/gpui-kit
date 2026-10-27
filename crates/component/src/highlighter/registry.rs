@@ -223,11 +223,11 @@ impl From<FontWeightContent> for FontWeight {
     }
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, JsonSchema, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, Copy, PartialEq, Eq, Hash, JsonSchema, Serialize, Deserialize)]
 pub struct ThemeStyle {
-    color: Option<Hsla>,
-    font_style: Option<FontStyle>,
-    font_weight: Option<FontWeightContent>,
+    pub color: Option<Hsla>,
+    pub font_style: Option<FontStyle>,
+    pub font_weight: Option<FontWeightContent>,
 }
 
 impl From<ThemeStyle> for HighlightStyle {
@@ -363,7 +363,7 @@ impl StatusColors {
 
     #[inline]
     pub fn error_background(&self, cx: &App) -> Hsla {
-        let bg = cx.theme().background;
+        let bg = crate::custom_style::base();
         self.error_background
             .unwrap_or(bg.blend(self.error(cx).alpha(0.2)))
     }
@@ -380,7 +380,7 @@ impl StatusColors {
 
     #[inline]
     pub fn warning_background(&self, cx: &App) -> Hsla {
-        let bg = cx.theme().background;
+        let bg = crate::custom_style::base();
         self.warning_background
             .unwrap_or(bg.blend(self.warning(cx).alpha(0.2)))
     }
@@ -397,7 +397,7 @@ impl StatusColors {
 
     #[inline]
     pub fn info_background(&self, cx: &App) -> Hsla {
-        let bg = cx.theme().background;
+        let bg = crate::custom_style::base();
         self.info_background
             .unwrap_or(bg.blend(self.info(cx).alpha(0.2)))
     }
@@ -414,7 +414,7 @@ impl StatusColors {
 
     #[inline]
     pub fn success_background(&self, cx: &App) -> Hsla {
-        let bg = cx.theme().background;
+        let bg = crate::custom_style::base();
         self.success_background
             .unwrap_or(bg.blend(self.success(cx).alpha(0.2)))
     }
@@ -431,7 +431,7 @@ impl StatusColors {
 
     #[inline]
     pub fn hint_background(&self, cx: &App) -> Hsla {
-        let bg = cx.theme().background;
+        let bg = crate::custom_style::base();
         self.hint_background
             .unwrap_or(bg.blend(self.hint(cx).alpha(0.2)))
     }

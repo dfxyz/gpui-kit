@@ -148,7 +148,7 @@ pub enum FontWeightContent {
     Black = 900,
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, JsonSchema, Serialize, Deserialize)]
+#[derive(Default, Debug, Clone, Copy, PartialEq, Eq, Hash, JsonSchema, Serialize, Deserialize)]
 #[non_exhaustive]
 pub struct ThemeStyle {
     pub color: Option<gpui::Hsla>,

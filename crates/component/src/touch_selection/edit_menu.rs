@@ -83,10 +83,10 @@ impl RenderOnce for EditMenu {
         // The menu family's hover, not the ghost button's: the ghost's grey
         // is the bar's own ring color and would blur the edge.
         let item_style = ButtonCustomVariant::new(cx)
-            .color(cx.theme().transparent)
-            .foreground(cx.theme().popover_foreground)
-            .hover(cx.theme().accent)
-            .active(cx.theme().accent);
+            .color(crate::custom_style::transparent())
+            .foreground(crate::custom_style::text())
+            .hover(crate::custom_style::common_hover_bg())
+            .active(crate::custom_style::common_active_bg());
         let last = self.items.len().saturating_sub(1);
         let items = self.items.into_iter().enumerate().flat_map(|(ix, item)| {
             let on_click = item.on_click;

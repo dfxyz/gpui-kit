@@ -59,7 +59,7 @@ use gpui_kit::base::Button as BaseButton;
 use gpui_kit::component::{
     ActiveTheme as _, Disableable as _, Sizable as _, StyledExt as _,
     button::Button,
-    h_flex,
+    custom_style, h_flex,
     label::Label,
     tab::{Tab, TabBar},
     v_flex,
@@ -1083,7 +1083,7 @@ impl ShellStory {
             .px(rems(ROW_INSET))
             .pb(rems(0.25))
             .border_b_1()
-            .border_color(cx.theme().border)
+            .border_color(custom_style::border())
             .child(caption("Symbol", SYMBOL_COLUMN, false))
             .child(div().flex_1())
             .child(caption("Last", PRICE_COLUMN, true))
@@ -1247,7 +1247,7 @@ impl ShellStory {
                     }
                 })
                 .text_xs()
-                .text_color(cx.theme().muted_foreground),
+                .text_color(crate::custom_style::muted_text()),
             )
     }
 
@@ -1268,7 +1268,7 @@ impl ShellStory {
                         .child(
                             Label::new(message)
                                 .text_xs()
-                                .text_color(cx.theme().muted_foreground),
+                                .text_color(crate::custom_style::muted_text()),
                         ),
                 )
             })
@@ -1292,7 +1292,7 @@ impl ShellStory {
                         .child(
                             Label::new(message)
                                 .text_xs()
-                                .text_color(cx.theme().muted_foreground),
+                                .text_color(crate::custom_style::muted_text()),
                         ),
                 )
             })
@@ -1318,31 +1318,35 @@ fn pause_button(
 }
 
 /// The three type roles, mirroring `title`, `label` and `muted` in `ui.js`.
-fn title(value: impl Into<SharedString>, cx: &Context<ShellStory>) -> Label {
+fn title(value: impl Into<SharedString>, _cx: &Context<ShellStory>) -> Label {
     Label::new(value)
         .text_size(rems(TITLE_SIZE))
         .line_height(relative(1.3))
         .font_semibold()
-        .text_color(cx.theme().foreground)
+        .text_color(custom_style::text())
 }
 
-fn body(value: impl Into<SharedString>, cx: &Context<ShellStory>) -> Label {
+fn body(value: impl Into<SharedString>, _cx: &Context<ShellStory>) -> Label {
     Label::new(value)
         .text_size(rems(BODY_SIZE))
         .line_height(relative(LINE_HEIGHT))
-        .text_color(cx.theme().foreground)
+        .text_color(custom_style::text())
 }
 
-fn muted(value: impl Into<SharedString>, cx: &Context<ShellStory>) -> Label {
+fn muted(value: impl Into<SharedString>, _cx: &Context<ShellStory>) -> Label {
     Label::new(value)
         .text_size(rems(BODY_SIZE))
         .line_height(relative(LINE_HEIGHT))
-        .text_color(cx.theme().muted_foreground)
+        .text_color(crate::custom_style::muted_text())
 }
 
 /// The hairline between the rows and the actions under them.
-fn rule(cx: &Context<ShellStory>) -> impl IntoElement {
-    div().w_full().h(px(1.)).flex_none().bg(cx.theme().border)
+fn rule(_cx: &Context<ShellStory>) -> impl IntoElement {
+    div()
+        .w_full()
+        .h(px(1.))
+        .flex_none()
+        .bg(custom_style::border())
 }
 
 /// Up is `success`, down is `danger`, flat is ordinary text. Both halves ask
@@ -1351,7 +1355,7 @@ fn direction_color(direction: i32, cx: &Context<ShellStory>) -> Hsla {
     match direction {
         1 => cx.theme().success,
         -1 => cx.theme().danger,
-        _ => cx.theme().foreground,
+        _ => custom_style::text(),
     }
 }
 
@@ -1520,20 +1524,20 @@ fn reading(
     caption: &'static str,
     value: String,
     detail: String,
-    cx: &Context<ShellStory>,
+    _cx: &Context<ShellStory>,
 ) -> impl IntoElement {
     v_flex()
         .gap_1()
         .child(
             Label::new(caption)
                 .text_xs()
-                .text_color(cx.theme().muted_foreground),
+                .text_color(crate::custom_style::muted_text()),
         )
         .child(Label::new(value).font_semibold())
         .child(
             Label::new(detail)
                 .text_xs()
-                .text_color(cx.theme().muted_foreground),
+                .text_color(crate::custom_style::muted_text()),
         )
 }
 
@@ -1566,7 +1570,7 @@ fn shape_repeats(rate: &RuntimeMetrics) -> String {
 fn boundary_line(
     call: &'static str,
     detail: &'static str,
-    cx: &Context<ShellStory>,
+    _cx: &Context<ShellStory>,
 ) -> impl IntoElement {
     h_flex()
         .w_full()
@@ -1576,7 +1580,7 @@ fn boundary_line(
         .child(
             Label::new(detail)
                 .text_xs()
-                .text_color(cx.theme().muted_foreground),
+                .text_color(crate::custom_style::muted_text()),
         )
 }
 

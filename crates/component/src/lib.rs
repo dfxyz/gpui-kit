@@ -96,6 +96,8 @@ pub mod toolbar;
 pub mod tooltip;
 pub mod tree;
 
+pub mod custom_style;
+
 pub use crate::Disableable;
 pub use element_ext::*;
 pub use global_state::GlobalState;
@@ -129,6 +131,7 @@ rust_i18n::i18n!("locales", fallback = "en");
 ///
 /// You must initialize the components at your application's entry point.
 pub fn init(cx: &mut App) {
+    set_locale("zh-CN");
     theme::init(cx);
     global_state::init(cx);
     #[cfg(any(feature = "inspector", debug_assertions))]

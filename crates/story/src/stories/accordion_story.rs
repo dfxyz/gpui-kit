@@ -141,8 +141,8 @@ impl Focusable for AccordionStory {
 impl Render for AccordionStory {
     fn render(&mut self, _: &mut Window, cx: &mut Context<Self>) -> impl IntoElement {
         let settings_item_style = SettingsItemStyle {
-            icon_bg: cx.theme().secondary.opacity(0.5),
-            muted: cx.theme().muted_foreground,
+            icon_bg: crate::custom_style::muted_bg(),
+            muted: crate::custom_style::muted_text(),
             icon_radius: cx.theme().radius,
         };
 
@@ -263,9 +263,9 @@ impl Render for AccordionStory {
                         .w(px(480.))
                         .p(px(4.))
                         .rounded(cx.theme().radius_lg * 2.)
-                        .bg(cx.theme().secondary.opacity(0.5))
+                        .bg(crate::custom_style::muted_bg())
                         .border_1()
-                        .border_color(cx.theme().border.opacity(0.5))
+                        .border_color(crate::custom_style::border())
                         .child(
                             Accordion::new("custom-style")
                                 .multiple(self.multiple)

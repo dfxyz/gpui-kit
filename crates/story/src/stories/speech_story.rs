@@ -4,7 +4,7 @@ use gpui_kit::{
 };
 
 use gpui_kit::component::{
-    ActiveTheme as _, Sizable as _, WindowExt as _, h_flex,
+    Sizable as _, WindowExt as _, h_flex,
     input::{Input, InputState},
     notification::Notification,
     speech::{
@@ -196,7 +196,7 @@ impl Dictation {
                 this.child(
                     div()
                         .text_sm()
-                        .text_color(cx.theme().muted_foreground)
+                        .text_color(crate::custom_style::muted_text())
                         .child(speech.transcript()),
                 )
             })

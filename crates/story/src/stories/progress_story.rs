@@ -1,7 +1,7 @@
 use gpui_kit::component::{
     ActiveTheme, IconName, Sizable, Size, StyledExt,
     button::Button,
-    h_flex,
+    custom_style, h_flex,
     progress::{Progress, ProgressCircle},
     v_flex,
 };
@@ -158,7 +158,7 @@ impl Render for ProgressStory {
                             .p_4()
                             .rounded(cx.theme().radius_lg)
                             .border_1()
-                            .border_color(cx.theme().border)
+                            .border_color(custom_style::border())
                             .child(
                                 h_flex()
                                     .items_center()
@@ -167,7 +167,7 @@ impl Render for ProgressStory {
                                     .child(
                                         div()
                                             .text_sm()
-                                            .text_color(cx.theme().muted_foreground)
+                                            .text_color(crate::custom_style::muted_text())
                                             .child(format!("{}%", self.value)),
                                     ),
                             )
@@ -181,7 +181,7 @@ impl Render for ProgressStory {
                                     .items_center()
                                     .justify_between()
                                     .text_xs()
-                                    .text_color(cx.theme().muted_foreground)
+                                    .text_color(crate::custom_style::muted_text())
                                     .child("24.8 MB of 96 MB")
                                     .child(if self.loading {
                                         "Calculating…"
@@ -203,13 +203,14 @@ impl Render for ProgressStory {
                             .gap_5()
                             .p_4()
                             .rounded(cx.theme().radius_lg)
-                            .bg(cx.theme().muted.opacity(0.4))
+                            .bg(custom_style::muted_bg())
                             .child(
                                 ProgressCircle::new("analysis-progress")
                                     .with_size(self.size)
                                     .value(self.value)
                                     .loading(self.loading)
                                     .size_20()
+                                    .flex_shrink_0()
                                     .when(!self.loading, |this| {
                                         this.child(
                                             div()
@@ -229,7 +230,7 @@ impl Render for ProgressStory {
                                     .child(
                                         div()
                                             .text_sm()
-                                            .text_color(cx.theme().muted_foreground)
+                                            .text_color(crate::custom_style::muted_text())
                                             .child(if self.loading {
                                                 "Preparing analysis…"
                                             } else {

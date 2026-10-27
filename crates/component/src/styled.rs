@@ -33,8 +33,8 @@ const POPOVER_RING_INK: f32 = 0.1;
 /// (`oklch(1 0 0 / 10%)`), so it follows the foreground rather than the border
 /// token: a fixed black ring would all but vanish on a dark surface.
 ///
-pub(crate) fn popover_ring(cx: &App) -> Hsla {
-    cx.theme().foreground.alpha(POPOVER_RING_INK)
+pub(crate) fn popover_ring(_cx: &App) -> Hsla {
+    crate::custom_style::text().alpha(POPOVER_RING_INK)
 }
 
 /// shadcn/ui's popup surface shadow — a hairline `ring` plus `shadow-md` — at
@@ -187,8 +187,8 @@ impl<T: Styled + Sized> ThemeStyled for T {
         let theme = cx.theme();
         // No border: the edge is the ring inside `popover_shadow`, which is how
         // shadcn draws it and the only way the shadow can show through it.
-        self.bg(theme.popover)
-            .text_color(theme.popover_foreground)
+        self.bg(crate::custom_style::popover())
+            .text_color(crate::custom_style::text())
             .shadow(popover_shadow(popover_ring(cx), 1.))
             .rounded(theme.radius)
     }
@@ -256,9 +256,9 @@ pub(crate) fn focus_style<T: Styled + ParentElement>(
     let theme = cx.theme();
     if theme.focus_ring {
         return focus_ring(
-            element.border_color(theme.ring),
+            element,
             window,
-            theme.ring.alpha(FOCUS_RING_OPACITY),
+            crate::custom_style::ring().alpha(FOCUS_RING_OPACITY),
         );
     }
 
@@ -267,14 +267,14 @@ pub(crate) fn focus_style<T: Styled + ParentElement>(
     // and keeps the tinted border, which takes no space.
     let rem_size = window.rem_size();
     if border_widths(element.style(), rem_size).any(|width| *width > Pixels::ZERO) {
-        return element.border_color(theme.ring);
+        return element.border_color(crate::custom_style::ring());
     }
 
     let gap = rem_size * FOCUS_LINE_GAP;
     let (color, inset) = match line {
-        FocusLine::Edge => (theme.ring, Pixels::ZERO),
+        FocusLine::Edge => (crate::custom_style::ring(), Pixels::ZERO),
         FocusLine::Inside(color) => (color, gap),
-        FocusLine::Outside => (theme.ring, -gap),
+        FocusLine::Outside => (crate::custom_style::ring(), -gap),
     };
     // Shrinking or growing the box by `inset` keeps the line concentric with
     // the element's own corners.

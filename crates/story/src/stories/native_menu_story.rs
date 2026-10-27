@@ -2,7 +2,8 @@ use std::cell::Cell;
 use std::rc::Rc;
 
 use gpui_kit::component::{
-    ActiveTheme as _, ElementExt, Icon, IconName, button::Button, native_menu::NativeMenu, v_flex,
+    ActiveTheme as _, ElementExt, Icon, IconName, button::Button, custom_style,
+    native_menu::NativeMenu, v_flex,
 };
 use gpui_kit::*;
 use serde::Deserialize;
@@ -113,9 +114,9 @@ impl NativeMenuStory {
             .w_full()
             .h_24()
             .border_1()
-            .border_color(cx.theme().border)
+            .border_color(custom_style::border())
             .rounded(cx.theme().radius_lg)
-            .text_color(cx.theme().muted_foreground)
+            .text_color(crate::custom_style::muted_text())
             .child(SharedString::from(label.to_string()))
     }
 }

@@ -94,7 +94,7 @@ impl RenderOnce for Avatar {
         // placeholder, keeps the neutral border.
         let border_color = match (identity, &self.src) {
             (Some(identity), None) => identity.border,
-            _ => cx.theme().border,
+            _ => crate::custom_style::border(),
         };
 
         let fallback = AvatarFallback::new()
@@ -122,8 +122,8 @@ impl RenderOnce for Avatar {
             .flex_shrink_0()
             .rounded_full_style(cx)
             .overflow_hidden()
-            .bg(cx.theme().tokens.secondary)
-            .text_color(cx.theme().background)
+            .bg(crate::custom_style::muted_bg())
+            .text_color(crate::custom_style::muted_text())
             .border_1()
             .border_color(border_color)
             .fallback(fallback)

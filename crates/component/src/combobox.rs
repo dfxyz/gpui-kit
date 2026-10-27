@@ -271,7 +271,7 @@ where
                         .flex_row_dir(cx)
                         .justify_center()
                         .py_6()
-                        .text_color(cx.theme().muted_foreground.opacity(0.6))
+                        .text_color(crate::custom_style::muted_text().opacity(0.6))
                         .child(Icon::new(IconName::Inbox).size(px(28.)))
                         .into_any_element()
                 }
@@ -576,7 +576,7 @@ where
         self.clear_selection(cx);
     }
 
-    fn default_trigger_body(&self, _window: &mut Window, cx: &mut Context<Self>) -> AnyElement {
+    fn default_trigger_body(&self, _window: &mut Window, _cx: &mut Context<Self>) -> AnyElement {
         let placeholder_text = self
             .state
             .placeholder
@@ -585,7 +585,7 @@ where
 
         if self.state.selection.is_empty() {
             return div()
-                .text_color(cx.theme().muted_foreground)
+                .text_color(crate::custom_style::muted_text())
                 .child(placeholder_text)
                 .into_any_element();
         }
@@ -638,7 +638,7 @@ where
         let outline_visible = self.state.open || (is_focused && !self.state.disabled);
         let disabled = self.state.disabled;
 
-        let (bg, fg) = input_style(disabled, cx);
+        let (bg, fg) = input_style(disabled);
 
         self.state.list.update(cx, |list, cx| {
             list.set_searchable(searchable, cx);
@@ -681,11 +681,11 @@ where
                 .into_any_element()
         } else if let Some(icon) = self.trigger_icon.clone() {
             icon.xsmall()
-                .text_color(cx.theme().muted_foreground)
+                .text_color(crate::custom_style::muted_text())
                 .into_any_element()
         } else {
             Caret::new(size)
-                .text_color(cx.theme().muted_foreground)
+                .text_color(crate::custom_style::muted_text())
                 .into_any_element()
         };
 
@@ -843,8 +843,9 @@ where
     /// Highlight the part of each row that matches the search query, default is `false`.
     ///
     /// Rows render with [`SearchableListItem::render_highlighted`]; the default
-    /// highlights the matched text of `title()` in the theme's
-    /// `list_highlight_foreground` color.
+    /// highlights the matched text of `title()` in
+    /// `custom_style::highlighted_text()`, the same color `Label` highlighting
+    /// and completion matches use.
     pub fn highlight_matches(mut self, highlight: bool) -> Self {
         self.options.highlight_matches = highlight;
         self
@@ -1029,19 +1030,19 @@ fn render_trigger_container(
         .items_center()
         .justify_between()
         .border_1()
-        .border_color(cx.theme().transparent)
+        .border_color(crate::custom_style::transparent())
         .when(appearance, |this| {
             this.bg(bg)
                 .text_color(fg)
                 .when(disabled, |this| this.opacity(0.5))
-                .border_color(cx.theme().input)
+                .border_color(crate::custom_style::border())
                 .rounded(cx.theme().radius)
         })
         .input_size(size)
         .input_text_size(size)
         .refine_style(style)
         .when(outline_visible && appearance, |this| {
-            this.border_1().border_color(cx.theme().ring)
+            this.border_1().border_color(crate::custom_style::ring())
         })
         .when(
             outline_visible && appearance && focus_ring_enabled,
@@ -1115,7 +1116,7 @@ fn render_popup_shell<D: SearchableListDelegate + 'static>(
                 this.child(
                     div()
                         .border_t_1()
-                        .border_color(cx.theme().border)
+                        .border_color(crate::custom_style::border())
                         .p_1()
                         .when_some(footer_el, |this, el| this.child(el)),
                 )

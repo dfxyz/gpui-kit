@@ -5,7 +5,7 @@ use serde::Deserialize;
 use gpui_kit::component::{
     ActiveTheme as _, Icon, IconName, Selectable as _, Sizable, Size,
     button::{Button, ButtonGroup, ButtonVariants},
-    h_flex,
+    custom_style, h_flex,
     tab::{Tab, TabBar},
     v_flex,
 };
@@ -172,7 +172,7 @@ impl Render for TabsStory {
                             this.set_active_tab(*ix, window, cx);
                         }))
                         .border_t_1()
-                        .border_color(cx.theme().border)
+                        .border_color(custom_style::border())
                         .prefix(
                             h_flex()
                                 .mx_1()
@@ -299,7 +299,7 @@ impl Render for TabsStory {
                     v_flex()
                         .w_full()
                         .border_1()
-                        .border_color(cx.theme().border)
+                        .border_color(custom_style::border())
                         .rounded(cx.theme().radius_lg)
                         .overflow_hidden()
                         .child(
@@ -342,7 +342,7 @@ impl Render for TabsStory {
                                         .icon(IconName::Plus),
                                 ),
                         )
-                        .child(div().h_20().bg(cx.theme().tab_active)),
+                        .child(div().h_20().bg(custom_style::base())),
                 ),
             )
             .child(

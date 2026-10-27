@@ -5,7 +5,7 @@ use gpui::{
 use gpui_base::dock::{PanelEvent, PanelState};
 use rust_i18n::t;
 
-use crate::{ActiveTheme as _, dock::Panel};
+use crate::dock::Panel;
 
 /// Stands in for a panel this build cannot construct — one whose
 /// `panel_name` no [`PanelRegistry`](gpui_base::dock::PanelRegistry) builder
@@ -55,7 +55,7 @@ impl Focusable for InvalidPanel {
 }
 
 impl Render for InvalidPanel {
-    fn render(&mut self, _: &mut Window, cx: &mut Context<Self>) -> impl IntoElement {
+    fn render(&mut self, _: &mut Window, _cx: &mut Context<Self>) -> impl IntoElement {
         div()
             .size_full()
             .my_6()
@@ -63,7 +63,7 @@ impl Render for InvalidPanel {
             .flex_col()
             .items_center()
             .justify_center()
-            .text_color(cx.theme().muted_foreground)
+            .text_color(crate::custom_style::muted_text())
             .child(t!("Dock.Unavailable Panel"))
     }
 }

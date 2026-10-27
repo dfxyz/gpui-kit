@@ -1,4 +1,4 @@
-use crate::{ActiveTheme, Disableable, StyledExt, h_flex};
+use crate::{Disableable, StyledExt, h_flex};
 use gpui::{
     AnyElement, App, ClickEvent, ElementId, InteractiveElement, IntoElement, MouseButton,
     ParentElement, RenderOnce, Role, SharedString, StatefulInteractiveElement as _,
@@ -118,8 +118,7 @@ impl RenderOnce for MenuItemElement {
             .gap_x_1()
             .py_1()
             .px_2()
-            .text_base()
-            .text_color(cx.theme().foreground)
+            .text_color(crate::custom_style::text())
             .relative()
             .items_center()
             .justify_between()
@@ -132,12 +131,12 @@ impl RenderOnce for MenuItemElement {
                 // element before registering its group, and that fallback keeps
                 // the pointer's item lit after a key moves the highlight away.
                 this.hover(|this| {
-                    this.bg(cx.theme().tokens.accent)
-                        .text_color(cx.theme().accent_foreground)
+                    this.bg(crate::custom_style::common_hover_bg())
+                        .text_color(crate::custom_style::text())
                 })
                 .when(self.selected, |this| {
-                    this.bg(cx.theme().tokens.accent)
-                        .text_color(cx.theme().accent_foreground)
+                    this.bg(crate::custom_style::common_hover_bg())
+                        .text_color(crate::custom_style::text())
                 })
                 .when_some(self.on_click, |this, on_click| {
                     this.on_mouse_down(MouseButton::Left, move |_, _, cx| {
@@ -147,7 +146,7 @@ impl RenderOnce for MenuItemElement {
                 })
             })
             .when(self.disabled, |this| {
-                this.text_color(cx.theme().muted_foreground)
+                this.text_color(crate::custom_style::muted_text())
             })
             .children(self.children)
     }

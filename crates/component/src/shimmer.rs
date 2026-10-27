@@ -216,13 +216,12 @@ impl RenderOnce for ShimmerText {
                 .into_any_element();
         }
 
-        let tokens = cx.theme().semantic_tokens();
         let reverse = self.shimmer_style.reverse;
         let shimmer = ShimmerGlyphs {
             text: StyledText::new(self.text),
             highlight_color: self.shimmer_style.highlight_color,
-            background: tokens.colors.background,
-            foreground: tokens.colors.foreground,
+            background: crate::custom_style::base(),
+            foreground: crate::custom_style::text(),
             dark: cx.theme().is_dark(),
             spread: self.shimmer_style.spread,
             phase: 0.,

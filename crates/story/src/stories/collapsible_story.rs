@@ -6,6 +6,7 @@ use gpui_kit::component::{
     button::{Button, ButtonVariants},
     checkbox::Checkbox,
     collapsible::Collapsible,
+    custom_style,
     group_box::{GroupBox, GroupBoxVariants as _},
     h_flex,
     progress::Progress,
@@ -74,39 +75,37 @@ fn panel_row(cx: &App) -> Div {
         .items_center()
         .rounded(cx.theme().radius_lg)
         .border_1()
-        .border_color(cx.theme().border)
+        .border_color(custom_style::border())
         .text_sm()
 }
 
 /// The chevron of a row trigger: pointing right when collapsed, down when open.
-fn chevron(open: bool, cx: &App) -> Icon {
+fn chevron(open: bool, _cx: &App) -> Icon {
     Icon::new(if open {
         IconName::ChevronDown
     } else {
         IconName::ChevronRight
     })
     .xsmall()
-    .text_color(cx.theme().muted_foreground)
+    .text_color(crate::custom_style::muted_text())
 }
 
 /// A leaf row of the tree example: a file icon and its name.
 fn file_row(name: &'static str, cx: &App) -> impl IntoElement {
-    let accent = cx.theme().accent;
-
     h_flex()
         .h_7()
         .px_2()
         .gap_2()
         .items_center()
         .rounded(cx.theme().radius)
-        .hover(|this| this.bg(accent))
+        .hover(|this| this.bg(crate::custom_style::common_hover_bg()))
         .text_sm()
         // Aligns the name with the folder names, which are preceded by a chevron.
         .child(div().w_3())
         .child(
             Icon::new(IconName::File)
                 .xsmall()
-                .text_color(cx.theme().muted_foreground),
+                .text_color(crate::custom_style::muted_text()),
         )
         .child(name)
 }
@@ -174,8 +173,6 @@ impl CollapsibleStory {
         cx: &mut Context<Self>,
     ) -> impl IntoElement {
         let open = self.is_open(key);
-        let accent = cx.theme().accent;
-        let muted_foreground = cx.theme().muted_foreground;
         let radius = cx.theme().radius;
 
         self.trigger_row(key, cx)
@@ -183,7 +180,7 @@ impl CollapsibleStory {
             .px_2()
             .gap_2()
             .rounded(radius)
-            .hover(|this| this.bg(accent))
+            .hover(|this| this.bg(crate::custom_style::common_hover_bg()))
             .text_sm()
             .child(chevron(open, cx))
             .child(
@@ -193,14 +190,14 @@ impl CollapsibleStory {
                     IconName::Folder
                 })
                 .xsmall()
-                .text_color(muted_foreground),
+                .text_color(crate::custom_style::muted_text()),
             )
             .child(name)
     }
 
     /// A trigger beside the title, with a summary row that stays visible.
     fn render_basic(&self, cx: &mut Context<Self>) -> impl IntoElement {
-        let muted_foreground = cx.theme().muted_foreground;
+        let muted_foreground = crate::custom_style::muted_text();
 
         section("Basic")
             .description("A trigger beside the title, with a summary that stays visible.")
@@ -230,7 +227,7 @@ impl CollapsibleStory {
                     .child(
                         panel_row(cx)
                             .justify_between()
-                            .bg(cx.theme().muted.opacity(0.3))
+                            .bg(crate::custom_style::muted_bg().opacity(0.3))
                             .child(div().text_color(muted_foreground).child("Status"))
                             .child(Tag::success().small().child("Shipped")),
                     )
@@ -251,7 +248,7 @@ impl CollapsibleStory {
 
     /// The whole row acts as the trigger.
     fn render_row_trigger(&self, cx: &mut Context<Self>) -> impl IntoElement {
-        let muted_foreground = cx.theme().muted_foreground;
+        let muted_foreground = crate::custom_style::muted_text();
 
         section("Row trigger")
             .description("The whole row is the trigger, as used by FAQ entries.")
@@ -281,7 +278,7 @@ impl CollapsibleStory {
     /// A round trigger sitting on the bottom edge of a card.
     fn render_bottom_trigger(&self, cx: &mut Context<Self>) -> impl IntoElement {
         let open = self.is_open(USAGE);
-        let muted_foreground = cx.theme().muted_foreground;
+        let muted_foreground = crate::custom_style::muted_text();
 
         section("Bottom trigger")
             .description("The trigger sits on the bottom edge of the card it opens.")
@@ -315,7 +312,7 @@ impl CollapsibleStory {
                                             .v_flex()
                                             .items_stretch()
                                             .gap_2()
-                                            .bg(cx.theme().muted.opacity(0.6))
+                                            .bg(crate::custom_style::muted_bg().opacity(0.6))
                                             .child(
                                                 h_flex()
                                                     .justify_between()
@@ -351,7 +348,7 @@ impl CollapsibleStory {
                                     .outline()
                                     .xsmall()
                                     .rounded(cx.theme().radius_full())
-                                    .bg(cx.theme().background)
+                                    .bg(custom_style::base())
                                     .icon(if open {
                                         IconName::ChevronUp
                                     } else {
@@ -366,7 +363,7 @@ impl CollapsibleStory {
 
     /// Optional settings held behind a full width trigger.
     fn render_settings(&self, cx: &mut Context<Self>) -> impl IntoElement {
-        let border = cx.theme().border;
+        let border = custom_style::border();
 
         section("Settings")
             .description("Holds optional controls, keeping the default view short.")
@@ -421,7 +418,7 @@ impl CollapsibleStory {
 
     /// A list where the header and every row carry their own action.
     fn render_row_actions(&self, cx: &mut Context<Self>) -> impl IntoElement {
-        let muted = cx.theme().muted;
+        let muted = crate::custom_style::muted_bg();
         let radius = cx.theme().radius;
 
         section("Row actions")
@@ -468,7 +465,7 @@ impl CollapsibleStory {
                                         .child(
                                             Icon::new(IconName::Asterisk)
                                                 .xsmall()
-                                                .text_color(cx.theme().green),
+                                                .text_color(crate::custom_style::green_text()),
                                         ),
                                 )
                                 .child(div().w_20().flex_none().text_xs().child(name))
@@ -535,7 +532,7 @@ impl CollapsibleStory {
 
     /// An identity row that stays visible, with the details folded behind it.
     fn render_profile(&self, cx: &mut Context<Self>) -> impl IntoElement {
-        let muted_foreground = cx.theme().muted_foreground;
+        let muted_foreground = crate::custom_style::muted_text();
 
         section("Profile")
             .description("Shows who someone is, and their details only on request.")
